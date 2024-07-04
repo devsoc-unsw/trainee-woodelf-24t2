@@ -1,42 +1,78 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.icon {
+  width: 100px;
+  margin-right: 16px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  margin: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+body {
+  background: linear-gradient(
+    270deg,
+    #662424,
+    #626624,
+    #246632,
+    #245466,
+    #462466,
+    #66245e
+  );
+  background-size: 1200% 1200%;
+
+  -webkit-animation: bgGrad 30s ease infinite;
+  -moz-animation: bgGrad 30s ease infinite;
+  animation: bgGrad 30s ease infinite;
+}
+
+@-webkit-keyframes bgGrad {
+  0% {
+    background-position: 0% 50%;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes bgGrad {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes bgGrad {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Hammersmith One', sans-serif;
 }
 
-.card {
-  padding: 2em;
+.yellow {
+  color: #efff33;
 }
 
-.read-the-docs {
-  color: #888;
+.shirt {
+  color: #ffdc00;
 }
