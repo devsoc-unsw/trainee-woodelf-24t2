@@ -3,9 +3,25 @@
   "version": "1.0.0",
   "description": "I love finding places at uni",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev_env": "tsx watch --env-file=.env ./src/index.ts",
+    "dev": "tsx watch ./src/index.ts",
+    "build": "tsc --build",
+    "start_env": "node --env-file=.env dist/src/index.js",
+    "start": "node dist/src/index.js",
+    "production": "node dist/src/index.js"
+  }
 }
