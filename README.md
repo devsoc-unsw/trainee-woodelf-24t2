@@ -17,4 +17,8 @@ VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 ```
-4. thats it for now
+4. *optionally*, create a .env file at the root of the directory which contains a cloudflare deploy book endpoint.
+```
+https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ENDPOINT_GOES_HERE
+```
+you can now use the `rebuild` script in the root of the repository to initiate manual deployments without having to push changes to `master`.
