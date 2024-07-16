@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ -f ".env" ]; then
+	hook=$(sed -n 1p .env)
+	curl -X POST "$hook"
+fi
