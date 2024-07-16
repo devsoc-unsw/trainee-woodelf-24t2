@@ -17,7 +17,7 @@ VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 ```
-4. *optionally*, create a .env file at the root of the directory which contains a cloudflare deploy book endpoint.
+4. *optionally*, create a .env file at the root of the repository which contains a cloudflare deploy book endpoint.
 ```
 echo "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ENDPOINT_GOES_HERE" > .env
 ```
