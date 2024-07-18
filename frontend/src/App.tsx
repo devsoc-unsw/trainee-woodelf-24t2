@@ -1,6 +1,5 @@
 import '@fontsource/hammersmith-one';
 import './App.css';
-
 import { useState } from 'react';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
