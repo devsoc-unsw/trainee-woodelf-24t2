@@ -1,6 +1,13 @@
 import '@fontsource/hammersmith-one';
 import './App.css';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  DocumentReference,
+} from 'firebase/firestore';
 import { db } from './firebase';
 import { useState } from 'react';
 
@@ -18,11 +25,18 @@ const subscribe_shirt_fan = async (email: string, colour: string) => {
 };
 
 const check_colour = async (email: string) => {
-  const querySnapshot = await getDocs(collection(db, 'shirt_cravers'));
-  querySnapshot.forEach((doc) => {
-    if (doc.data().email === email) {
-      alert('i think you wanted ' + doc.data().colour);
-    }
+  // const querySnapshot = await getDocs(collection(db, 'shirt_cravers'));
+  // querySnapshot.forEach((doc) => {
+  //   if (doc.data().email === email) {
+  //     alert('i think you wanted ' + doc.data().colour);
+  //   }
+  // });
+
+  const shirt_cravers = collection(db, 'shirt_cravers');
+  const q = query(shirt_cravers, where('email', '==', email));
+  const users = await getDocs(q);
+  users.forEach((user) => {
+    alert('i think you wanted ' + user.data().colour);
   });
 };
 
