@@ -19,7 +19,7 @@ function Title({level} : TitleProps) {
             size = 2;
             break;
     }
-    console.log(size)
+
     return(
         <h1 
             className={classes.titleStyle}
