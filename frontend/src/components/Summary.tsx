@@ -1,6 +1,7 @@
 import classes from './Summary.module.css'
+import { useEffect } from 'react'
 
-type summary = {
+interface summary {
 	correctGuesses: number;
 	correctBuilding: number;
 	timeBonus: number;
@@ -10,9 +11,11 @@ type summary = {
 function Summary(props: summary) {
 
 	return(
-		<div>
-			
-		</div>
+			<div className={classes.container}>
+				<div className={classes.table}>
+
+				</div>
+			</div>
 	)
 }
 

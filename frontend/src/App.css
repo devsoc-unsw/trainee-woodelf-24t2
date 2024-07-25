@@ -1,3 +1,7 @@
+:root {
+  --dark: #232223;
+}
+
 .icon {
   width: 100px;
   margin-right: 16px;
