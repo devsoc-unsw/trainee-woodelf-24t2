@@ -35,13 +35,7 @@ function App() {
 
   return (
     <div className="app">
-      <Summary
-        correctGuesses={10}
-        correctBuilding={10}
-        timeBonus={10}
-        shirtsAcquried={727}
-      />
-      {/* <Title level="large"/>
+      <Title level="large"/>
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input
@@ -74,7 +68,7 @@ function App() {
         <button onClick={() => check_colour(checkEmail)}>
           what was it again
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }
