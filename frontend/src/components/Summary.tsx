@@ -17,30 +17,32 @@ function Summary(props: Summary) {
 				<hr></hr>
 			<div>
 					<table className={classes.fields}>
-						<tr>
-							<td>
-								<span className='light-text'>✅ Correct Guesses</span>
-							</td>
-							<td>
-								{props.correctGuesses}
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<span className='light-text'>🏫 Correct Building</span>
-							</td>
-							<td>
-								{props.correctBuilding}
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<span className='light-text'>⏰ Time Bonus</span>
-							</td>
-							<td>
-								{props.timeBonus}
-							</td>
-						</tr>
+						<tbody>
+							<tr>
+								<td>
+									<span className='light-text'>✅ Correct Guesses</span>
+								</td>
+								<td>
+									{props.correctGuesses}
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span className='light-text'>🏫 Correct Building</span>
+								</td>
+								<td>
+									{props.correctBuilding}
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span className='light-text'>⏰ Time Bonus</span>
+								</td>
+								<td>
+									{props.timeBonus}
+								</td>
+							</tr>
+						</tbody>
 					</table>
 			</div>
 			<div className={classes.result}>

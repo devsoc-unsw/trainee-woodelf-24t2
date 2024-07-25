@@ -2,7 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	width: 35vw;
-	height: 45vh;
+	height: 44vh;
 	border-radius: 10px;
 	background-color: var(--dark);
 	padding: 30px;
@@ -58,4 +58,13 @@ hr {
 
 button:hover {
 	background-color: #d4b055;
+}
+
+@media (max-width: 1345px) or (max-height: 900px) {
+	.fields {
+		font-size: 1.5rem;
+	}
+	.result {
+		font-size: 1.6rem;
+	}
 }
