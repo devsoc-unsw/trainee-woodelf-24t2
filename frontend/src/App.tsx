@@ -3,6 +3,7 @@ import './App.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { useState } from 'react';
+import Title from './components/Title'
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
@@ -33,11 +34,7 @@ function App() {
 
   return (
     <div className="app">
-      <img className="icon" src="/yellowshirt.svg" alt="yellowshirt" />
-      <h1>
-        <span className="yellow">yellow</span>
-        <span className="shirt">shirt</span>
-      </h1>
+      <Title level="large"/>
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input
