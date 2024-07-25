@@ -1,5 +1,11 @@
 :root {
   --dark: #232223;
+  --light-dark: #999999;
+  --yellow-button: #C28E0A;
+}
+
+.light-text{
+  color: var(--light-dark);
 }
 
 .icon {
