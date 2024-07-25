@@ -1,5 +1,4 @@
 import classes from './Summary.module.css'
-import { useEffect } from 'react'
 
 interface Summary {
 	correctGuesses: number;
@@ -16,18 +15,33 @@ function Summary(props: Summary) {
 				Summary
 			</div>
 				<hr></hr>
-			<div className={classes.table}>
-				<ul className={classes.fields}>
-					<li>
-						<span className='light-text'>✅ Correct Guesses:</span> {props.correctGuesses}
-					</li>
-					<li>
-						<span className='light-text'>🏫 Correct Building:</span> {props.correctBuilding}
-					</li>
-					<li>
-						<span className='light-text'>⏰ Time Bonus:</span> {props.timeBonus}
-					</li>
-				</ul>
+			<div>
+					<table className={classes.fields}>
+						<tr>
+							<td>
+								<span className='light-text'>✅ Correct Guesses</span>
+							</td>
+							<td>
+								{props.correctGuesses}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span className='light-text'>🏫 Correct Building</span>
+							</td>
+							<td>
+								{props.correctBuilding}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span className='light-text'>⏰ Time Bonus</span>
+							</td>
+							<td>
+								{props.timeBonus}
+							</td>
+						</tr>
+					</table>
 			</div>
 			<div className={classes.result}>
 			💃🥳	{props.shirtsAcquried} Shirts Acquired 💃🥳
