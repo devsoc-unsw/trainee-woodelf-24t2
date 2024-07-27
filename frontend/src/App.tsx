@@ -3,7 +3,7 @@ import './App.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { useState } from 'react';
-import Title from './components/Title/Title';
+import Title from './components/Logo/Logo';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {

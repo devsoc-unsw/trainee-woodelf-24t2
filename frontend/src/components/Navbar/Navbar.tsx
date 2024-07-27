@@ -1,5 +1,5 @@
 import classes from './Navbar.module.css';
-import Title from '../Title/Title';
+import Title from '../Logo/Logo';
 import ProfileIcon from '../ProfileIcon/ProfileIcon';
 
 function Navbar() {
