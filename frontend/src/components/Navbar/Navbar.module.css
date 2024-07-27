@@ -1,29 +1,18 @@
 .navbar {
-  width: 100vw;
   height: 7vh;
   background-color: var(--navbar-dark);
-  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   opacity: 90%;
-  font-family: 'Hammersmith One', sans-serif;
-  overflow: hidden;
-  position: absolute;
+  padding: 0px 1vw 0px 1vw;
 }
 
-.navbar > div:first-child {
+.navbar > div {
   display: flex;
-  flex-direction: row;
   gap: 50px;
   align-items: center;
   font-size: 1.5rem;
-  padding-left: 1vw;
-}
-
-.navbar > div:last-child {
-  display: flex;
-  padding-right: 1vw;
 }
 
 .profile {

@@ -9,6 +9,7 @@
 
 html {
   box-sizing: border-box;
+  font-family: 'Hammersmith One', sans-serif;
 }
 
 *,
@@ -85,5 +86,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Hammersmith One', sans-serif;
 }
