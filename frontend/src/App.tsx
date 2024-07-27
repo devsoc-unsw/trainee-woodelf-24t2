@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div className="app">
-      <Logo level="large" />
+      <Logo size="lg" />
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input

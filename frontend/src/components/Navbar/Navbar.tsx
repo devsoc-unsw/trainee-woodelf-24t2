@@ -4,11 +4,11 @@ import ProfileIcon from '../ProfileIcon/ProfileIcon';
 
 function Navbar() {
   return (
-    <nav className={classes.container}>
-      <div className={classes.leftStuff}>
-        <Logo level="large" />
+    <nav className={classes.navbar}>
+      <div>
+        <Logo size="lg" />
       </div>
-      <div className={classes.rightStuff}>
+      <div>
         <ProfileIcon url="/yellowshirt.svg" />
       </div>
     </nav>

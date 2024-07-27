@@ -7,6 +7,16 @@
   --secondary-yellow: hsl(52, 100%, 50%);
 }
 
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 .icon {
   width: 100px;
   margin-right: 16px;
