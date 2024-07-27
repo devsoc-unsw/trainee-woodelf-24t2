@@ -1,32 +1,25 @@
 import classes from './Logo.module.css';
 
-type Level = 'small' | 'medium' | 'large';
+type Size = 'sm' | 'md' | 'lg';
 
 interface LogoProps {
-  level: Level;
+  size: Size;
 }
 
-function Logo({ level }: LogoProps) {
-  let size: number;
-  switch (level) {
-    case 'small':
-      size = 1;
-      break;
-    case 'medium':
-      size = 1.5;
-      break;
-    case 'large':
-      size = 2;
-      break;
-  }
+const Logo = ({ size }: LogoProps) => {
+  const fontSize = {
+    sm: 1,
+    md: 1.5,
+    lg: 2,
+  }[size];
 
   return (
-    <h1 className={classes.logo} style={{ fontSize: size + 'rem' }}>
+    <h1 className={classes.logo} style={{ fontSize: `${fontSize}rem` }}>
       <img
-        style={{ width: size + 'rem' }}
         className={classes.iconStyle}
         src="/yellowshirt.svg"
         alt="yellowshirt"
+        style={{ width: `${fontSize}rem` }}
       />
       <div className={classes.logoContents}>
         <span>yellow</span>
@@ -34,6 +27,6 @@ function Logo({ level }: LogoProps) {
       </div>
     </h1>
   );
-}
+};
 
-export default Title;
+export default Logo;

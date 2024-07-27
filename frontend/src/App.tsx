@@ -3,7 +3,7 @@ import './App.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { useState } from 'react';
-import Title from './components/Logo/Logo';
+import Logo from './components/Logo/Logo';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div className="app">
-      <Title level="large" />
+      <Logo level="large" />
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input

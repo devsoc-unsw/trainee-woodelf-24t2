@@ -1,12 +1,12 @@
 import classes from './Navbar.module.css';
-import Title from '../Logo/Logo';
+import Logo from '../Logo/Logo';
 import ProfileIcon from '../ProfileIcon/ProfileIcon';
 
 function Navbar() {
   return (
     <nav className={classes.container}>
       <div className={classes.leftStuff}>
-        <Title level="large" />
+        <Logo level="large" />
       </div>
       <div className={classes.rightStuff}>
         <ProfileIcon url="/yellowshirt.svg" />
