@@ -1,6 +1,7 @@
 import '@fontsource/hammersmith-one';
 import './App.css';
 import { useState } from 'react';
+import Logo from './components/Logo/Logo';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
@@ -47,11 +48,7 @@ function App() {
 
   return (
     <div className="app">
-      <img className="icon" src="/yellowshirt.svg" alt="yellowshirt" />
-      <h1>
-        <span className="yellow">yellow</span>
-        <span className="shirt">shirt</span>
-      </h1>
+      <Logo size="lg" />
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input
