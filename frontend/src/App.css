@@ -1,8 +1,10 @@
 :root {
-  --dark: #232223;
-  --navbar-dark: #222227;
-  --light-dark: #999999;
-  --yellow-button: #C28E0A;
+  --dark: hsl(300, 1%, 14%);
+  --navbar-dark: hsl(240, 7%, 14%);
+  --light-dark: hsl(0, 0%, 60%);
+  --yellow-button: hsl(43, 90%, 40%);
+  --primary-yellow: hsl(65, 100%, 60%);
+  --secondary-yellow: hsl(52, 100%, 50%);
 }
 
 .icon {
@@ -21,12 +23,12 @@ body,
 body {
   background: linear-gradient(
     270deg,
-    #662424,
-    #626624,
-    #246632,
-    #245466,
-    #462466,
-    #66245e
+    hsl(0, 48%, 27%),
+    hsl(64, 48%, 27%),
+    hsl(133, 48%, 27%),
+    hsl(196, 48%, 27%),
+    hsl(271, 48%, 27%),
+    hsl(307, 48%, 27%)
   );
   background-size: 1200% 1200%;
 
@@ -74,12 +76,4 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Hammersmith One', sans-serif;
-}
-
-.yellow {
-  color: #efff33;
-}
-
-.shirt {
-  color: #ffdc00;
 }
