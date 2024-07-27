@@ -1,3 +1,10 @@
+:root {
+  --dark: #232223;
+  --navbar-dark: #222227;
+  --light-dark: #999999;
+  --yellow-button: #C28E0A;
+}
+
 .icon {
   width: 100px;
   margin-right: 16px;
