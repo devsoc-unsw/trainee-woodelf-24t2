@@ -7,8 +7,17 @@ function Navbar() {
     <nav className={classes.navbar}>
       <div>
         <Logo size="lg" />
+        <div>
+        Gamemodes
+        </div>
+        <div>
+          Help
+        </div>
       </div>
       <div>
+        <div>
+          Credits
+        </div>
         <ProfileIcon url="/yellowshirt.svg" />
       </div>
     </nav>
