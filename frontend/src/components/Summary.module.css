@@ -1,70 +1,65 @@
 .container {
-	display: flex;
-	flex-direction: column;
-	width: 35vw;
-	height: 44vh;
-	border-radius: 10px;
-	background-color: var(--dark);
-	padding: 30px;
-	color: white;
+  display: flex;
+  flex-direction: column;
+  width: 35vw;
+  height: 44vh;
+  border-radius: 10px;
+  background-color: var(--dark);
+  padding: 30px;
+  color: white;
 }
 
 table {
-	border-spacing: 15px 5px;
-	margin-left: 0;
-	width: 30vw;
+  border-spacing: 15px 5px;
+  margin-left: 0;
+  width: 30vw;
 }
 
 .title {
-	display: flex;
-	flex-direction: column;
-	font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .fields {
-	text-align: left;
-	font-size: 2rem;
-	margin-top: 3vh;
+  text-align: left;
+  font-size: 2rem;
+  margin-top: 3vh;
 }
 
 .result {
-	margin: 4vh 0;
-	align-self: center;
-	font-size: 2rem;
+  margin: 4vh 0;
+  align-self: center;
+  font-size: 2rem;
 }
 
 .button {
-	align-self: center;
-	width: 15vw;
-	height: 5vh;
-	border-radius: 10px;
-	background-color: var(--yellow-button);
-	transition: background-color 0.5s ease;
-}
-
-button {
-	border: none;
-	font: inherit;
-	color: #202A45;
-	cursor: pointer;
-	outline: none;
-	font-size: 1.5rem;
-}
-
-hr {
-	width: 30vw;
-	margin-left: 0;
+  align-self: center;
+  width: 15vw;
+  height: 5vh;
+  border-radius: 10px;
+  background-color: var(--yellow-button);
+  border: none;
+  font: inherit;
+  color: #202a45;
+  outline: none;
+  font-size: 1.5rem;
+  transition: background-color 0.5s ease;
 }
 
 button:hover {
-	background-color: #d4b055;
+  cursor: pointer;
+  background-color: #d4b055;
+}
+
+hr {
+  width: 30vw;
+  margin-left: 0;
 }
 
 @media (max-width: 1345px) or (max-height: 900px) {
-	.fields {
-		font-size: 1.5rem;
-	}
-	.result {
-		font-size: 1.6rem;
-	}
+  .fields {
+    font-size: 1.5rem;
+  }
+  .result {
+    font-size: 1.6rem;
+  }
 }
