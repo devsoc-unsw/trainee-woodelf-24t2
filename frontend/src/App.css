@@ -48,6 +48,10 @@ body {
   animation: bgGrad 30s ease infinite;
 }
 
+.light-text {
+  color: var(--light-dark);
+}
+
 @-webkit-keyframes bgGrad {
   0% {
     background-position: 0% 50%;
@@ -87,4 +91,10 @@ body {
   justify-content: center;
   align-items: center;
   height: 93vh;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
