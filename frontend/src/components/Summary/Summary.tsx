@@ -1,4 +1,5 @@
 import classes from './Summary.module.css';
+import SummaryRows from '../SummaryRows/SummaryRows';
 
 interface Summary {
   correctGuesses: number;
@@ -15,24 +16,18 @@ function Summary(props: Summary) {
       <div>
         <table className={classes.fields}>
           <tbody>
-            <tr>
-              <td>
-                <span className="light-text">✅ Correct guesses</span>
-              </td>
-              <td>{props.correctGuesses}</td>
-            </tr>
-            <tr>
-              <td>
-                <span className="light-text">🏫 Correct building</span>
-              </td>
-              <td>{props.correctBuilding}</td>
-            </tr>
-            <tr>
-              <td>
-                <span className="light-text">⏰ Time bonus</span>
-              </td>
-              <td>{props.timeBonus}</td>
-            </tr>
+          <SummaryRows
+              summaryType="guesses"
+              summaryAttribute={props.correctGuesses}
+            />
+            <SummaryRows
+              summaryType="building"
+              summaryAttribute={props.correctBuilding}
+            />
+            <SummaryRows
+              summaryType="time"
+              summaryAttribute={props.timeBonus}
+            />
           </tbody>
         </table>
       </div>
