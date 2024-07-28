@@ -1,17 +1,18 @@
 import '@fontsource/hammersmith-one';
 import './App.css';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
 import { useState } from 'react';
 import Logo from './components/Logo/Logo';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
-    const docRef = await addDoc(collection(db, 'shirt_cravers'), {
-      email,
-      colour,
-    });
-    console.log('doc written: ', docRef.id);
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/subscribe`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        colour: colour
+      }),
+      headers: {'Content-Type': 'application/json'}
+    })
     alert('thanks, a shirt is on the way');
   } catch (e) {
     console.error('oh no!! ' + e);
@@ -19,12 +20,25 @@ const subscribe_shirt_fan = async (email: string, colour: string) => {
 };
 
 const check_colour = async (email: string) => {
-  const querySnapshot = await getDocs(collection(db, 'shirt_cravers'));
-  querySnapshot.forEach((doc) => {
-    if (doc.data().email === email) {
-      alert('i think you wanted ' + doc.data().colour);
+  const url = `${import.meta.env.VITE_BACKEND_URL}/colour?` + new URLSearchParams(
+    {
+      email: email
     }
-  });
+  )
+  const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    }
+  )
+  if (response.status === 200) {
+    const color = await response.text()
+    alert('i think you wanted ' + color);
+  } else {
+    alert('sorry could not find your email')
+  }
+
 };
 
 function App() {
