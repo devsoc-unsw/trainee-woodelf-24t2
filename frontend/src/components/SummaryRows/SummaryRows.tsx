@@ -1,5 +1,3 @@
-import classes from './SummaryRows.module.css'
-
 type SummaryType = "guesses" | "time" | "building"; 
 
 interface SummaryInformation {
