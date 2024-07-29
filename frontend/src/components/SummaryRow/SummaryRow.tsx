@@ -1,30 +1,23 @@
-type SummaryType = "guesses" | "time" | "building"; 
+type SummaryType = 'guesses' | 'time' | 'building';
 
 interface SummaryRowProps {
-    summaryType: SummaryType;
-    summaryAttribute: number;
+  summaryType: SummaryType;
+  summaryAttribute: number;
 }
 
-function SummaryRow(props : SummaryRowProps) {
- 
-    return(
+const summaries = {
+  guesses: '🎯 Correct guesses',
+  time: '⏰ Time bonus',
+  building: '🏫 Correct building',
+};
+
+function SummaryRow(props: SummaryRowProps) {
+  return (
     <tr>
-        <td>
-            {props.summaryType === "guesses" ? (
-                <span className="light-text">✅ Correct guesses</span>
-            ) : props.summaryType == "building" ? (
-                <span className="light-text">🏫 Correct building</span>
-            ) : props.summaryType == "time" ? (
-                <span className="light-text">⏰ Time bonus</span>
-            ) : (
-                <p>Error</p>
-            )}
-        </td>
-        <td>
-            {props.summaryAttribute}
-        </td>
+      <td>{summaries[props.summaryType]}</td>
+      <td>{props.summaryAttribute}</td>
     </tr>
-    )
+  );
 }
 
-export default SummaryRow
+export default SummaryRow;
