@@ -1,14 +1,14 @@
 import classes from './Summary.module.css';
-import SummaryRows from '../SummaryRows/SummaryRows';
+import SummaryRow from '../SummaryRow/SummaryRow';
 
-interface Summary {
+interface SummaryProps {
   correctGuesses: number;
   correctBuilding: number;
   timeBonus: number;
   shirtsAcquried: number;
 }
 
-function Summary(props: Summary) {
+function Summary(props: SummaryProps) {
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Summary</h1>
@@ -16,15 +16,15 @@ function Summary(props: Summary) {
       <div>
         <table className={classes.fields}>
           <tbody>
-          <SummaryRows
+            <SummaryRow
               summaryType="guesses"
               summaryAttribute={props.correctGuesses}
             />
-            <SummaryRows
+            <SummaryRow
               summaryType="building"
               summaryAttribute={props.correctBuilding}
             />
-            <SummaryRows
+            <SummaryRow
               summaryType="time"
               summaryAttribute={props.timeBonus}
             />
