@@ -2,6 +2,7 @@ import '@fontsource/hammersmith-one';
 import './App.css';
 import { useState } from 'react';
 import Logo from './components/Logo/Logo';
+import Summary from './components/Summary/Summary';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
@@ -48,7 +49,13 @@ function App() {
 
   return (
     <div className="app">
-      <Logo size="lg" />
+      <Summary
+        correctGuesses={10}
+        correctBuilding={10}
+        shirtsAcquried={10}
+        timeBonus={10}
+      />
+      {/* <Logo size="lg" />
       <div style={{ marginLeft: '40px' }}>
         <p>Enter your email for a free shirt</p>
         <input
@@ -81,7 +88,7 @@ function App() {
         <button onClick={() => check_colour(checkEmail)}>
           what was it again
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,5 +1,8 @@
+
+import { useState, useEffect } from 'react';
 import classes from './Summary.module.css';
 import SummaryRows from '../SummaryRows/SummaryRows';
+import Confetti from 'react-confetti'
 
 interface Summary {
   correctGuesses: number;
@@ -9,14 +12,33 @@ interface Summary {
 }
 
 function Summary(props: Summary) {
+  // const { innerWidth: width, innerHeight: height } = window;
+
+  const [width, setWidth]   = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const updateDimensions = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+  }
+  useEffect(() => {
+      window.addEventListener("resize", updateDimensions);
+      return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+  
   return (
     <div className={classes.container}>
+            <Confetti
+            width={width}
+            height={height}
+            colors={['#EFD104']}
+            numberOfPieces={1000}
+          />
       <h1 className={classes.title}>Summary</h1>
       <hr></hr>
       <div>
         <table className={classes.fields}>
           <tbody>
-          <SummaryRows
+            <SummaryRows
               summaryType="guesses"
               summaryAttribute={props.correctGuesses}
             />
