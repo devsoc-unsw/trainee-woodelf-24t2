@@ -1,11 +1,11 @@
-type SummaryRowProps = "guesses" | "time" | "building"; 
+type SummaryType = "guesses" | "time" | "building"; 
 
-interface SummaryInformation {
-    summaryType: SummaryRowProps;
+interface SummaryRowProps {
+    summaryType: SummaryType;
     summaryAttribute: number;
 }
 
-function SummaryRow(props : SummaryInformation) {
+function SummaryRow(props : SummaryRowProps) {
  
     return(
     <tr>
