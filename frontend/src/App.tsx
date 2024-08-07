@@ -1,5 +1,5 @@
 import "@fontsource/hammersmith-one";
-import "./App.css";
+import "./App.scss";
 import { useState } from "react";
 import Logo from "./components/Logo/Logo";
 
