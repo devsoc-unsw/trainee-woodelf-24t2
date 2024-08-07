@@ -1,4 +1,4 @@
-import classes from './Logo.module.css';
+import classes from './Logo.module.scss';
 
 type Size = 'sm' | 'md' | 'lg';
 

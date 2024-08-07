@@ -1,4 +1,4 @@
-import classes from './Summary.module.css';
+import classes from './Summary.module.scss';
 import SummaryRow from '../SummaryRow/SummaryRow';
 
 interface SummaryProps {
