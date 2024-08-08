@@ -1,0 +1,22 @@
+.navbar {
+  height: 7vh;
+  background-color: var(--navbar-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 90%;
+  padding: 0px 1vw 0px 1vw;
+}
+
+.navbar > div {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.profile {
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+}
