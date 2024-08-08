@@ -16,6 +16,22 @@
   color: white;
 }
 
+.navbar button {
+  background: none;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar button:hover {
+  text-decoration: underline;
+  color: var(--navbar-dark)
+}
+
 .profile {
   border-radius: 100%;
   width: 50px;

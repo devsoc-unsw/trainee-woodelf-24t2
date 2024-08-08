@@ -6,13 +6,21 @@ function Navbar() {
   return (
     <nav className={classes.navbar}>
       <div>
-        <Logo size="lg" />
-        <div>Gamemodes</div>
-        <div>Help</div>
+        <button>
+          <Logo size="lg" />
+        </button>
+        <button>
+          Gamemodes
+        </button>
+        <button>
+          Help
+        </button>
       </div>
       <div>
-        <div>Credits</div>
-        <ProfileIcon url="/yellowshirt.svg" />
+        <button>
+          Credits
+        </button>
+          <ProfileIcon url="/yellowshirt.svg" />
       </div>
     </nav>
   );
