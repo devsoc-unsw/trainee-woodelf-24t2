@@ -23,8 +23,50 @@
   color: white;
 }
 
+.navbar button {
+  background: none;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
 .profile {
   border-radius: 100%;
   width: 50px;
   height: 50px;
+}
+
+.hover {
+  position: relative;
+  display: inline-block;
+}
+
+.hover:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: $secondary-yellow;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.logo:after {
+  background: #e2a168;
+  bottom: -0.2vh;
+}
+
+.logo:hover:after {
+  width: 80%;
+  left: 0;
+}
+
+.hover:hover:after {
+  width: 100%;
+  left: 0;
 }

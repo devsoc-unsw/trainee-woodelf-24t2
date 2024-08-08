@@ -6,12 +6,14 @@ function Navbar() {
   return (
     <nav className={classes.navbar}>
       <div>
-        <Logo size="lg" />
-        <div>Gamemodes</div>
-        <div>Help</div>
+        <button className={`${classes.hover} ${classes.logo}`}>
+          <Logo size="lg"/>
+        </button>
+        <button className={classes.hover}>Gamemodes</button>
+        <button className={classes.hover}>Help</button>
       </div>
       <div>
-        <div>Credits</div>
+        <button className={classes.hover}>Credits</button>
         <ProfileIcon url="/yellowshirt.svg" />
       </div>
     </nav>
