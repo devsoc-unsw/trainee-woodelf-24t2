@@ -52,7 +52,13 @@
 }
 
 .logo:after {
-  background: $secondary-yellow;
+  background: #e2a168;
+  bottom: -0.2vh;
+}
+
+.logo:hover:after {
+  width: 80%;
+  left: 0;
 }
 
 .hover:hover:after {

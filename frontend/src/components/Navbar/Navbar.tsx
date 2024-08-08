@@ -7,7 +7,7 @@ function Navbar() {
     <nav className={classes.navbar}>
       <div>
         <button className={`${classes.hover} ${classes.logo}`}>
-          <Logo size="lg" />
+          <Logo size="lg"/>
         </button>
         <button className={classes.hover}>Gamemodes</button>
         <button className={classes.hover}>Help</button>
