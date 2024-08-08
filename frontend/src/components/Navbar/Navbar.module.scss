@@ -29,13 +29,33 @@
   padding: 0;
 }
 
-.navbar button:hover {
-  text-decoration: underline;
-  color: var(--navbar-dark)
-}
-
 .profile {
   border-radius: 100%;
   width: 50px;
   height: 50px;
+}
+
+.hover {
+  position: relative;
+  display: inline-block;
+}
+
+.hover:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: $secondary-yellow;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.logo:after {
+  background: $secondary-yellow;
+}
+
+.hover:hover:after {
+  width: 100%;
+  left: 0;
 }
