@@ -2,11 +2,16 @@
 
 .navbar {
   height: 7vh;
+  width: 100vw;
   background-color: $navbar-dark;
   display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
   align-items: center;
   justify-content: space-between;
-  opacity: 90%;
+  opacity: 80%;
   padding: 0px 1vw 0px 1vw;
 }
 
