@@ -1,6 +1,8 @@
+@import "../../variables";
+
 .navbar {
   height: 7vh;
-  background-color: var(--navbar-dark);
+  background-color: $navbar-dark;
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -1,4 +1,4 @@
-import classes from "./Navbar.module.css";
+import classes from "./Navbar.module.scss";
 import Logo from "../Logo/Logo";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
 

@@ -1,12 +1,15 @@
+@import "../../variables";
+
 .container {
   display: flex;
   flex-direction: column;
   width: 35vw;
-  height: 44vh;
+  height: 55vh;
   border-radius: 10px;
-  background-color: var(--dark);
+  background-color: $dark;
   padding: 30px;
   color: white;
+  margin: auto;
 }
 
 table {
@@ -17,6 +20,7 @@ table {
 
 .title {
   font-size: 1.5rem;
+  color: $light-dark;
 }
 
 .fields {
@@ -36,7 +40,7 @@ table {
   width: 15vw;
   height: 5vh;
   border-radius: 10px;
-  background-color: var(--yellow-button);
+  background-color: $yellow-button;
   border: none;
   font: inherit;
   color: #202a45;
@@ -47,7 +51,7 @@ table {
 
 button:hover {
   cursor: pointer;
-  background-color: #d4b055;
+  background-color: lighten($yellow-button, 30%);
 }
 
 hr {
