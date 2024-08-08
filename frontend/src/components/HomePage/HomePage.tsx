@@ -1,6 +1,7 @@
 // @ts-ignore
 import ReactPannellum from "react-pannellum";
 import panoramaImage from "./testimage.png";
+import "./HomePage.scss";
 
 function HomePage() {
   const config = {
