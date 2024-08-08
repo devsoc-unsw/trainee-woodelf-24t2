@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('yellowshirt backend says hello');
 });
 
-app.post('/subscribe', async (req, res) => {
+app.post('/demo/subscribe', async (req, res) => {
   const {email, colour} = req.body
   if (!email || !colour) {
     res.status(400).send("email and colour not specified in request")
@@ -29,7 +29,7 @@ app.post('/subscribe', async (req, res) => {
   res.status(200).send(docRef)
 });
 
-app.get('/colour', async (req, res) => {
+app.get('/demo/colour', async (req, res) => {
   if (!req.query.email) {
     res.status(400).send("request must specify an email")
     return

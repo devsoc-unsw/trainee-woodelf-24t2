@@ -1,41 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+
 import './App.css';
-import Navbar from './components/Navbar/Navbar.tsx';
+import App from './App.tsx';
+import LoginPage from './pages/LoginPage.tsx';
+import HomePage from './pages/HomePage.tsx';
+import PlayPage from './pages/PlayPage.tsx';
+import ProfilePage from './pages/ProfilePage.tsx';
 
 import {
   createBrowserRouter,
   RouterProvider,
-  useParams,
 } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <NavbarWrapper />,
+    element: <App/>,
     errorElement: <div>error</div>,
     children: [
       {
-        path: '/play',
-        element: <div>Playing the game</div>,
+        path: '/login',
+        element: <LoginPage/>,
       },
       {
-        path: '/profile/:id',
-        element: <div>Profile person</div>,
+        path: '/home',
+        element: <HomePage/>,
+      },
+      {
+        path: '/play',
+        element: <PlayPage/>,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage/>,
       },
     ],
   },
 ]);
 
-function NavbarWrapper(){
-  return (
-  <div>
-      <Navbar/>
-      <App/>
-  </div>
-  )
-};
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
