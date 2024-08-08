@@ -3,6 +3,7 @@ import './App.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { useState } from 'react';
+import Login from './components/Login/Login';
 
 const subscribe_shirt_fan = async (email: string, colour: string) => {
   try {
@@ -71,6 +72,8 @@ function App() {
           what was it again
         </button>
       </div>
+      <Login>
+      </Login>
     </div>
   );
 }

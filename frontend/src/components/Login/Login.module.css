@@ -1,0 +1,26 @@
+input {
+    display: flex;
+    border-radius: 3;
+}
+
+.label {
+    color: white;
+    font-size: 200%;
+}
+
+.sheet {
+    height: 400px;
+    width: 300px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    align-content: center;
+    border-radius: 10px
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
