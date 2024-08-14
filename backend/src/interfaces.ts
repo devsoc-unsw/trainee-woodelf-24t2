@@ -27,5 +27,13 @@ export interface User {
   highScore?: number;
   cumulativeScore?: number;
   shirts?: number;   // Would this refer to the number of secrets(clothes drawing) found?
-  dateJoined?: Date; 
+  dateJoined?: Date;
+}
+
+
+// Adds a new property to req.session
+declare module 'express-session' {
+  interface SessionData {
+    userId: string;
+  }
 }
