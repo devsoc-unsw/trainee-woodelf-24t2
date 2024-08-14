@@ -1,22 +1,28 @@
 import express from 'express';
+import session from 'express-session'
 
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import cors from 'cors';
 
 const EXPRESS_PORT = 3000;
+const SESSION_SECRET = 'CS is suffering';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(cors());
+app.use(session({
+  secret: SESSION_SECRET,
+  saveUninitialized: false,
+}));
 
 app.get('/', (req, res) => {
   res.send('yellowshirt backend says hello');
 });
 
 app.post('/subscribe', async (req, res) => {
-  const {email, colour} = req.body
+  const { email, colour } = req.body
   if (!email || !colour) {
     res.status(400).send("email and colour not specified in request")
     return
