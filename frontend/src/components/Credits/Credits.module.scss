@@ -1,0 +1,42 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $secondary-yellow;
+}
+
+.box {
+  padding: 20px;
+  width: 600px;
+  height: 300px;
+  border-radius: 8px;
+  background-color: $dark;
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.creditstext {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 3rem - 40px);
+  font-size: 1.5rem;
+}
+
+.creditstext ul {
+  color: rgb(250, 225, 81);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.creditstext li {
+  margin: 0;
+}
