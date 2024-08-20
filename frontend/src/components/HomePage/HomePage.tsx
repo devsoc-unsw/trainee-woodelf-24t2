@@ -12,11 +12,9 @@ function HomePage() {
   useEffect(() => {
     const checkLoaded = setInterval(() => {
       if (isLoaded()) {
-        console.log("running");
         setIsPanoramaLoaded(true);
         clearInterval(checkLoaded);
       }
-      console.log("checking");
     }, 2000);
     return () => clearInterval(checkLoaded);
   }, []);
