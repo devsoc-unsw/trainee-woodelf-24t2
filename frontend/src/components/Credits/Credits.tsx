@@ -4,17 +4,15 @@ function Credits() {
   return (
     <div className={classes.container}>
       <div className={classes.box}>
-        <div className={classes.title}>Credits</div>
-        Made with the most amazing team:
-        <div className={classes.creditstext}>
-          <ul>
-            <li>Lachlan Shoesmith: Master of Yapping</li>
-            <li>Ben Goldwin: </li>
-            <li>Chris Wong: </li>
-            <li>Alyssa Cheong: </li>
-            <li>Oswaldo Prajitno: </li>
-          </ul>
-        </div>
+        <h1>Credits</h1>
+        <h2>Made with the most amazing team:</h2>
+        <ul className={classes.creditstext}>
+          <li>Lachlan Shoesmith: Master of Yapping</li>
+          <li>Ben Godwin: </li>
+          <li>Chris Wong: </li>
+          <li>Alyssa Cheong: </li>
+          <li>Osvaldo Prajitno: </li>
+        </ul>
       </div>
     </div>
   );

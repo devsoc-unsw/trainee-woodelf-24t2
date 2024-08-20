@@ -15,18 +15,23 @@
   background-color: $dark;
 }
 
-.title {
+h1 {
   font-size: 3rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: rgb(250, 225, 81);
+  font-weight: 500;
 }
 
 .creditstext {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 3rem - 40px);
   font-size: 1.5rem;
-}
-
-.creditstext ul {
+  display: flex;
+  height: calc(100% - 3rem - 40px);
+  flex-direction: column;
   color: rgb(250, 225, 81);
   display: flex;
   flex-direction: column;
@@ -34,7 +39,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  height: 100%;
 }
 
 .creditstext li {
