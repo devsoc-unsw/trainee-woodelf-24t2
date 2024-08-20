@@ -36,7 +36,7 @@ function HomePage() {
     height: "104vh",
     filter: "blur(12px)",
     left: "-2vw",
-    top: "-2vh",
+    top: "2vh",
     zIndex: "0",
   };
 
