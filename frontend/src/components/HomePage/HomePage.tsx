@@ -17,7 +17,7 @@ function HomePage() {
         clearInterval(checkLoaded);
       }
       console.log("checking");
-    }, 5000);
+    }, 2000);
     return () => clearInterval(checkLoaded);
   }, []);
 
@@ -34,11 +34,11 @@ function HomePage() {
   };
 
   const style = {
-    width: "110vw",
-    height: "110vh",
+    width: "104vw",
+    height: "104vh",
     filter: "blur(12px)",
-    left: "-5px",
-    top: "20px",
+    left: "-2vw",
+    top: "-2vh",
     zIndex: "0",
   };
 
