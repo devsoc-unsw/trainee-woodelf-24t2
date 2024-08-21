@@ -36,26 +36,22 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
 app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-
   const users = collection(db, "users");
   const loginDetails = query(users, where("username", "==", username));
-
   const details = await getDocs(loginDetails);
 
   if (details.empty) {
     return res.status(400).send("Username not found");
   }
 
-  bcrypt.compare(username, details.docs[0].data().password, (err, result) => {
+  bcrypt.compare(password, details.docs[0].data().password, (err, result) => {
     if (err) {
       return res.status(500).send("Error processing password");
     }
 
-    if (result) {
-      return res.status(201).send("User Successfully Logged In");
-    } else {
-      return res.status(401).send("Incorrect password");
-    }
+    return result
+      ? res.status(201).send("User Successfully Logged In")
+      : res.status(401).send("Incorrect password");
   });
 });
 
