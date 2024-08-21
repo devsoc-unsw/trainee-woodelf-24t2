@@ -1,6 +1,7 @@
 // @ts-ignore
-import ReactPannellum from "react-pannellum";
+import ReactPannellum, { isLoaded } from "react-pannellum";
 import panoramaImage from "./testimage.png";
+import Navbar from "../Navbar/Navbar";
 import "./HomePage.scss";
 
 function HomePage() {
@@ -17,15 +18,18 @@ function HomePage() {
   };
 
   const style = {
-    width: "110vw",
-    height: "110vh",
+    width: "104vw",
+    height: "104vh",
     filter: "blur(12px)",
-    left: "-5vw",
-    top: "-5vw",
+    left: "-2vw",
+    top: "2vh",
+    zIndex: "0",
   };
 
   return (
-    <div>
+    <div className="homepage-container">
+      <Navbar />
+      <div id="overlay-root"></div>
       <ReactPannellum
         id="1"
         sceneId="firstScene"
