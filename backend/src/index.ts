@@ -6,14 +6,13 @@ import { db } from './firebase';
 import cors from 'cors';
 
 const EXPRESS_PORT = 3000;
-const SESSION_SECRET = 'CS is suffering';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(cors());
 app.use(session({
-  secret: SESSION_SECRET,
+  secret: process.env.SESSION_SECRET as string,
   saveUninitialized: false,
 }));
 
