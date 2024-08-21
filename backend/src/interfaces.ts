@@ -24,12 +24,19 @@ export interface Game {
 export interface User {
   id: string;
   username: string;
+  profilePicture?: string;
   highScore?: number;
   cumulativeScore?: number;
   shirts?: number;   // Would this refer to the number of secrets(clothes drawing) found?
   dateJoined?: Date;
 }
 
+export interface SessionStorage {
+  sessionId: string;
+  userId: string;
+  creationDate: Date;
+  expirationDate: Date;
+}
 
 // Adds a new property to req.session
 declare module 'express-session' {
