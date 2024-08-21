@@ -1,0 +1,27 @@
+@import "../../variables";
+
+.container {
+  margin: 0;
+  padding: 0;
+  height: 110vh;
+  width: 110vw;
+  background-color: $dark;
+}
+
+.innerContainer {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-yellow;
+    font-size: 2rem;
+}
+
+.loadingText {
+    display: inline-block;
+    width: 4ch;
+    text-align: left;
+}
