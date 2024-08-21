@@ -1,0 +1,17 @@
+@import "../../variables";
+
+.logo {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.2rem;
+    margin: 0;
+  }
+  
+  .logoContents:nth-child(1) {
+    color: $primary-yellow;
+  }
+  
+  .logoContents:nth-child(2) {
+    color: $secondary-yellow;
+  }
