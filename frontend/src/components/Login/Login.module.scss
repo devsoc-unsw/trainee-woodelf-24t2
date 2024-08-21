@@ -11,9 +11,9 @@ input {
 }
 
 input {
-  width: 100%; /* Input fields will take up the full width of the container */
-  max-width: 350px; /* Limit input field width to ensure a good fit */
-  margin-bottom: 1rem; /* Adds spacing between fields */
+  width: 100%; 
+  max-width: 350px; 
+  margin-bottom: 1rem; 
 }
 
 .container {
@@ -34,8 +34,8 @@ input {
   align-items: center;
   margin: auto;
   border-radius: 10px;
-  width: 100%; /* Allows it to shrink or grow based on content */
-  max-width: 400px; /* This caps the width to a reasonable size */
+  width: 100%;
+  max-width: 400px;
 }
 
 .form {
