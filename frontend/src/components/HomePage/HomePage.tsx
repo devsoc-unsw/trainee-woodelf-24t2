@@ -39,7 +39,9 @@ function HomePage() {
         imageSource={panoramaImage}
         config={config}
         onPanoramaLoaded={() => {
-          // Added due to slight delay between event listener and fully loading. 
+          // there is a delay between when the 'panorama loaded' event occurs
+          // and the actual loading of the panorama; this timer covers that gap
+          // by waiting a little longer
           setTimeout(() => {
             setIsPanoramaLoaded(true);
           }, 500);
