@@ -24,7 +24,7 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
     return res.status(400).send("Username already exists");
   }
 
-  const saltRounds: number = 0;
+  const saltRounds: number = 10;
   const hashedPassword: string = await bcrypt.hash(password, saltRounds);
   await addDoc(collection(db, "users"), {
     username,
