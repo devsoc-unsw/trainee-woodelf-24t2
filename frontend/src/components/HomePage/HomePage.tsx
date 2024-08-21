@@ -41,6 +41,7 @@ function HomePage() {
         imageSource={panoramaImage}
         config={config}
         onPanoramaLoaded={() => {
+          // Added due to slight delay between event listener and fully loading. 
           setTimeout(() => {
             setIsPanoramaLoaded(true);
           }, 500);
