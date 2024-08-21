@@ -3,7 +3,9 @@ import ReactPannellum, { isLoaded } from "react-pannellum";
 import panoramaImage from "./testimage.png";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
+import YellowButton from "../yellowbutton/YellowButton";
 import { useState } from "react";
+import ReactDOM from 'react-dom';
 
 function HomePage() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
@@ -32,7 +34,12 @@ function HomePage() {
   return (
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root"/>
+      <div id="overlay-root">
+        {ReactDOM.createPortal(
+          <YellowButton text="Play" />, // Pass the text prop here
+          document.getElementById('overlay-root')!
+        )}
+      </div>
       <ReactPannellum
         id="1"
         sceneId="firstScene"
@@ -40,9 +47,7 @@ function HomePage() {
         imageSource={panoramaImage}
         config={config}
         onPanoramaLoaded={() => {
-          // there is a delay between when the 'panorama loaded' event occurs
-          // and the actual loading of the panorama; this timer covers that gap
-          // by waiting a little longer
+          // Wait a little longer for the panorama to actually load
           setTimeout(() => {
             setIsPanoramaLoaded(true);
           }, 500);
@@ -51,5 +56,6 @@ function HomePage() {
     </>
   );
 }
+
 
 export default HomePage;

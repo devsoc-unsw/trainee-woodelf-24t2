@@ -1,10 +1,14 @@
 import classes from './YellowButton.module.css';
 
-function YellowButton() {
+interface YellowButtonProps {
+    text: string;
+}
+
+function YellowButton({ text }: YellowButtonProps) {
     return (
         <div>
           <button>
-            <p className={classes.text} >Next</p>
+            <p className={classes.text} >{text}</p>
             </button>
         </div>
       );
