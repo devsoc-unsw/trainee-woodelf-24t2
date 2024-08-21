@@ -14,6 +14,11 @@ app.use(cors());
 app.use(session({
   secret: process.env.SESSION_SECRET as string,
   saveUninitialized: false,
+  /* I'm not entirely sure of the effects,
+  ** but since our sessions use expiration dates and based on the express-session doc,
+  ** I've set it to true
+  */
+  resave: true
 }));
 
 app.get('/', (req, res) => {
