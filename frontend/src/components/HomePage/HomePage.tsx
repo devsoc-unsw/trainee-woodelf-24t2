@@ -1,7 +1,6 @@
 // @ts-ignore
 import ReactPannellum, { isLoaded } from "react-pannellum";
 import panoramaImage from "./testimage.png";
-import Navbar from "../Navbar/Navbar";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
 import { useState } from "react";
@@ -31,8 +30,7 @@ function HomePage() {
   };
 
   return (
-    <div>
-      <Navbar />
+    <>
       {!isPanoramaLoaded && <LoadingScreen />}
       <ReactPannellum
         id="1"
@@ -47,7 +45,7 @@ function HomePage() {
           }, 500);
         }}
       />
-    </div>
+    </>
   );
 }
 
