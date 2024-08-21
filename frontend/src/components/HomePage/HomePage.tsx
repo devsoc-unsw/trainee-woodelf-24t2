@@ -32,7 +32,7 @@ function HomePage() {
   return (
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root"></div>
+      <div id="overlay-root"/>
       <ReactPannellum
         id="1"
         sceneId="firstScene"
