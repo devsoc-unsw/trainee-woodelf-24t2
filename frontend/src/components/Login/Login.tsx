@@ -3,7 +3,6 @@ import classes from "./Login.module.scss";
 function Login() {
   return (
     <div className={classes.container}>
-      <div id="overlay-root"></div>
       <div className={classes.sheet}>
         <h1>login ty</h1>
         <form className={classes.form}>
@@ -16,6 +15,7 @@ function Login() {
           <button className={classes.button}>Login</button>
           </form>
       </div>
+      <div id="overlay-root"></div>
     </div>
   );
 }
