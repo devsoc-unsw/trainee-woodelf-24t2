@@ -7,9 +7,9 @@ export interface Level {
   id: string;
   photoLink: string;
   locationName: string;
-  xCoordinate: number;
-  yCoordinate: number;
-  zCoordinate: number;
+  latitude: number;
+  longitude: number;
+  zPosition: number;
 }
 
 export interface Game {
