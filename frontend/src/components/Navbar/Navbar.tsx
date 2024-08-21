@@ -10,6 +10,10 @@ function Navbar() {
 
   const toggleCredits = () => {
     setShowCredits((prev) => !prev);
+    setTimeout(() => {
+      (document.getElementById("overlay-root") as HTMLElement).style.display =
+        showCredits ? "none" : "flex";
+    }, 1000);
   };
 
   return (
@@ -22,6 +26,9 @@ function Navbar() {
         <button className={classes.hover}>Help</button>
       </div>
       <div>
+        <button className={classes.hover} onClick={toggleCredits}>
+          Login
+        </button>
         <button className={classes.hover} onClick={toggleCredits}>
           Credits
         </button>

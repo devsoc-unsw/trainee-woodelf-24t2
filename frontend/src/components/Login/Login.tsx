@@ -7,14 +7,14 @@ function Login() {
         <h1>login ty</h1>
         <form className={classes.form}>
         <span className={classes.label}>Username</span>
-        <input name="email" placeholder="Enter Email" type="text" />
-          <span className={classes.label}>Email</span>
-          <input name="email" placeholder="Enter Email" type="text" />
+        <input name="email" type="text" />
           <span className={classes.label}>Password</span>
-          <input name="password" placeholder="Enter Password" type="password" />
+          <input name="password" type="password" />
           <button className={classes.button}>Login</button>
+          <div className={classes.register} >Don't have an account? <span className={classes.blue}>Register</span></div>
           </form>
       </div>
+      
       <div id="overlay-root"></div>
     </div>
   );

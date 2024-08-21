@@ -7,13 +7,14 @@ input {
 
 .label {
   color: white;
-  font-size: 200%;
+  font-size: 100%;
 }
 
 input {
-  width: 100%; 
-  max-width: 350px; 
-  margin-bottom: 1rem; 
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 1rem;
+  height: 40px;
 }
 
 .container {
@@ -27,7 +28,7 @@ input {
 
 .sheet {
   color: $yellow-button;
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   background-color: $dark;
@@ -57,6 +58,7 @@ input {
   outline: none;
   font-size: 1.5rem;
   transition: background-color 0.5s ease;
+  cursor: pointer;
 }
 
 .button:hover {
@@ -65,4 +67,18 @@ input {
 
 form {
   display: flex;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.register {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.blue {
+    color: #73889A;
+    cursor: pointer;
 }
