@@ -2,7 +2,7 @@ export interface TypedRequest<T> extends Express.Request {
   body: T;
 }
 
-export interface RegisterBody {
+export interface LoginBody {
   username: string;
   password: string;
 }
