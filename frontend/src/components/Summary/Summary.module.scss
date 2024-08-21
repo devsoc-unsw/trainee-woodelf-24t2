@@ -1,0 +1,69 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 35vw;
+  height: 55vh;
+  border-radius: 10px;
+  background-color: $dark;
+  padding: 30px;
+  color: white;
+  margin: auto;
+}
+
+table {
+  border-spacing: 15px 5px;
+  margin-left: 0;
+  width: 30vw;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: $light-dark;
+}
+
+.fields {
+  text-align: left;
+  font-size: 2rem;
+  margin-top: 3vh;
+}
+
+.result {
+  margin: 4vh 0;
+  align-self: center;
+  font-size: 2rem;
+}
+
+.button {
+  align-self: center;
+  width: 15vw;
+  height: 5vh;
+  border-radius: 10px;
+  background-color: $yellow-button;
+  border: none;
+  font: inherit;
+  color: #202a45;
+  outline: none;
+  font-size: 1.5rem;
+  transition: background-color 0.5s ease;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: lighten($yellow-button, 30%);
+}
+
+hr {
+  width: 30vw;
+  margin-left: 0;
+}
+
+@media (max-width: 1345px) or (max-height: 900px) {
+  .fields {
+    font-size: 1.5rem;
+  }
+  .result {
+    font-size: 1.6rem;
+  }
+}

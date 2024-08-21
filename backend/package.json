@@ -6,7 +6,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.19.2"
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "firebase": "^10.12.3",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
@@ -23,5 +26,10 @@
     "start_env": "node --env-file=.env dist/src/index.js",
     "start": "node dist/src/index.js",
     "production": "node dist/src/index.js"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "tabWidth": 2,
+    "trailingComma": "all"
   }
 }
