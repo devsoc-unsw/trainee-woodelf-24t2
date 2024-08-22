@@ -35,7 +35,7 @@ function HomePage() {
   return (
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root" />
+      {/* <div id="overlay-root" /> */}
       <LoginPage />
       <ReactPannellum
         id="1"

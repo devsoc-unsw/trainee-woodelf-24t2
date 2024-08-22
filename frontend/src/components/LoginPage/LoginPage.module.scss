@@ -15,12 +15,13 @@ input {
   max-width: 350px;
   margin-bottom: 1rem;
   height: 40px;
+  font: inherit;
 }
 
 input:focus,
 input:valid {
   outline: 0;
-  border-bottom-color: $dark;
+  border-color: red;
 }
 
 input:nth-of-type(1),
@@ -89,7 +90,7 @@ form {
 }
 
 h1 {
-  margin-bottom: 20px;
+  padding-bottom: 20px;
   text-align: center;
 }
 
@@ -106,3 +107,8 @@ h1 {
 .blue:hover {
   color: darken(#bdc072, 10%);
 }
+
+input:-webkit-autofill {
+  transition: background-color 10000000s ease-in-out 0s, color 10000000s ease-in-out 0s;
+}
+
