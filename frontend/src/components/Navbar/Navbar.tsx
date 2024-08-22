@@ -27,9 +27,6 @@ function Navbar() {
       </div>
       <div>
         <button className={classes.hover} onClick={toggleCredits}>
-          Login
-        </button>
-        <button className={classes.hover} onClick={toggleCredits}>
           Credits
         </button>
         <ProfileIcon url="/yellowshirt.svg" />
@@ -37,7 +34,7 @@ function Navbar() {
       {showCredits &&
         createPortal(
           <Credits />,
-          document.getElementById("overlay-root") as HTMLElement, // Target the new element
+          document.getElementById("overlay-root") as HTMLElement,
         )}
     </nav>
   );

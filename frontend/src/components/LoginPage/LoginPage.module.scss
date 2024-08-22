@@ -17,10 +17,27 @@ input {
   height: 40px;
 }
 
+input:focus,
+input:valid {
+  outline: 0;
+  border-bottom-color: $dark;
+}
+
+input:nth-of-type(1),
+input:nth-of-type(2) {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px $secondary-yellow solid;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  color: #fff;
+}
+
 .container {
   height: 100vh;
   width: 100vw;
-  background-color: $light-dark;
+  opacity: 90%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -36,7 +53,7 @@ input {
   margin: auto;
   border-radius: 10px;
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
 }
 
 .form {
@@ -48,15 +65,19 @@ input {
   align-self: center;
   width: 250px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 3px;
   background-color: $yellow-button;
   border: none;
   font: inherit;
-  color: #202a45;
+  color: #000000;
   outline: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   transition: background-color 0.5s ease;
   cursor: pointer;
+}
+
+.button:active {
+  transform: scale(0.98);
 }
 
 .button:hover {
@@ -78,10 +99,10 @@ h1 {
 }
 
 .blue {
-    color: #73889A;
-    cursor: pointer;
+  color: #bdc072;
+  cursor: pointer;
 }
 
 .blue:hover {
-  color: darken(#73889A, 10%);
+  color: darken(#bdc072, 10%);
 }

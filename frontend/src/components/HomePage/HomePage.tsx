@@ -4,6 +4,7 @@ import panoramaImage from "./testimage.png";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
 import { useState } from "react";
+import LoginPage from "../LoginPage/LoginPage";
 
 function HomePage() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
@@ -21,17 +22,21 @@ function HomePage() {
   };
 
   const style = {
+    position: "absolute",
     width: "104vw",
     height: "104vh",
     filter: "blur(12px)",
     left: "-2vw",
     top: "-2vh",
-    zIndex: "0",
+    zIndex: "-1",
+    PointerEvents: "none",
   };
 
   return (
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
+      <div id="overlay-root" />
+      <LoginPage />
       <ReactPannellum
         id="1"
         sceneId="firstScene"

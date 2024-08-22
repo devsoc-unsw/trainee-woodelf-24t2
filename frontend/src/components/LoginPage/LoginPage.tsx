@@ -61,8 +61,6 @@ function LoginPage() {
           </div>
         </form>
       </div>
-
-      {/* <div id="overlay-root"></div> */}
     </div>
   );
 }
