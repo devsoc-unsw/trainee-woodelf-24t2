@@ -33,7 +33,7 @@ function Navbar() {
       </div>
       {showCredits &&
         createPortal(
-          <Credits />,
+          <Credits onClick={toggleCredits}/>,
           document.getElementById("overlay-root") as HTMLElement,
         )}
     </nav>
