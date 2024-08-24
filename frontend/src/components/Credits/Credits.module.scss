@@ -11,7 +11,7 @@
   position: relative;
   padding: 20px;
   width: 300px;
-  height: 300px;
+  height: 275px;
   border-radius: 8px;
   background-color: $dark;
   opacity: 95%;
@@ -21,13 +21,12 @@
 .title {
   font-size: 3rem;
   margin: 0;
-  padding-bottom: 10px;
 }
 
 .creditstext {
   font-size: 1.5rem;
   display: flex;
-  height: calc(100% - 3rem - 40px);
+  height: calc(100% - 3rem - 10px);
   flex-direction: column;
   color: rgb(250, 225, 81);
   display: flex;

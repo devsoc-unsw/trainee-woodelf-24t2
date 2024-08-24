@@ -95,7 +95,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           {!passwordMatch && (
             <div className={classes.warning}>Incorrect password</div>
           )}
-          <input type="submit" className={classes.button} value="Login" />
+          <input type="submit" className={classes.button} style={{ marginBottom: "5px" }} value="Login" />
           <div className={classes.register}>
             Don't have an account?{" "}
             <span className={classes.blue} onClick={onClick}>
