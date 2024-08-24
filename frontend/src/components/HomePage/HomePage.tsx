@@ -4,8 +4,8 @@ import panoramaImage from "./testimage.png";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
 import { useState } from "react";
-import LoginPage from "../LoginPage/LoginPage";
-import RegisterPage from "../RegisterPage/RegisterPage";
+import LoginPage from "../Forms/LoginPage/LoginPage";
+import RegisterPage from "../Forms/RegisterPage/RegisterPage";
 
 function HomePage() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);

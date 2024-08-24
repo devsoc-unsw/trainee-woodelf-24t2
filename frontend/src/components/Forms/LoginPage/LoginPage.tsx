@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import classes from "./LoginPage.module.scss";
+import classes from "../Forms.module.scss";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const [formData, setFormData] = useState({
@@ -8,9 +8,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   });
   const [usernameFound, setUsernameFound] = useState(true);
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [usernameEmpty, setUsernameEmpty] = useState(false);
+  const [passwordEmpty, setPasswordEmpty] = useState(false);
   const usernameField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -18,10 +20,23 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     });
     if (!usernameFound) setUsernameFound(true);
     if (!passwordMatch) setPasswordMatch(true);
+    if (usernameEmpty) setUsernameEmpty(false);
+    if (passwordEmpty) setPasswordEmpty(false);
+    usernameField.current?.classList.remove(classes.inputError);
+    passwordField.current?.classList.remove(classes.inputError);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (formData.username === "") {
+      usernameField.current?.classList.add(classes.inputError);
+      return setUsernameEmpty(formData.username === "");
+    }
+    if (formData.password === "") {
+      passwordField.current?.classList.add(classes.inputError);
+      return setPasswordEmpty(formData.password === "");
+    }
+
     try {
       const resp = await fetch("http://localhost:3000/login", {
         method: "POST",
@@ -54,8 +69,12 @@ function LoginPage({ onClick }: { onClick: () => void }) {
             type="text"
             value={formData.username}
             onChange={handleChange}
-            required
           />
+          {usernameEmpty && (
+            <div className={classes.warning} style={{ paddingBottom: "10px" }}>
+              Please enter your username
+            </div>
+          )}
           {!usernameFound && (
             <div className={classes.warning} style={{ paddingBottom: "10px" }}>
               Username not found
@@ -69,8 +88,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
             type="password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
+          {passwordEmpty && (
+            <div className={classes.warning}>Please enter your password</div>
+          )}
           {!passwordMatch && (
             <div className={classes.warning}>Incorrect password</div>
           )}

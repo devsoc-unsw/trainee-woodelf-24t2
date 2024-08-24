@@ -18,10 +18,8 @@ input {
   font: inherit;
 }
 
-.input:focus,
-.input:valid {
+.input:focus {
   outline: 0;
-  border-color: darken($secondary-yellow, 20%);
 }
 
 .input {
@@ -63,6 +61,7 @@ input {
 
 .form {
   flex-direction: column;
+  width: 250px;
 }
 
 .button {
@@ -135,5 +134,5 @@ input:-webkit-autofill {
 }
 
 .close:hover {
-  color: darken($secondary-yellow, 10%)
+  color: darken($secondary-yellow, 10%);
 }
