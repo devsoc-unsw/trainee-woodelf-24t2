@@ -12,7 +12,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const usernameField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -59,7 +59,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   return (
     <div className={classes.container}>
       <div className={classes.sheet}>
-        <h1>Welcome!</h1>
+        <h1 className={classes.title}>Welcome!</h1>
         <form className={classes.form} onSubmit={handleSubmit}>
           <span className={classes.label}>Username</span>
           <input

@@ -91,7 +91,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <button className={classes.close} onClick={onClick}>
           <X />
         </button>
-        <h1>Register!</h1>
+        <h1 className={classes.title}>Register!</h1>
         <form className={classes.form} onSubmit={handleSubmit}>
           <span className={classes.label}>Username</span>
           <input

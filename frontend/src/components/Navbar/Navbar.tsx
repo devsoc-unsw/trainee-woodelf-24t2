@@ -13,7 +13,7 @@ function Navbar() {
     setTimeout(() => {
       (document.getElementById("overlay-root") as HTMLElement).style.display =
         showCredits ? "none" : "flex";
-    }, 1000);
+    }, 10);
   };
 
   return (
