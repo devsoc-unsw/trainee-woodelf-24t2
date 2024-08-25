@@ -25,4 +25,4 @@ you can now use the `rebuild` script in the root of the repository to initiate m
 
 ## level editor
 
-you can create your own yellowshirt levels using the [panoproc](https://github.com/lachlanshoesmith/panoproc) level editor. installation and usage instructions can be found in that repository's readme.
+you can create your own yellowshirt levels (or, more precisely, *maps* composed of *levels*) using the [panoproc](https://github.com/lachlanshoesmith/panoproc) level editor. installation and usage instructions can be found in that repository's readme.
