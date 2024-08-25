@@ -37,7 +37,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     if (passwordEmpty) setPasswordEmpty(false);
     if (confirmPasswordEmpty) setConfirmPasswordEmpty(false);
     if (!passwordValid) setPasswordValid(true);
-    
+
     usernameField.current?.classList.remove(classes.inputError);
     passwordField.current?.classList.remove(classes.inputError);
     confirmPasswordField.current?.classList.remove(classes.inputError);
@@ -46,7 +46,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isProcessing) return
+    if (isProcessing) return;
 
     setIsProcessing(true);
 

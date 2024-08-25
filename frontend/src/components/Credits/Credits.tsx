@@ -5,7 +5,7 @@ function Credits({ onClick }: { onClick: () => void }) {
   return (
     <div className={classes.container}>
       <div className={classes.box}>
-      <button className={classes.close} onClick={onClick}>
+        <button className={classes.close} onClick={onClick}>
           <X />
         </button>
         <h1 className={classes.title}>Credits</h1>

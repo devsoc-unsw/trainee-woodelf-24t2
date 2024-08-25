@@ -29,7 +29,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (isProcessing) return;
     setIsProcessing(true);
 
