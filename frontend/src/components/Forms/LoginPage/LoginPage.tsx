@@ -46,6 +46,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         body: JSON.stringify(formData),
       });
 
+      // need backend for auth/login to display errors for username not found / password invalid.
       if (resp.ok) {
         console.log("success");
       } else {
@@ -95,7 +96,12 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           {!passwordMatch && (
             <div className={classes.warning}>Incorrect password</div>
           )}
-          <input type="submit" className={classes.button} style={{ marginBottom: "5px" }} value="Login" />
+          <input
+            type="submit"
+            className={classes.button}
+            style={{ marginBottom: "5px" }}
+            value="Login"
+          />
           <div className={classes.register}>
             Don't have an account?{" "}
             <span className={classes.blue} onClick={onClick}>
