@@ -10,6 +10,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const usernameField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
 
@@ -28,6 +29,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (isProcessing) return;
+    setIsProcessing(true);
+
     if (formData.username === "") {
       usernameField.current?.classList.add(classes.inputError);
       return setUsernameEmpty(formData.username === "");
@@ -54,6 +59,8 @@ function LoginPage({ onClick }: { onClick: () => void }) {
       }
     } catch (err) {
       console.log("Error: ", err);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
