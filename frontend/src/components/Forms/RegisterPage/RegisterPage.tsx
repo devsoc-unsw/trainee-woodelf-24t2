@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordPattern =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
+    /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/;
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -21,57 +21,70 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordField = useRef<HTMLInputElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-
-    if (!passwordMatch) {
-      setPasswordMatch(true);
-    }
-    if (!usernameAvaliable) {
-      setUsernameAvaliable(true);
-    }
+  const resetState = () => {
+    if (!passwordMatch) setPasswordMatch(true);
+    if (!usernameAvaliable) setUsernameAvaliable(true);
     if (usernameEmpty) setUsernameEmpty(false);
     if (passwordEmpty) setPasswordEmpty(false);
     if (confirmPasswordEmpty) setConfirmPasswordEmpty(false);
     if (!passwordValid) setPasswordValid(true);
-
     usernameField.current?.classList.remove(classes.inputError);
     passwordField.current?.classList.remove(classes.inputError);
     confirmPasswordField.current?.classList.remove(classes.inputError);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    resetState();
+  };
 
-    if (isProcessing) return;
+  const isFieldEmpty = (field: string) => field === "";
 
-    setIsProcessing(true);
+  const isPasswordEqual = (password: string, confirmPassword: string) =>
+    password === confirmPassword;
 
-    if (formData.username === "") {
+  const errorChecking = (): boolean => {
+    if (isFieldEmpty(formData.username.trim())) {
       usernameField.current?.classList.add(classes.inputError);
-      return setUsernameEmpty(formData.username === "");
+      setUsernameEmpty(formData.username.trim() === "");
+      return false;
     }
-    if (formData.password === "") {
+    if (isFieldEmpty(formData.password)) {
       passwordField.current?.classList.add(classes.inputError);
-      return setPasswordEmpty(formData.password === "");
+      setPasswordEmpty(formData.password === "");
+      return false;
     }
-    if (formData.confirmPassword === "") {
+    if (isFieldEmpty(formData.confirmPassword)) {
       confirmPasswordField.current?.classList.add(classes.inputError);
-      return setConfirmPasswordEmpty(formData.confirmPassword === "");
+      setConfirmPasswordEmpty(formData.confirmPassword === "");
+      return false;
     }
-    if (formData.confirmPassword !== formData.password) {
+    if (!isPasswordEqual(formData.password, formData.confirmPassword)) {
       confirmPasswordField.current?.classList.add(classes.inputError);
-      return setPasswordMatch(false);
+      setPasswordMatch(false);
+      return false;
     }
 
     if (!passwordPattern.test(formData.password)) {
       passwordField.current?.classList.add(classes.inputError);
       confirmPasswordField.current?.classList.add(classes.inputError);
-      return setPasswordValid(false);
+      setPasswordValid(false);
+      return false;
     }
+
+    return true;
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    
+    if (!errorChecking()) return;
+    
+    if (isProcessing) return;
+    setIsProcessing(true);
     try {
       const resp = await fetch("http://localhost:3000/register", {
         method: "POST",
@@ -152,8 +165,8 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           )}
           {!passwordValid && (
             <div className={classes.warning}>
-              Password must be 8 to 25 characters long and include at least one
-              letter, one number, and one special character
+              Password must be 8 to 100 characters long with no spaces and
+              include at least one letter, one number, and one special character
             </div>
           )}
           <input type="submit" className={classes.button} value="Register" />

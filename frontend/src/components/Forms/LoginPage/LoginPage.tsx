@@ -14,11 +14,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const usernameField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const resetState = () => {
     if (!usernameFound) setUsernameFound(true);
     if (!passwordMatch) setPasswordMatch(true);
     if (usernameEmpty) setUsernameEmpty(false);
@@ -27,21 +23,39 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     passwordField.current?.classList.remove(classes.inputError);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    resetState();
+  };
+
+  const isFieldEmpty = (field: string) => field === "";
+
+  const errorChecking = (): boolean => {
+    if (isFieldEmpty(formData.username.trim())) {
+      usernameField.current?.classList.add(classes.inputError);
+      setUsernameEmpty(true);
+      return false;
+    }
+    if (isFieldEmpty(formData.password)) {
+      passwordField.current?.classList.add(classes.inputError);
+      setPasswordEmpty(true);
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!errorChecking()) return;
     if (isProcessing) return;
     setIsProcessing(true);
 
-    if (formData.username === "") {
-      usernameField.current?.classList.add(classes.inputError);
-      return setUsernameEmpty(formData.username === "");
-    }
-    if (formData.password === "") {
-      passwordField.current?.classList.add(classes.inputError);
-      return setPasswordEmpty(formData.password === "");
-    }
-
+    // formData.username = formData.username.trim();
     try {
       const resp = await fetch("http://localhost:3000/login", {
         method: "POST",
