@@ -2,7 +2,7 @@
 
 by alyssa, ben, chris, lachlan, and osvaldo
 
-geoguessr but cool and unsw and supports ending world hunger
+> geoguessr but cool and unsw and supports ending world hunger
 
 ## installation
 
@@ -22,3 +22,7 @@ VITE_FIREBASE_APP_ID=
 echo "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ENDPOINT_GOES_HERE" > .env
 ```
 you can now use the `rebuild` script in the root of the repository to initiate manual deployments without having to push changes to `main`.
+
+## level editor
+
+you can create your own yellowshirt levels using the [panoproc](https://github.com/lachlanshoesmith/panoproc) level editor. installation and usage instructions can be found in that repository's readme.
