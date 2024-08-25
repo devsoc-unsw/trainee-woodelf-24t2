@@ -83,8 +83,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
       <div className={classes.sheet}>
         <h1 className={classes.title}>Welcome!</h1>
         <form className={classes.form} onSubmit={handleSubmit}>
-          <span className={classes.label}>Username</span>
+          <label htmlFor="username" className={classes.label}>
+            Username
+          </label>
           <input
+            id="username"
             ref={usernameField}
             className={classes.input}
             name="username"
@@ -102,8 +105,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
               Username not found
             </div>
           )}
-          <span className={classes.label}>Password</span>
+          <label htmlFor="password" className={classes.label}>
+            Password
+          </label>
           <input
+            id="password"
             ref={passwordField}
             className={classes.input}
             name="password"
@@ -125,10 +131,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           />
           <div className={classes.register}>
             Don't have an account?{" "}
-            <span className={classes.blue} onClick={onClick}>
+            <a className={classes.blue} onClick={onClick}>
               Register
-            </span>
-            <br /> or play as a <span className={classes.blue}>guest</span>
+            </a>
+            <br /> or play as a <a className={classes.blue}>guest</a>
           </div>
         </form>
       </div>

@@ -4,14 +4,14 @@ import { X } from "lucide-react";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordPattern =
-    /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/;
+    /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
   });
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const [usernameAvaliable, setUsernameAvaliable] = useState(true);
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [confirmPasswordEmpty, setConfirmPasswordEmpty] = useState(false);
@@ -23,7 +23,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
 
   const resetState = () => {
     if (!passwordMatch) setPasswordMatch(true);
-    if (!usernameAvaliable) setUsernameAvaliable(true);
+    if (!usernameAvailable) setUsernameAvailable(true);
     if (usernameEmpty) setUsernameEmpty(false);
     if (passwordEmpty) setPasswordEmpty(false);
     if (confirmPasswordEmpty) setConfirmPasswordEmpty(false);
@@ -41,27 +41,28 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     resetState();
   };
 
-  const isFieldEmpty = (field: string) => field === "";
+  const isFieldEmpty = (field: string): boolean => field === "";
 
   const isPasswordEqual = (password: string, confirmPassword: string) =>
     password === confirmPassword;
 
-  const errorChecking = (): boolean => {
+  const validateLoginAttempt = (): boolean => {
     if (isFieldEmpty(formData.username.trim())) {
       usernameField.current?.classList.add(classes.inputError);
-      setUsernameEmpty(formData.username.trim() === "");
+      setUsernameEmpty(true);
       return false;
     }
     if (isFieldEmpty(formData.password)) {
       passwordField.current?.classList.add(classes.inputError);
-      setPasswordEmpty(formData.password === "");
+      setPasswordEmpty(true);
       return false;
     }
     if (isFieldEmpty(formData.confirmPassword)) {
       confirmPasswordField.current?.classList.add(classes.inputError);
-      setConfirmPasswordEmpty(formData.confirmPassword === "");
+      setConfirmPasswordEmpty(true);
       return false;
     }
+
     if (!isPasswordEqual(formData.password, formData.confirmPassword)) {
       confirmPasswordField.current?.classList.add(classes.inputError);
       setPasswordMatch(false);
@@ -79,10 +80,9 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    
-    if (!errorChecking()) return;
-    
+
+    if (!validateLoginAttempt()) return;
+
     if (isProcessing) return;
     setIsProcessing(true);
     try {
@@ -115,8 +115,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         </button>
         <h1 className={classes.title}>Register!</h1>
         <form className={classes.form} onSubmit={handleSubmit}>
-          <span className={classes.label}>Username</span>
+          <label htmlFor="username" className={classes.label}>
+            Username
+          </label>
           <input
+            id="username"
             ref={usernameField}
             className={classes.input}
             name="username"
@@ -129,13 +132,16 @@ function LoginPage({ onClick }: { onClick: () => void }) {
               Please enter your username
             </div>
           )}
-          {!usernameAvaliable && (
+          {!usernameAvailable && (
             <div className={classes.warning} style={{ marginBottom: "10px" }}>
-              Username unavaliable.
+              Username unavailable.
             </div>
           )}
-          <span className={classes.label}>Password</span>
+          <label htmlFor="password" className={classes.label}>
+            Password
+          </label>
           <input
+            id="password"
             ref={passwordField}
             className={classes.input}
             name="password"
@@ -148,8 +154,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
               Please enter your password
             </div>
           )}
-          <span className={classes.label}>Confirm Password</span>
+          <label htmlFor="confirmPassword" className={classes.label}>
+            Confirm Password
+          </label>
           <input
+            id="confirmPassword"
             className={classes.input}
             ref={confirmPasswordField}
             name="confirmPassword"
@@ -165,7 +174,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           )}
           {!passwordValid && (
             <div className={classes.warning}>
-              Password must be 8 to 100 characters long with no spaces and
+              Password must be 8 to 64 characters long with no spaces and
               include at least one letter, one number, and one special character
             </div>
           )}
