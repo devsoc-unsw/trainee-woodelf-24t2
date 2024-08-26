@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session'
 
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
@@ -10,13 +11,22 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(cors());
+app.use(session({
+  secret: process.env.SESSION_SECRET as string,
+  saveUninitialized: false,
+  /* I'm not entirely sure of the effects,
+  ** but since our sessions use expiration dates and based on the express-session doc,
+  ** I've set it to true
+  */
+  resave: true
+}));
 
 app.get('/', (req, res) => {
   res.send('yellowshirt backend says hello');
 });
 
 app.post('/subscribe', async (req, res) => {
-  const {email, colour} = req.body
+  const { email, colour } = req.body
   if (!email || !colour) {
     res.status(400).send("email and colour not specified in request")
     return
