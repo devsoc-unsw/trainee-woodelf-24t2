@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Response } from "express";
 import session from "express-session";
 import { TypedRequest, LoginBody } from "./requestTypes";
 import bcrypt from "bcrypt";
@@ -8,6 +8,9 @@ import cors from "cors";
 import crypto from "crypto";
 
 const EXPRESS_PORT = 3000;
+
+// only meant for debugging / delete for production
+const store = new session.MemoryStore();
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -22,6 +25,7 @@ app.use(
      ** I've set it to true
      */
     resave: true,
+    store,
   }),
 );
 
@@ -44,10 +48,15 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
   const saltRounds: number = 10;
   const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
-  await addDoc(collection(db, "users"), {
+  const userLoginDetailsRef = await addDoc(collection(db, "userLoginDetails"), {
     username,
     password: hashedPassword,
     salt: salt,
+  });
+
+  const docRef = await addDoc(collection(db, "userDetails"), {
+    username,
+    dateJoined: Date(),
   });
 
   res.status(201).send("User Successfully Registered");
@@ -79,5 +88,3 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
-
-// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
