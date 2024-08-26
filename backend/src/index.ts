@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { TypedRequest, LoginBody, RegisterBody } from "./requestTypes";
+import { TypedRequest, LoginBody } from "./requestTypes";
 import bcrypt from "bcrypt";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { db } from "./firebase";
@@ -21,7 +21,7 @@ app.listen(EXPRESS_PORT, () => {
 
 app.post(
   "/register",
-  async (req: TypedRequest<RegisterBody>, res: Response) => {
+  async (req: TypedRequest<LoginBody>, res: Response) => {
     const { username, password } = req.body;
 
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -56,10 +56,9 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   if (details.empty) {
     return res.status(400).send("Username not found");
   }
-  console.log(details.docs[0].data().salt);
 
   const saltedPassword = password.concat(details.docs[0].data().salt);
-  console.log(saltedPassword);
+
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
