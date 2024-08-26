@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import classes from "../Forms.module.scss";
-import { X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
