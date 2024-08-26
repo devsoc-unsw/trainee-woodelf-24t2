@@ -6,10 +6,10 @@ export enum GameState {
 export interface Level {
   id: string;
   photoLink: string;
-  locationName: string;
+  locationName: string | undefined;
   latitude: number;
   longitude: number;
-  zPosition: number;
+  zPosition: number | undefined;
 }
 
 export interface Game {
