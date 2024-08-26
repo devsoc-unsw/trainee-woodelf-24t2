@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
+import classNames from "classnames";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const [formData, setFormData] = useState({
@@ -36,12 +37,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
 
   const errorChecking = (): boolean => {
     if (isFieldEmpty(formData.username.trim())) {
-      usernameField.current?.classList.add(classes.inputError);
       setUsernameEmpty(true);
       return false;
     }
     if (isFieldEmpty(formData.password)) {
-      passwordField.current?.classList.add(classes.inputError);
       setPasswordEmpty(true);
       return false;
     }
@@ -89,7 +88,9 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <input
           id="username"
           ref={usernameField}
-          className={classes.input}
+          className={classNames(classes.input, {
+            [classes.inputError]: usernameEmpty,
+          })}
           name="username"
           type="text"
           value={formData.username}
@@ -97,12 +98,12 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         />
         {usernameEmpty && (
           <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your username
+            Please enter your username.
           </div>
         )}
         {!usernameFound && (
           <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Username not found
+            Username not found.
           </div>
         )}
         <label htmlFor="password" className={classes.label}>
@@ -111,17 +112,19 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <input
           id="password"
           ref={passwordField}
-          className={classes.input}
+          className={classNames(classes.input, {
+            [classes.inputError]: passwordEmpty,
+          })}
           name="password"
           type="password"
           value={formData.password}
           onChange={handleChange}
         />
         {passwordEmpty && (
-          <div className={classes.warning}>Please enter your password</div>
+          <div className={classes.warning}>Please enter your password.</div>
         )}
         {!passwordMatch && (
-          <div className={classes.warning}>Incorrect password</div>
+          <div className={classes.warning}>Incorrect password.</div>
         )}
         <input
           type="submit"
@@ -131,10 +134,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         />
         <div className={classes.register}>
           Don't have an account?{" "}
-          <a className={classes.blue} onClick={onClick}>
+          <a className={classes.link} onClick={onClick}>
             Register
           </a>
-          <br /> or play as a <a className={classes.blue}>guest</a>
+          <br /> or play as a <a className={classes.link}>guest</a>
         </div>
       </form>
     </Sheet>

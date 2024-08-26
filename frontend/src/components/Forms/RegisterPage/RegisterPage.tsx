@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
+import classNames from "classnames";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordPattern =
@@ -41,7 +42,8 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     resetState();
   };
 
-  const isFieldEmpty = (field: string): boolean => field === "";
+  const isFieldEmpty = (field: string, trim: boolean = false): boolean =>
+    trim ? field === "" : field.trim() === "";
 
   const isPasswordEqual = (
     password: string,
@@ -49,31 +51,28 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   ): boolean => password === confirmPassword;
 
   const validateLoginAttempt = (): boolean => {
-    if (isFieldEmpty(formData.username.trim())) {
-      usernameField.current?.classList.add(classes.inputError);
+    // Checks the fields are empty
+    if (isFieldEmpty(formData.username, true)) {
       setUsernameEmpty(true);
       return false;
     }
     if (isFieldEmpty(formData.password)) {
-      passwordField.current?.classList.add(classes.inputError);
       setPasswordEmpty(true);
       return false;
     }
     if (isFieldEmpty(formData.confirmPassword)) {
-      confirmPasswordField.current?.classList.add(classes.inputError);
       setConfirmPasswordEmpty(true);
       return false;
     }
 
+    // Checks confirmPass = Pass
     if (!isPasswordEqual(formData.password, formData.confirmPassword)) {
-      confirmPasswordField.current?.classList.add(classes.inputError);
       setPasswordMatch(false);
       return false;
     }
 
+    // Checks pass with regex
     if (!passwordPattern.test(formData.password)) {
-      passwordField.current?.classList.add(classes.inputError);
-      confirmPasswordField.current?.classList.add(classes.inputError);
       setPasswordValid(false);
       return false;
     }
@@ -110,8 +109,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   };
 
   return (
-    <Sheet
-    hasCloseButton={onClick}>
+    <Sheet hasCloseButton={onClick}>
       <h1 className={classes.title}>Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
@@ -120,7 +118,9 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <input
           id="username"
           ref={usernameField}
-          className={classes.input}
+          className={classNames(classes.input, {
+            [classes.inputError]: usernameEmpty || !usernameAvailable,
+          })}
           name="username"
           type="text"
           value={formData.username}
@@ -128,7 +128,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         />
         {usernameEmpty && (
           <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your username
+            Please enter your username.
           </div>
         )}
         {!usernameAvailable && (
@@ -142,7 +142,9 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <input
           id="password"
           ref={passwordField}
-          className={classes.input}
+          className={classNames(classes.input, {
+            [classes.inputError]: !passwordValid || passwordEmpty,
+          })}
           name="password"
           type="password"
           value={formData.password}
@@ -150,7 +152,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         />
         {passwordEmpty && (
           <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your password
+            Please enter your password.
           </div>
         )}
         <label htmlFor="confirmPassword" className={classes.label}>
@@ -158,7 +160,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         </label>
         <input
           id="confirmPassword"
-          className={classes.input}
+          className={classNames(classes.input, {
+            [classes.inputError]:
+              confirmPasswordEmpty || !passwordMatch || !passwordValid,
+          })}
           ref={confirmPasswordField}
           name="confirmPassword"
           type="password"
@@ -166,7 +171,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {confirmPasswordEmpty && (
-          <div className={classes.warning}>Please enter your password</div>
+          <div className={classes.warning}>Please enter your password.</div>
         )}
         {!passwordMatch && (
           <div className={classes.warning}>Passwords do not match.</div>
@@ -174,7 +179,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         {!passwordValid && (
           <div className={classes.warning}>
             Password must be 8 to 64 characters long with no spaces and include
-            at least one letter, one number, and one special character
+            at least one letter, one number, and one special character.
           </div>
         )}
         <input type="submit" className={classes.button} value="Register" />
