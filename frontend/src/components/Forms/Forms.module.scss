@@ -36,30 +36,6 @@ input {
   border-color: rgb(238, 121, 121) !important;
 }
 
-.container {
-  height: 100vh;
-  width: 100vw;
-  opacity: 95%;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.sheet {
-  color: $yellow-button;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  background-color: $dark;
-  align-items: center;
-  margin: auto;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
-  position: relative;
-}
-
 .form {
   flex-direction: column;
   width: 250px;
@@ -122,20 +98,4 @@ input:-webkit-autofill {
 
 .warning {
   color: rgb(238, 121, 121);
-}
-
-.close {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  position: absolute;
-  background: transparent;
-  right: 20px;
-}
-
-.close:hover {
-  color: darken($secondary-yellow, 10%);
 }

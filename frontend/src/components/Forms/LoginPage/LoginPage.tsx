@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import classes from "../Forms.module.scss";
+import Sheet from "../Sheet/Sheet";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const [formData, setFormData] = useState({
@@ -79,66 +80,64 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sheet}>
-        <h1 className={classes.title}>Welcome!</h1>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <label htmlFor="username" className={classes.label}>
-            Username
-          </label>
-          <input
-            id="username"
-            ref={usernameField}
-            className={classes.input}
-            name="username"
-            type="text"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          {usernameEmpty && (
-            <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-              Please enter your username
-            </div>
-          )}
-          {!usernameFound && (
-            <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-              Username not found
-            </div>
-          )}
-          <label htmlFor="password" className={classes.label}>
-            Password
-          </label>
-          <input
-            id="password"
-            ref={passwordField}
-            className={classes.input}
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {passwordEmpty && (
-            <div className={classes.warning}>Please enter your password</div>
-          )}
-          {!passwordMatch && (
-            <div className={classes.warning}>Incorrect password</div>
-          )}
-          <input
-            type="submit"
-            className={classes.button}
-            style={{ marginBottom: "5px" }}
-            value="Login"
-          />
-          <div className={classes.register}>
-            Don't have an account?{" "}
-            <a className={classes.blue} onClick={onClick}>
-              Register
-            </a>
-            <br /> or play as a <a className={classes.blue}>guest</a>
+    <Sheet>
+      <h1 className={classes.title}>Welcome!</h1>
+      <form className={classes.form} onSubmit={handleSubmit}>
+        <label htmlFor="username" className={classes.label}>
+          Username
+        </label>
+        <input
+          id="username"
+          ref={usernameField}
+          className={classes.input}
+          name="username"
+          type="text"
+          value={formData.username}
+          onChange={handleChange}
+        />
+        {usernameEmpty && (
+          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
+            Please enter your username
           </div>
-        </form>
-      </div>
-    </div>
+        )}
+        {!usernameFound && (
+          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
+            Username not found
+          </div>
+        )}
+        <label htmlFor="password" className={classes.label}>
+          Password
+        </label>
+        <input
+          id="password"
+          ref={passwordField}
+          className={classes.input}
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        {passwordEmpty && (
+          <div className={classes.warning}>Please enter your password</div>
+        )}
+        {!passwordMatch && (
+          <div className={classes.warning}>Incorrect password</div>
+        )}
+        <input
+          type="submit"
+          className={classes.button}
+          style={{ marginBottom: "5px" }}
+          value="Login"
+        />
+        <div className={classes.register}>
+          Don't have an account?{" "}
+          <a className={classes.blue} onClick={onClick}>
+            Register
+          </a>
+          <br /> or play as a <a className={classes.blue}>guest</a>
+        </div>
+      </form>
+    </Sheet>
   );
 }
 
