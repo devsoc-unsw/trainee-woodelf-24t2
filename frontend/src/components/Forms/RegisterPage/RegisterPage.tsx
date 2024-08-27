@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
+import WarningText from "../WarningText/WarningText";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordPattern =
@@ -127,14 +128,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {usernameEmpty && (
-          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your username.
-          </div>
+          <WarningText text="Please enter your username." paddingBottom={10} />
         )}
         {!usernameAvailable && (
-          <div className={classes.warning} style={{ marginBottom: "10px" }}>
-            Username unavailable.
-          </div>
+          <WarningText text="Username unavaliable." paddingBottom={10} />
         )}
         <label htmlFor="password" className={classes.label}>
           Password
@@ -151,9 +148,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {passwordEmpty && (
-          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your password.
-          </div>
+          <WarningText text="Please enter your password." paddingBottom={10} />
         )}
         <label htmlFor="confirmPassword" className={classes.label}>
           Confirm Password
@@ -171,16 +166,17 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {confirmPasswordEmpty && (
-          <div className={classes.warning}>Please enter your password.</div>
+          <WarningText text="Please enter your password." paddingBottom={0} />
         )}
         {!passwordMatch && (
-          <div className={classes.warning}>Passwords do not match.</div>
+          <WarningText text="Passwords do not match." paddingBottom={0} />
         )}
         {!passwordValid && (
-          <div className={classes.warning}>
-            Password must be 8 to 64 characters long with no spaces and include
-            at least one letter, one number, and one special character.
-          </div>
+          <WarningText
+            text="Password must be 8 to 64 characters long with no spaces and include
+            at least one letter, one number, and one special character."
+            paddingBottom={0}
+          />
         )}
         <input type="submit" className={classes.button} value="Register" />
         <div className={classes.register}></div>

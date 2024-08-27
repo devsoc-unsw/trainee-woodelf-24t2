@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
+import WarningText from "../WarningText/WarningText";
 
 function LoginPage({ onClick }: { onClick: () => void }) {
   const [formData, setFormData] = useState({
@@ -13,16 +14,12 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const usernameField = useRef<HTMLInputElement>(null);
-  const passwordField = useRef<HTMLInputElement>(null);
 
   const resetState = () => {
     if (!usernameFound) setUsernameFound(true);
     if (!passwordMatch) setPasswordMatch(true);
     if (usernameEmpty) setUsernameEmpty(false);
     if (passwordEmpty) setPasswordEmpty(false);
-    usernameField.current?.classList.remove(classes.inputError);
-    passwordField.current?.classList.remove(classes.inputError);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +84,6 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         </label>
         <input
           id="username"
-          ref={usernameField}
           className={classNames(classes.input, {
             [classes.inputError]: usernameEmpty,
           })}
@@ -97,21 +93,17 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {usernameEmpty && (
-          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Please enter your username.
-          </div>
+          <WarningText text="Please enter your username." paddingBottom={10} />
         )}
+
         {!usernameFound && (
-          <div className={classes.warning} style={{ paddingBottom: "10px" }}>
-            Username not found.
-          </div>
+          <WarningText text="Username not found." paddingBottom={10} />
         )}
         <label htmlFor="password" className={classes.label}>
           Password
         </label>
         <input
           id="password"
-          ref={passwordField}
           className={classNames(classes.input, {
             [classes.inputError]: passwordEmpty,
           })}
@@ -121,10 +113,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           onChange={handleChange}
         />
         {passwordEmpty && (
-          <div className={classes.warning}>Please enter your password.</div>
+          <WarningText text="Please enter your password." paddingBottom={0} />
         )}
         {!passwordMatch && (
-          <div className={classes.warning}>Incorrect password.</div>
+          <WarningText text="Please enter your username." paddingBottom={0} />
         )}
         <input
           type="submit"
