@@ -1,6 +1,6 @@
 export enum GameState {
   IN_PROGRESS = 0,
-  FINISHED = 1
+  FINISHED = 1,
 }
 
 export interface Level {
@@ -27,7 +27,7 @@ export interface User {
   profilePicture?: string;
   highScore?: number;
   cumulativeScore?: number;
-  shirts?: number;   // Would this refer to the number of secrets(clothes drawing) found?
+  shirts?: number; // Would this refer to the number of secrets(clothes drawing) found?
   dateJoined?: Date;
 }
 
@@ -39,7 +39,7 @@ export interface SessionStorage {
 }
 
 // Adds a new property to req.session
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     userId: string;
   }
