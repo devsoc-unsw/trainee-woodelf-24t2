@@ -1,0 +1,45 @@
+@import "../../../variables";
+
+.card {
+  width: 400px;
+  height: 600px;
+  background-color: darken($dark, 10%);
+  display: flex;
+  margin: 0 5px;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.3s;
+  border-radius: 5px;
+}
+
+.card:hover {
+  transform: scale(1.04);
+}
+
+.cardImage {
+  border-radius: inherit;
+  width: inherit;
+  height: 350px;
+}
+
+.cardTextBox {
+  text-align: center;
+  padding: 10px;
+  height: inherit;
+}
+
+.cardTitle {
+  margin: auto;
+  font-size: 3rem;
+  color: $exploration;
+}
+
+.center {
+  align-content: center;
+}
+
+.cardText {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  color: $white-text;
+}

@@ -1,6 +1,6 @@
 // @ts-ignore
 import ReactPannellum, { isLoaded } from "react-pannellum";
-import panoramaImage from "./testimage.png";
+import panoramaImage from "/testimage.png";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
 import { useState } from "react";
@@ -40,8 +40,8 @@ function HomePage() {
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
       <div id="overlay-root" />
-
-      {/* {showRegister && (
+{/* 
+      {showRegister && (
         <RegisterPage
           onClick={() => {
             setShowRegister(false);

@@ -1,6 +1,6 @@
-@import "../../../variables"; 
+@import "../../../variables";
 
-.container {
+.containerLogin {
   height: 100vh;
   width: 100vw;
   opacity: 95%;
@@ -10,7 +10,17 @@
   justify-content: center;
 }
 
-.sheet {
+.containerGamemode {
+  height: 107vh;
+  width: 100vw;
+  opacity: 95%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.sheetLogin {
   color: $yellow-button;
   padding: 1.5rem;
   display: flex;
@@ -24,18 +34,29 @@
   position: relative;
 }
 
+.sheetGamemode {
+  color: $yellow-button;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  margin: auto;
+  width: 100%;
+  height: 725px;
+  position: relative;
+}
+
 .close {
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    position: absolute;
-    background: transparent;
-    right: 20px;
-  }
-  
-  .close:hover {
-    color: darken($secondary-yellow, 10%);
-  }
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  position: absolute;
+  background: transparent;
+  right: 20px;
+}
+
+.close:hover {
+  color: darken($secondary-yellow, 10%);
+}

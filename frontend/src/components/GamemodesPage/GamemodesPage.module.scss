@@ -1,0 +1,17 @@
+@import "../../variables";
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-shrink: initial;
+  margin: 0 75px;
+}
+
+.title {
+  padding: 15px;
+  margin: 0;
+  font-size: 3rem;
+  color: $white-text;
+  text-align: center;
+}

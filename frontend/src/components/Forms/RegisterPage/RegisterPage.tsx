@@ -111,7 +111,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   };
 
   return (
-    <Sheet>
+    <Sheet sheetLogin={true}>
       <h1 className={classes.title}>Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
