@@ -49,15 +49,12 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
   const saltRounds: number = 10;
   const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
-  const userLoginDetailsRef = await addDoc(collection(db, "userLoginDetails"), {
-    username,
-    password: hashedPassword,
-    salt: salt,
-  });
 
   const newUser: User = {
     id: "1",
     username,
+    password: hashedPassword,
+    salt: salt,
     dateJoined: new Date(),
     profilePicture: undefined,
     highScore: 0,
@@ -65,7 +62,7 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
     shirts: 0,
   };
 
-  await addDoc(collection(db, "userDetails"), {
+  await addDoc(collection(db, "users"), {
     newUser,
   });
 

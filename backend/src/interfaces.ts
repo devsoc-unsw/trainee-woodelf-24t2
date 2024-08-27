@@ -24,6 +24,8 @@ export interface Game {
 export interface User {
   id: string;
   username: string;
+  password: string;
+  salt: string;
   profilePicture?: string;
   highScore?: number;
   cumulativeScore?: number;
