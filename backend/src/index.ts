@@ -18,6 +18,13 @@ app.use(express.json());
 app.use(cors());
 app.use(
   session({
+    // TODO: uncomment the secure 
+    // secure: true,
+    cookie: {
+      sameSite: "lax",
+      httpOnly: true,
+      maxAge: 604800000
+    },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
     /* I'm not entirely sure of the effects,
