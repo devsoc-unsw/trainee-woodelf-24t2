@@ -111,7 +111,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   };
 
   return (
-    <Sheet hasCloseButton={onClick}>
+    <Sheet>
       <h1 className={classes.title}>Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
@@ -120,15 +120,19 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         <input
           id="username"
           className={classNames(classes.input, {
-            [classes.inputError]: usernameEmpty || !usernameAvailable || !usernameValid,
+            [classes.inputError]:
+              usernameEmpty || !usernameAvailable || !usernameValid,
           })}
           name="username"
           type="text"
           value={formData.username}
           onChange={handleChange}
         />
-         {!usernameValid && (
-          <WarningText text="Username must be between 3-16 characters and only contain alphabetical or numberic characters." paddingBottom={10} />
+        {!usernameValid && (
+          <WarningText
+            text="Username must be between 3-16 characters and only contain alphabetical or numberic characters."
+            paddingBottom={10}
+          />
         )}
         {usernameEmpty && (
           <WarningText text="Please enter your username." paddingBottom={10} />
@@ -180,7 +184,11 @@ function LoginPage({ onClick }: { onClick: () => void }) {
           />
         )}
         <input type="submit" className={classes.button} value="Register" />
-        <div className={classes.register}></div>
+        <div className={classes.register}>
+          <a className={classes.link} onClick={onClick}>
+            Go back
+          </a>
+        </div>
       </form>
     </Sheet>
   );
