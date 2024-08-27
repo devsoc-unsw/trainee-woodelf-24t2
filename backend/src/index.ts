@@ -18,21 +18,15 @@ app.use(express.json());
 app.use(cors());
 app.use(
   session({
-    // TODO: uncomment the secure 
-    // secure: true,
     cookie: {
       sameSite: "lax",
-      httpOnly: true,
-      maxAge: 604800000
+      maxAge: 604800000,
+      // If not development, assume production and set secure to true
+      secure: (process.env.NODE_ENV !== "development") ? true : false,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    /* I'm not entirely sure of the effects,
-     ** but since our sessions use expiration dates and based on the express-session doc,
-     ** I've set it to true
-     */
-    resave: true,
-    store,
+    resave: true
   }),
 );
 
