@@ -6,9 +6,16 @@ interface WarningTextProps {
 }
 
 function WarningText(props: WarningTextProps) {
-    return (
-        <div className={classes.warning} style={props.paddingBottom ? {paddingBottom: `${props.paddingBottom}px`} : {}}>{props.text}</div>
-    );
+  return (
+    <div
+      className={classes.warning}
+      style={
+        props.paddingBottom ? { paddingBottom: `${props.paddingBottom}px` } : {}
+      }
+    >
+      {props.text}
+    </div>
+  );
 }
 
 export default WarningText;
