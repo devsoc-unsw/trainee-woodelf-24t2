@@ -4,7 +4,6 @@ export enum GameState {
 }
 
 export interface Level {
-  id: string;
   photoLink: string;
   locationName: string | undefined;
   latitude: number;
@@ -13,7 +12,6 @@ export interface Level {
 }
 
 export interface Game {
-  id: string;
   status: GameState;
   levels: Level[];
   score: number;
@@ -22,7 +20,6 @@ export interface Game {
 }
 
 export interface User {
-  id: string;
   username: string;
   password: string;
   salt: string;

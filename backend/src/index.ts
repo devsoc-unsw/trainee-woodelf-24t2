@@ -10,9 +10,6 @@ import crypto from "crypto";
 
 const EXPRESS_PORT = 3000;
 
-// only meant for debugging / delete for production
-const store = new session.MemoryStore();
-
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -51,7 +48,6 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
   const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
 
   const newUser: User = {
-    id: "1",
     username,
     password: hashedPassword,
     salt: salt,
