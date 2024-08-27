@@ -1,12 +1,25 @@
 import express, { Response } from "express";
 import session from "express-session";
 import { TypedRequest, LoginBody } from "./requestTypes";
-import { User } from "./interfaces";
+import { SessionStorage, User } from "./interfaces";
 import bcrypt from "bcrypt";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
+
+const session_auth = async (sessionId: string): Promise<boolean> => {
+  const users = collection(db, "sessions");
+  const sessionData = query(users, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return false;
+  }
+
+  // if current time is less than expiration date, return true
+  return new Date() < session.docs[0].data().expirationDate;
+}
 
 const EXPRESS_PORT = 3000;
 
@@ -51,15 +64,12 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
     password: hashedPassword,
     salt: salt,
     dateJoined: new Date(),
-    profilePicture: undefined,
     highScore: 0,
     cumulativeScore: 0,
     shirts: 0,
   };
 
-  await addDoc(collection(db, "users"), {
-    newUser,
-  });
+  await addDoc(collection(db, "users"), newUser);
 
   res.status(201).send("User Successfully Registered");
 });
@@ -79,14 +89,29 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    (err, result) => {
+    async (err, result: boolean) => {
       if (err) {
         return res.status(500).send("Error processing password");
       }
 
-      return result
-        ? res.status(201).send("User Successfully Logged In")
-        : res.status(401).send("Incorrect password");
+      if (result) {
+        req.session.userId = details.docs[0].id;
+        const expiryTime: Date = new Date();
+        expiryTime.setDate(expiryTime.getDate() + 7);
+
+        const session: SessionStorage = {
+          sessionId: req.sessionID,
+          userId: details.docs[0].id,  // assuming userId is the docRef
+          creationDate: new Date(),
+          expirationDate: expiryTime
+        }
+
+        await addDoc(collection(db, 'sessions'), session);
+
+        res.status(201).send('Login succesful!');
+      } else {
+        res.status(401).send('Login unsuccesful!');
+      }
     },
   );
 });
