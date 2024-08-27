@@ -1,6 +1,7 @@
 import express, { Response } from "express";
 import session from "express-session";
 import { TypedRequest, LoginBody } from "./requestTypes";
+import { User } from "./interfaces";
 import bcrypt from "bcrypt";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { db } from "./firebase";
@@ -54,9 +55,18 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
     salt: salt,
   });
 
-  const docRef = await addDoc(collection(db, "userDetails"), {
+  const newUser: User = {
+    id: "1",
     username,
-    dateJoined: Date(),
+    dateJoined: new Date(),
+    profilePicture: undefined,
+    highScore: 0,
+    cumulativeScore: 0,
+    shirts: 0,
+  };
+
+  await addDoc(collection(db, "userDetails"), {
+    newUser,
   });
 
   res.status(201).send("User Successfully Registered");
