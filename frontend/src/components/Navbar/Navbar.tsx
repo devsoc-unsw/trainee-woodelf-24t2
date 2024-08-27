@@ -29,6 +29,7 @@ function Navbar() {
         <button className={classes.hover} onClick={toggleCredits}>
           Credits
         </button>
+        <button className={classes.hover}>Logout</button>
         <ProfileIcon url="/yellowshirt.svg" />
       </div>
       {showCredits &&

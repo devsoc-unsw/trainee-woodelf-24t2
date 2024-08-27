@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
@@ -7,6 +7,7 @@ import WarningText from "../WarningText/WarningText";
 function LoginPage({ onClick }: { onClick: () => void }) {
   const passwordPattern =
     /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
+  const usernamePattern = /^[A-Za-z0-9]{3,16}$/;
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -18,9 +19,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [confirmPasswordEmpty, setConfirmPasswordEmpty] = useState(false);
   const [passwordValid, setPasswordValid] = useState(true);
-  const confirmPasswordField = useRef<HTMLInputElement>(null);
-  const usernameField = useRef<HTMLInputElement>(null);
-  const passwordField = useRef<HTMLInputElement>(null);
+  const [usernameValid, setUsernameValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const resetState = () => {
@@ -30,9 +29,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     if (passwordEmpty) setPasswordEmpty(false);
     if (confirmPasswordEmpty) setConfirmPasswordEmpty(false);
     if (!passwordValid) setPasswordValid(true);
-    usernameField.current?.classList.remove(classes.inputError);
-    passwordField.current?.classList.remove(classes.inputError);
-    confirmPasswordField.current?.classList.remove(classes.inputError);
+    if (!usernameValid) setUsernameValid(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +52,10 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     // Checks the fields are empty
     if (isFieldEmpty(formData.username, true)) {
       setUsernameEmpty(true);
+      return false;
+    }
+    if (!usernamePattern.test(formData.username)) {
+      setUsernameValid(false);
       return false;
     }
     if (isFieldEmpty(formData.password)) {
@@ -118,15 +119,17 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         </label>
         <input
           id="username"
-          ref={usernameField}
           className={classNames(classes.input, {
-            [classes.inputError]: usernameEmpty || !usernameAvailable,
+            [classes.inputError]: usernameEmpty || !usernameAvailable || !usernameValid,
           })}
           name="username"
           type="text"
           value={formData.username}
           onChange={handleChange}
         />
+         {!usernameValid && (
+          <WarningText text="Username must be between 3-16 characters and only contain alphabetical or numberic characters." paddingBottom={10} />
+        )}
         {usernameEmpty && (
           <WarningText text="Please enter your username." paddingBottom={10} />
         )}
@@ -138,7 +141,6 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         </label>
         <input
           id="password"
-          ref={passwordField}
           className={classNames(classes.input, {
             [classes.inputError]: !passwordValid || passwordEmpty,
           })}
@@ -159,7 +161,6 @@ function LoginPage({ onClick }: { onClick: () => void }) {
             [classes.inputError]:
               confirmPasswordEmpty || !passwordMatch || !passwordValid,
           })}
-          ref={confirmPasswordField}
           name="confirmPassword"
           type="password"
           value={formData.confirmPassword}
