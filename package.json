@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"@lachlanshoesmith/mazemap-react": "^1.0.0",
-		"bcrypt": "^5.1.1"
-	}
-}
