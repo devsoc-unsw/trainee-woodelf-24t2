@@ -1,9 +1,16 @@
 import express, { Response } from "express";
 import session from "express-session";
-import { TypedRequest, LoginBody } from "./requestTypes";
+import { TypedRequest, LoginBody, ValidateBody } from "./requestTypes";
 import { SessionStorage, User } from "./interfaces";
 import bcrypt from "bcrypt";
-import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  where,
+  query,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
@@ -17,9 +24,27 @@ const session_auth = async (sessionId: string): Promise<boolean> => {
     return false;
   }
 
-  // if current time is less than expiration date, return true
-  return new Date() < session.docs[0].data().expirationDate;
-}
+  // if current time is greater than expiration date, return false and
+  // removes it from the database
+  if (new Date() > session.docs[0].data().expirationDate.toDate()) {
+    console.log(new Date(), session.docs[0].data().expirationDate);
+    await session_remove(sessionId);
+    return false;
+  }
+
+  return true;
+};
+
+const session_remove = async (sessionId: string): Promise<void> => {
+  const users = collection(db, "sessions");
+  const sessionData = query(users, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  session.forEach(async (sessionDoc) => {
+    const ref = sessionDoc.ref;
+    await deleteDoc(ref);
+  });
+};
 
 const EXPRESS_PORT = 3000;
 
@@ -37,6 +62,18 @@ app.use(
      */
     resave: true,
   }),
+);
+
+app.post(
+  "/session/validate",
+  async (req: TypedRequest<ValidateBody>, res: Response) => {
+    const { sessionId } = req.body;
+    if (await session_auth(sessionId)) {
+      res.status(200).send("valid sessionID");
+    } else {
+      res.status(401).send("Invalid sessionID");
+    }
+  },
 );
 
 app.listen(EXPRESS_PORT, () => {
@@ -101,16 +138,16 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
 
         const session: SessionStorage = {
           sessionId: req.sessionID,
-          userId: details.docs[0].id,  // assuming userId is the docRef
+          userId: details.docs[0].id, // assuming userId is the docRef
           creationDate: new Date(),
-          expirationDate: expiryTime
-        }
+          expirationDate: expiryTime,
+        };
 
-        await addDoc(collection(db, 'sessions'), session);
+        await addDoc(collection(db, "sessions"), session);
 
-        res.status(201).send('Login succesful!');
+        res.status(201).send("Login Successful!");
       } else {
-        res.status(401).send('Login unsuccesful!');
+        res.status(401).send("Login Unsuccessful!");
       }
     },
   );
