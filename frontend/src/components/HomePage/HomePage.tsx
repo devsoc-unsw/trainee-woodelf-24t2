@@ -6,6 +6,7 @@ import "./HomePage.scss";
 import { useState } from "react";
 import LoginPage from "../Forms/LoginPage/LoginPage";
 import RegisterPage from "../Forms/RegisterPage/RegisterPage";
+import GamemodesPage from "../GamemodesPage/GamemodesPage";
 
 function HomePage() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
@@ -39,7 +40,8 @@ function HomePage() {
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
       <div id="overlay-root" />
-      {showRegister && (
+
+      {/* {showRegister && (
         <RegisterPage
           onClick={() => {
             setShowRegister(false);
@@ -54,7 +56,8 @@ function HomePage() {
             setShowLogin(false);
           }}
         />
-      )}
+      )} */}
+      <GamemodesPage/>
       <ReactPannellum
         id="1"
         sceneId="firstScene"
