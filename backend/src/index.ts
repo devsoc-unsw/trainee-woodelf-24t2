@@ -31,12 +31,11 @@ const session_auth = async (sessionId: string): Promise<boolean> => {
     await session_remove(sessionId);
     return false;
   }
-
-  clean_sessions();
-
   return true;
 };
 
+// Clears all expired sessions in the db
+// Idea, periodically call this to stay efficient on document reads?
 const clean_sessions = async (): Promise<void> => {
   const sessions = collection(db, "sessions");
   const allSessions = await getDocs(sessions);
@@ -139,7 +138,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    async (err, result: boolean) => {
+    async (err: Error | null, result: boolean) => {
       if (err) {
         return res.status(500).send("Error processing password");
       }
@@ -149,21 +148,19 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
           if (err) {
             return res.status(500).send("Error regenerating session.");
           }
+          const expiryTime: Date = new Date();
+          expiryTime.setDate(expiryTime.getDate() + 7);
+
+          const session: SessionStorage = {
+            sessionId: req.sessionID,
+            userId: details.docs[0].id, // assuming userId is the docRef
+            creationDate: new Date(),
+            expirationDate: expiryTime,
+          };
+
+          await addDoc(collection(db, "sessions"), session);
+          res.status(201).send("Login Successful!");
         });
-        req.session.userId = details.docs[0].id;
-        const expiryTime: Date = new Date();
-        expiryTime.setDate(expiryTime.getDate() + 7);
-
-        const session: SessionStorage = {
-          sessionId: req.sessionID,
-          userId: details.docs[0].id, // assuming userId is the docRef
-          creationDate: new Date(),
-          expirationDate: expiryTime,
-        };
-
-        await addDoc(collection(db, "sessions"), session);
-
-        res.status(201).send("Login Successful!");
       } else {
         res.status(401).send("Login Unsuccessful!");
       }
