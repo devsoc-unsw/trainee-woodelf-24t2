@@ -23,7 +23,6 @@ app.use(
      ** I've set it to true
      */
     resave: true,
-    store,
   }),
 );
 
