@@ -144,7 +144,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
       }
 
       if (result) {
-        req.session.regenerate(async (err) => {
+        req.session.regenerate(async (err: Error | null) => {
           if (err) {
             return res.status(500).send("Error regenerating session.");
           }
