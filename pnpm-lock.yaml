@@ -8,11 +8,17 @@ importers:
 
   .:
     dependencies:
+      '@lachlanshoesmith/mazemap-react':
+        specifier: ^1.0.0
+        version: 1.0.0
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
 
 packages:
+
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    resolution: {integrity: sha512-r4GKpf6PGFLGmfalcHvFHpipjmKD2A+EBAGQ9nBWlN/mc9PqagJ28EXodijXp4A8Cv7ubpCXiIQvrWMXvvtW4g==}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -237,6 +243,10 @@ packages:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
 snapshots:
+
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    dependencies:
+      mazemap-react: 'link:'
 
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:
