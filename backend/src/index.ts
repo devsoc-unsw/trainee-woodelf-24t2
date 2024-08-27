@@ -2,7 +2,7 @@ import express, { Response } from "express";
 import session from "express-session";
 import { TypedRequest, LoginBody } from "./requestTypes";
 import bcrypt from "bcrypt";
-import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
+import { collection, addDoc, getDocs, where, query, doc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
@@ -28,6 +28,29 @@ app.use(
     store,
   }),
 );
+
+app.post('/logout', async (req, res) => {
+  const sessionId = req.sessionID;
+  const querySnapshot = await getDocs(collection(db, 'sessions'))
+  let docRef: string | undefined;
+  querySnapshot.forEach(doc => {
+    if (doc.data().sessionId === sessionId) {
+      docRef = doc.id;
+    }
+  })
+
+  if (docRef === undefined) {
+    res.send('Not logged in').status(400);
+    return;
+  }
+  deleteDoc(doc(db, 'sessions', docRef));
+
+  req.session.destroy(() => {
+    console.log('cookies removed');
+  });
+
+  res.send('Goodbye!').status(200);
+})
 
 app.listen(EXPRESS_PORT, () => {
   console.log(
