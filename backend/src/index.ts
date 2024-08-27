@@ -16,8 +16,8 @@ import cors from "cors";
 import crypto from "crypto";
 
 const session_auth = async (sessionId: string): Promise<boolean> => {
-  const users = collection(db, "sessions");
-  const sessionData = query(users, where("sessionId", "==", sessionId));
+  const sessions = collection(db, "sessions");
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) {
@@ -32,7 +32,20 @@ const session_auth = async (sessionId: string): Promise<boolean> => {
     return false;
   }
 
+  clean_sessions();
+
   return true;
+};
+
+const clean_sessions = async (): Promise<void> => {
+  const sessions = collection(db, "sessions");
+  const allSessions = await getDocs(sessions);
+  allSessions.forEach(async (sessionDoc) => {
+    if (new Date() > sessionDoc.data().expirationDate.toDate()) {
+      const ref = sessionDoc.ref;
+      await deleteDoc(ref);
+    }
+  });
 };
 
 const session_remove = async (sessionId: string): Promise<void> => {
@@ -132,6 +145,11 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
       }
 
       if (result) {
+        req.session.regenerate(async (err) => {
+          if (err) {
+            return res.status(500).send("Error regenerating session.");
+          }
+        });
         req.session.userId = details.docs[0].id;
         const expiryTime: Date = new Date();
         expiryTime.setDate(expiryTime.getDate() + 7);
