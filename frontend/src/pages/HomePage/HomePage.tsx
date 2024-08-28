@@ -1,6 +1,3 @@
-// @ts-ignore
-
-import PannellumBackground from "../../components/PannellumBackground/PannellumBackground";
 import "./HomePage.scss";
 
 function HomePage() {
