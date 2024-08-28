@@ -11,7 +11,7 @@ function App() {
 
   // List of routes that do not include the Navbar
   const hideNavbarRoutes = ["/login", "/register"];
-  const panoBackgroundRoutes = ["/login", "/register", "/profile", "/home"]
+  const panoBackgroundRoutes = ["/login", "/register", "/profile", "/home", "/gamemodes"]
 
   // Determine if the Navbar should be hidden
   const hasNavbar = !hideNavbarRoutes.includes(location.pathname);

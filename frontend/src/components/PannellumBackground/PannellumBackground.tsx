@@ -1,6 +1,7 @@
-import React from "react"
+// @ts-ignore
 import ReactPannellum from "react-pannellum";
-import panoramaImage from "./testimage.png";
+import React from "react"
+import panoramaImage from "/testimage.png";
 
 function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>}) {
 

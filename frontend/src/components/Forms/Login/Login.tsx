@@ -5,7 +5,7 @@ import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function LoginPage() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -75,11 +75,10 @@ function Login() {
       setIsProcessing(false);
     }
   };
-
   const navigate = useNavigate()
 
   return (
-    <Sheet>
+    <Sheet sheetLogin={true}>
       <h1 className={classes.title}>Welcome!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
@@ -132,11 +131,11 @@ function Login() {
           <a className={classes.link} onClick={() => navigate("/register", {replace: true})}>
             Register
           </a>
-          <br /> or play as a <a className={classes.link}>guest</a>
+          <br /> or play as a <a className={classes.link} onClick={() => navigate("/gamemodes", {replace: false})}>guest</a>
         </div>
       </form>
     </Sheet>
   );
 }
 
-export default Login;
+export default LoginPage;
