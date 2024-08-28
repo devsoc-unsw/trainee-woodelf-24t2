@@ -8,29 +8,25 @@
 }
 
 .box {
+  position: relative;
   padding: 20px;
-  width: 600px;
-  height: 300px;
+  width: 300px;
+  height: 275px;
   border-radius: 8px;
   background-color: $dark;
+  opacity: 95%;
+  text-align: center;
 }
 
-h1 {
+.title {
   font-size: 3rem;
   margin: 0;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: rgb(250, 225, 81);
-  font-weight: 500;
 }
 
 .creditstext {
   font-size: 1.5rem;
   display: flex;
-  height: calc(100% - 3rem - 40px);
+  height: calc(100% - 3rem - 10px);
   flex-direction: column;
   color: rgb(250, 225, 81);
   display: flex;
@@ -43,4 +39,16 @@ h2 {
 
 .creditstext li {
   margin: 0;
+}
+
+.close {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: $secondary-yellow;
+  cursor: pointer;
+  position: absolute;
+  background: transparent;
+  right: 20px;
 }

@@ -1,6 +1,6 @@
-import classes from './Logo.module.scss';
+import classes from "./Logo.module.scss";
 
-type Size = 'sm' | 'md' | 'lg';
+type Size = "sm" | "md" | "lg";
 
 interface LogoProps {
   size: Size;

@@ -1,5 +1,5 @@
-import classes from './Summary.module.scss';
-import SummaryRow from '../SummaryRow/SummaryRow';
+import classes from "./Summary.module.scss";
+import SummaryRow from "../SummaryRow/SummaryRow";
 
 interface SummaryProps {
   correctGuesses: number;
@@ -24,10 +24,7 @@ function Summary(props: SummaryProps) {
               summaryType="building"
               summaryAttribute={props.correctBuilding}
             />
-            <SummaryRow
-              summaryType="time"
-              summaryAttribute={props.timeBonus}
-            />
+            <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} />
           </tbody>
         </table>
       </div>

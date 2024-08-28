@@ -2,7 +2,7 @@
 
 html {
   box-sizing: border-box;
-  font-family: 'Hammersmith One', sans-serif;
+  font-family: "Hammersmith One", sans-serif;
 }
 
 *,
@@ -32,8 +32,6 @@ body {
   color: $light-dark;
 }
 
-
-
 .app {
   display: flex;
   justify-content: center;
@@ -42,7 +40,19 @@ body {
 }
 
 ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#overlay-root {
+  display: none;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
