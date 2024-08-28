@@ -47,3 +47,8 @@ declare module "express-session" {
     userId: string;
   }
 }
+
+export interface LoginErrors {
+  usernameNotFound: boolean;
+  passwordInvalid: boolean;
+}

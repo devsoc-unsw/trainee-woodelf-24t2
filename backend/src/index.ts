@@ -1,7 +1,7 @@
 import express, { Response, Request } from "express";
 import session from "express-session";
 import { TypedRequest, LoginBody } from "./requestTypes";
-import { SessionStorage, User } from "./interfaces";
+import { SessionStorage, User, LoginErrors } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -72,19 +72,15 @@ app.use(express.json());
 app.use(cors());
 app.use(
   session({
+    cookie: {
+      sameSite: "lax",
+      maxAge: 604800000,
+      // If not development, assume production and set secure to true
+      secure: (process.env.NODE_ENV !== "development") ? true : false,
+    },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    /* I'm not entirely sure of the effects,
-     ** but since our sessions use expiration dates and based on the express-session doc,
-     ** I've set it to true
-     */
     resave: true,
-    cookie: {
-      httpOnly: true,
-      // secure: true, // uncomment when not testing with http
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
-    },
   }),
 );
 
@@ -153,7 +149,7 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
   await addDoc(collection(db, "users"), newUser);
 
-  res.status(201).send("User Successfully Registered");
+  return res.status(201).send("User Successfully Registered");
 });
 
 app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
@@ -162,8 +158,14 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const loginDetails = query(users, where("username", "==", username));
   const details = await getDocs(loginDetails);
 
+  const errorCheck: LoginErrors = {
+    usernameNotFound: false,
+    passwordInvalid: false,
+  } 
+  
   if (details.empty) {
-    return res.status(400).send("Username not found");
+    errorCheck.usernameNotFound = true;
+    return res.status(400).json(errorCheck);
   }
 
   const saltedPassword = password.concat(details.docs[0].data().salt);
@@ -192,10 +194,11 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
           };
 
           await addDoc(collection(db, "sessions"), session);
-          return res.status(201).send("Login Successful!");
+          return res.status(201).json(errorCheck);
         });
       } else {
-        return res.status(401).send("Login Unsuccessful!");
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
       }
     },
   );
