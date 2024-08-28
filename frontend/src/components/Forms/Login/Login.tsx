@@ -6,9 +6,6 @@ import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-
-  
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
