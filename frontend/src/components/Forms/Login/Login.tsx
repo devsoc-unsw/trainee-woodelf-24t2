@@ -6,6 +6,9 @@ import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+
+  
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -15,6 +18,7 @@ function Login() {
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate()
 
   const resetState = () => {
     if (!usernameFound) setUsernameFound(true);
@@ -62,13 +66,18 @@ function Login() {
         },
         body: JSON.stringify(formData),
       });
+      const errorCheck = await resp.json();
 
-      // need backend for auth/login to display errors for username not found / password invalid.
       if (resp.ok) {
-        console.log("success");
+        navigate("/home", {replace: true});
       } else {
-        console.log("failure");
+        if (errorCheck.usernameNotFound) {
+          return setUsernameFound(false);
+        } else if (errorCheck.passwordInvalid) {
+          return setPasswordMatch(false);
+        }
       }
+
     } catch (err) {
       console.log("Error: ", err);
     } finally {
@@ -76,7 +85,6 @@ function Login() {
     }
   };
 
-  const navigate = useNavigate()
 
   return (
     <Sheet>
@@ -88,7 +96,7 @@ function Login() {
         <input
           id="username"
           className={classNames(classes.input, {
-            [classes.inputError]: usernameEmpty,
+            [classes.inputError]: usernameEmpty || !usernameFound,
           })}
           name="username"
           type="text"
@@ -108,7 +116,7 @@ function Login() {
         <input
           id="password"
           className={classNames(classes.input, {
-            [classes.inputError]: passwordEmpty,
+            [classes.inputError]: passwordEmpty || !passwordMatch,
           })}
           name="password"
           type="password"
@@ -119,7 +127,7 @@ function Login() {
           <WarningText text="Please enter your password." paddingBottom={0} />
         )}
         {!passwordMatch && (
-          <WarningText text="Please enter your username." paddingBottom={0} />
+          <WarningText text="Incorrect password." paddingBottom={0} />
         )}
         <input
           type="submit"

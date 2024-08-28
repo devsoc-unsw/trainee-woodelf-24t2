@@ -22,6 +22,7 @@ function Register() {
   const [passwordValid, setPasswordValid] = useState(true);
   const [usernameValid, setUsernameValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
   const resetState = () => {
     if (!passwordMatch) setPasswordMatch(true);
@@ -99,7 +100,7 @@ function Register() {
       });
 
       if (resp.ok) {
-        console.log("success");
+        navigate("/login", {replace: true});
       } else {
         console.log("failure");
       }
@@ -109,8 +110,6 @@ function Register() {
       setIsProcessing(false);
     }
   };
-
-  const navigate = useNavigate()
 
   return (
     <Sheet>
