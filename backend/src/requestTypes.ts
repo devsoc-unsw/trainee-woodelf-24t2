@@ -7,6 +7,10 @@ export interface LoginBody {
   password: string;
 }
 
+export interface LogoutBody {
+  sessionId: string;
+}
+
 export interface ValidateBody {
   sessionId: string;
 }

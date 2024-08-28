@@ -7,9 +7,9 @@ function App() {
   return (
     <>
       <Navbar />
-      <HomePage/>
+      <HomePage />
     </>
-);
+  );
 }
 
 export default App;

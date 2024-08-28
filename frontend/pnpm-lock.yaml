@@ -11,9 +11,21 @@ importers:
       '@fontsource/hammersmith-one':
         specifier: ^5.0.13
         version: 5.0.13
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
+      '@lachlanshoesmith/mazemap-react':
+        specifier: ^1.0.0
+        version: 1.0.0
       firebase:
         specifier: ^10.12.3
         version: 10.12.3
+      ldrs:
+        specifier: ^1.0.2
+        version: 1.0.2
+      lucide-react:
+        specifier: ^0.435.0
+        version: 0.435.0(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -559,6 +571,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    resolution: {integrity: sha512-r4GKpf6PGFLGmfalcHvFHpipjmKD2A+EBAGQ9nBWlN/mc9PqagJ28EXodijXp4A8Cv7ubpCXiIQvrWMXvvtW4g==}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -851,6 +866,9 @@ packages:
   chokidar@3.6.0:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
+
+  classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
 
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
@@ -1146,6 +1164,9 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
+  ldrs@1.0.2:
+    resolution: {integrity: sha512-sYJmivdkIiHrUEqTrEWccBoLdaENpzbzkABI5rk8rRxTXrg9i2xVuDvUUuhOhJY3RmQyaoxs046pM1DCRdcIpg==}
+
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -1169,6 +1190,11 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lucide-react@0.435.0:
+    resolution: {integrity: sha512-we5GKfzjMDw9m9SsyZJvWim9qaT+Ya5kaRS+OGFqgLqXUrPM1h+7CiMw5pKdEIoaBqfXz2pyv9TASAdpIAJs0Q==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -2103,6 +2129,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    dependencies:
+      mazemap-react: 'link:'
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -2400,6 +2430,8 @@ snapshots:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  classnames@2.5.1: {}
 
   cliui@8.0.1:
     dependencies:
@@ -2739,6 +2771,8 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
+  ldrs@1.0.2: {}
+
   levn@0.4.1:
     dependencies:
       prelude-ls: 1.2.1
@@ -2761,6 +2795,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-react@0.435.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   merge2@1.4.1: {}
 

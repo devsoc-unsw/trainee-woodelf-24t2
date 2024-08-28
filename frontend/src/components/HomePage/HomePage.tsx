@@ -4,9 +4,13 @@ import panoramaImage from "./testimage.png";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./HomePage.scss";
 import { useState } from "react";
+import LoginPage from "../Forms/LoginPage/LoginPage";
+import RegisterPage from "../Forms/RegisterPage/RegisterPage";
 
 function HomePage() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
+  const [showRegister, setShowRegister] = useState(false);
 
   const config = {
     type: "equirectangular",
@@ -21,18 +25,36 @@ function HomePage() {
   };
 
   const style = {
+    position: "absolute",
     width: "104vw",
     height: "104vh",
     filter: "blur(12px)",
     left: "-2vw",
     top: "-2vh",
-    zIndex: "0",
+    zIndex: "-1",
+    PointerEvents: "none",
   };
 
   return (
     <>
       {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root"></div>
+      <div id="overlay-root" />
+      {showRegister && (
+        <RegisterPage
+          onClick={() => {
+            setShowRegister(false);
+            setShowLogin(true);
+          }}
+        />
+      )}
+      {showLogin && (
+        <LoginPage
+          onClick={() => {
+            setShowRegister(true);
+            setShowLogin(false);
+          }}
+        />
+      )}
       <ReactPannellum
         id="1"
         sceneId="firstScene"

@@ -1,6 +1,6 @@
-import express, { Response } from "express";
+import express, { Response, Request } from "express";
 import session from "express-session";
-import { TypedRequest, LoginBody, ValidateBody } from "./requestTypes";
+import { TypedRequest, LoginBody } from "./requestTypes";
 import { SessionStorage, User } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
@@ -51,10 +51,14 @@ const session_remove = async (sessionId: string) => {
   const sessionData = query(users, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
+  if (session.empty) return false;
+
   session.forEach(async (sessionDoc) => {
     const ref = sessionDoc.ref;
     await deleteDoc(ref);
   });
+
+  return true;
 };
 
 const EXPRESS_PORT = 3000;
@@ -72,20 +76,23 @@ app.use(
      ** I've set it to true
      */
     resave: true,
+    cookie: {
+      httpOnly: true,
+      // secure: true, // uncomment when not testing with http
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+    },
   }),
 );
 
-app.post(
-  "/session/validate",
-  async (req: TypedRequest<ValidateBody>, res: Response) => {
-    const { sessionId } = req.body;
-    if (await session_auth(sessionId)) {
-      res.status(200).send("valid sessionID");
-    } else {
-      res.status(401).send("Invalid sessionID");
-    }
-  },
-);
+app.post("/session/validate", async (req: Request, res: Response) => {
+  const sessionId = req.sessionID;
+  if (await session_auth(sessionId)) {
+    res.status(200).send("valid sessionID");
+  } else {
+    res.status(401).send("Invalid sessionID");
+  }
+});
 
 app.listen(EXPRESS_PORT, () => {
   console.log(
@@ -158,11 +165,26 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
           };
 
           await addDoc(collection(db, "sessions"), session);
-          res.status(201).send("Login Successful!");
+          return res.status(201).send("Login Successful!");
         });
       } else {
-        res.status(401).send("Login Unsuccessful!");
+        return res.status(401).send("Login Unsuccessful!");
       }
     },
   );
+});
+
+app.post("/logout", async (req: Request, res: Response) => {
+  const sessionId = req.sessionID;
+  if (!(await session_remove(sessionId))) {
+    return res.send("Not logged in").status(400);
+  }
+
+  req.session.destroy((err) => {
+    if (err) {
+      return res.send("Error destroying session.").status(400);
+    }
+
+    return res.send("Logout Successful!").status(200);
+  });
 });
