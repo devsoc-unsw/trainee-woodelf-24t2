@@ -14,6 +14,9 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      '@lachlanshoesmith/mazemap-react':
+        specifier: ^1.0.0
+        version: 1.0.0
       firebase:
         specifier: ^10.12.3
         version: 10.12.3
@@ -567,6 +570,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    resolution: {integrity: sha512-r4GKpf6PGFLGmfalcHvFHpipjmKD2A+EBAGQ9nBWlN/mc9PqagJ28EXodijXp4A8Cv7ubpCXiIQvrWMXvvtW4g==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2122,6 +2128,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  '@lachlanshoesmith/mazemap-react@1.0.0':
+    dependencies:
+      mazemap-react: 'link:'
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:

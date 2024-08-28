@@ -1,54 +1,114 @@
-import express from 'express';
-
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
-import cors from 'cors';
+import express, { Response } from "express";
+import session from "express-session";
+import { TypedRequest, LoginBody } from "./requestTypes";
+import bcrypt from "bcrypt";
+import { collection, addDoc, getDocs, where, query, doc, deleteDoc } from "firebase/firestore";
+import { db } from "./firebase";
+import cors from "cors";
+import crypto from "crypto";
 
 const EXPRESS_PORT = 3000;
 
+// only meant for debugging / delete for production
+const store = new session.MemoryStore();
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+app.use(express.json());
 app.use(cors());
+app.use(
+  session({
+    cookie: {
+      sameSite: "lax",
+      maxAge: 604800000,
+      // If not development, assume production and set secure to true
+      secure: (process.env.NODE_ENV !== "development") ? true : false,
+    },
+    secret: process.env.SESSION_SECRET as string,
+    saveUninitialized: false,
+    resave: true
+  }),
+);
 
-app.get('/', (req, res) => {
-  res.send('yellowshirt backend says hello');
-});
-
-app.post('/subscribe', async (req, res) => {
-  const {email, colour} = req.body
-  if (!email || !colour) {
-    res.status(400).send("email and colour not specified in request")
-    return
-  }
-  const docRef = await addDoc(collection(db, 'shirt_cravers'), {
-    email,
-    colour
-  });
-  console.log('Subscribed! Doc written: ', docRef.id);
-  res.status(200).send(docRef)
-});
-
-app.get('/colour', async (req, res) => {
-  if (!req.query.email) {
-    res.status(400).send("request must specify an email")
-    return
-  }
-  const querySnapshot = await getDocs(collection(db, 'shirt_cravers'));
-  let email: string = ""
-  querySnapshot.forEach((doc) => {
-    if (doc.data().email === req.query.email) {
-      email = doc.data().colour
+app.post('/logout', async (req, res) => {
+  const sessionId = req.sessionID;
+  const querySnapshot = await getDocs(collection(db, 'sessions'))
+  let docRef: string | undefined;
+  querySnapshot.forEach(doc => {
+    if (doc.data().sessionId === sessionId) {
+      docRef = doc.id;
     }
+  })
+
+  if (docRef === undefined) {
+    res.send('Not logged in').status(400);
+    return;
+  }
+  deleteDoc(doc(db, 'sessions', docRef));
+
+  req.session.destroy(() => {
+    console.log('cookies removed');
   });
-  if (email) res.status(200).send(email)
-  else res.status(404).send("this email does not have a color :(")
-});
+
+  res.send('Goodbye!').status(200);
+})
 
 app.listen(EXPRESS_PORT, () => {
   console.log(
-    `👕💛 yellowshirt backend listening on port ${EXPRESS_PORT} 💛👕`
+    `👕💛 yellowshirt backend listening on port ${EXPRESS_PORT} 💛👕`,
   );
 });
 
-// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
+app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
+  const { username, password } = req.body;
+
+  const querySnapshot = await getDocs(collection(db, "users"));
+  if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
+    return res.status(400).send("Username already exists");
+  }
+
+  const salt: string = crypto.randomBytes(128).toString("base64");
+  const saltedPassword: string = password.concat(salt);
+
+  const saltRounds: number = 10;
+  const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
+  const userLoginDetailsRef = await addDoc(collection(db, "userLoginDetails"), {
+    username,
+    password: hashedPassword,
+    salt: salt,
+  });
+
+  const docRef = await addDoc(collection(db, "userDetails"), {
+    username,
+    dateJoined: Date(),
+  });
+
+  res.status(201).send("User Successfully Registered");
+});
+
+app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
+  const { username, password } = req.body;
+  const users = collection(db, "users");
+  const loginDetails = query(users, where("username", "==", username));
+  const details = await getDocs(loginDetails);
+
+  if (details.empty) {
+    return res.status(400).send("Username not found");
+  }
+
+  const saltedPassword = password.concat(details.docs[0].data().salt);
+
+  bcrypt.compare(
+    saltedPassword,
+    details.docs[0].data().password,
+    (err, result) => {
+      if (err) {
+        return res.status(500).send("Error processing password");
+      }
+
+      return result
+        ? res.status(201).send("User Successfully Logged In")
+        : res.status(401).send("Incorrect password");
+    },
+  );
+});
