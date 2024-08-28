@@ -15,7 +15,7 @@ import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
 
-const session_auth = async (sessionId: string): Promise<boolean> => {
+const session_auth = async (sessionId: string) => {
   const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
@@ -27,7 +27,6 @@ const session_auth = async (sessionId: string): Promise<boolean> => {
   // if current time is greater than expiration date, return false and
   // removes it from the database
   if (new Date() > session.docs[0].data().expirationDate.toDate()) {
-    console.log(new Date(), session.docs[0].data().expirationDate);
     await session_remove(sessionId);
     return false;
   }
@@ -36,7 +35,7 @@ const session_auth = async (sessionId: string): Promise<boolean> => {
 
 // Clears all expired sessions in the db
 // Idea, periodically call this to stay efficient on document reads?
-const clean_sessions = async (): Promise<void> => {
+const clean_sessions = async () => {
   const sessions = collection(db, "sessions");
   const allSessions = await getDocs(sessions);
   allSessions.forEach(async (sessionDoc) => {
@@ -47,7 +46,7 @@ const clean_sessions = async (): Promise<void> => {
   });
 };
 
-const session_remove = async (sessionId: string): Promise<void> => {
+const session_remove = async (sessionId: string) => {
   const users = collection(db, "sessions");
   const sessionData = query(users, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
