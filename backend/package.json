@@ -6,13 +6,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "firebase": "^10.12.3",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
     "@types/node": "^20.14.9",
     "ts-node": "^10.9.2",
     "tsx": "^4.16.2",

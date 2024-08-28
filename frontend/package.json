@@ -11,10 +11,15 @@
   },
   "dependencies": {
     "@fontsource/hammersmith-one": "^5.0.13",
+    "classnames": "^2.5.1",
+    "@lachlanshoesmith/mazemap-react": "^1.0.0",
     "firebase": "^10.12.3",
+    "ldrs": "^1.0.2",
+    "lucide-react": "^0.435.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "react-pannellum": "^0.2.14"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
@@ -25,6 +30,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "sass": "^1.77.8",
     "typescript": "^5.5.2",
     "vite": "^5.3.2"
   },

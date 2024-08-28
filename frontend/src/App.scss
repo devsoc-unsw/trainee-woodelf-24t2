@@ -1,0 +1,58 @@
+@import "./_variables.scss";
+
+html {
+  box-sizing: border-box;
+  font-family: "Hammersmith One", sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.icon {
+  width: 100px;
+  margin-right: 16px;
+}
+
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+.light-text {
+  color: $light-dark;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 93vh;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#overlay-root {
+  display: none;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}

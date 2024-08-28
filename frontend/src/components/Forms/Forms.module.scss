@@ -1,0 +1,97 @@
+@import "../../variables";
+
+input {
+  display: flex;
+  border-radius: 3;
+}
+
+.label {
+  color: white;
+  font-size: 100%;
+}
+
+input {
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 1rem;
+  height: 40px;
+  font: inherit;
+}
+
+.input:focus {
+  outline: 0;
+}
+
+.input {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px $secondary-yellow solid;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  color: #fff;
+}
+
+.inputError {
+  border-color: rgb(238, 121, 121) !important;
+}
+
+.form {
+  flex-direction: column;
+  width: 250px;
+}
+
+.button {
+  margin-top: 10px;
+  margin-bottom: 0;
+  align-self: center;
+  width: 250px;
+  height: 40px;
+  border-radius: 3px;
+  background-color: $yellow-button;
+  border: none;
+  font: inherit;
+  color: #000000;
+  outline: none;
+  font-size: 1.2rem;
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:hover {
+  background-color: darken($yellow-button, 10%);
+}
+
+form {
+  display: flex;
+}
+
+.title {
+  margin: 0;
+  font-size: 3rem;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.register {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.link {
+  color: #bdc072;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: darken(#bdc072, 10%);
+}
+
+input:-webkit-autofill {
+  transition: background-color 10000000s ease-in-out 0s,
+    color 10000000s ease-in-out 0s;
+}
