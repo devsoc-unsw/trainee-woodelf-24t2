@@ -1,7 +1,10 @@
 import classes from "./GamemodesPage.module.scss";
 import Sheet from "../Forms/Sheet/Sheet";
 import Card from "./Card/Card";
-import poggers from "/poggers.jpg";
+import poggers from "/poggers.png";
+import hacker from "/hackermans.gif";
+
+
 
 function GamemodesPage() {
   return (
@@ -12,8 +15,15 @@ function GamemodesPage() {
           titleColor="#8eda87"
           textColor="#ffffff"
           cardTitleText="Exploration"
-          cardBodyText="Enjoy the greenery of UNSW to it's fullest!"
+          cardBodyText="Explore UNSW’s lush campus at your own pace!"
           img={poggers}
+        />
+        <Card
+          titleColor="#f17e7e"
+          textColor="#ffffff"
+          cardTitleText="Timed"
+          cardBodyText="Race the clock at UNSW! Find your way or get lost like a first-year during O-Week!"
+          img={hacker}
         />
       </div>
     </Sheet>

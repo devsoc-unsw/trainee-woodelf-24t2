@@ -3,7 +3,8 @@
 .mainContent {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 50px;
   flex-shrink: initial;
   margin: 0 75px;
 }

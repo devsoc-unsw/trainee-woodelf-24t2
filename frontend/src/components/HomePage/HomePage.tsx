@@ -57,6 +57,7 @@ function HomePage() {
           }}
         />
       )}
+
       {/* <GamemodesPage/> */}
       <ReactPannellum
         id="1"
