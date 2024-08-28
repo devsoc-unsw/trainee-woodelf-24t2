@@ -10,7 +10,3 @@ export interface LoginBody {
 export interface LogoutBody {
   sessionId: string;
 }
-
-export interface ValidateBody {
-  sessionId: string;
-}

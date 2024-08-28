@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export enum GameState {
   IN_PROGRESS = 0,
   FINISHED = 1,
@@ -29,7 +31,7 @@ export interface User {
   highScore?: number;
   cumulativeScore?: number;
   shirts?: number; // Would this refer to the number of secrets(clothes drawing) found?
-  dateJoined?: Date;
+  dateJoined: Date | Timestamp;
 }
 
 export interface SessionStorage {

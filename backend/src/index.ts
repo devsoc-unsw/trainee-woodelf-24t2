@@ -10,6 +10,9 @@ import {
   where,
   query,
   deleteDoc,
+  getDoc,
+  doc,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import cors from "cors";
@@ -47,8 +50,8 @@ const clean_sessions = async () => {
 };
 
 const session_remove = async (sessionId: string) => {
-  const users = collection(db, "sessions");
-  const sessionData = query(users, where("sessionId", "==", sessionId));
+  const sessions = collection(db, "sessions");
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) return false;
@@ -92,6 +95,30 @@ app.post("/session/validate", async (req: Request, res: Response) => {
   } else {
     res.status(401).send("Invalid sessionID");
   }
+});
+
+app.get("/user", async (req: Request, res: Response) => {
+  const sessionId = req.sessionID;
+  console.log(sessionId);
+  const sessions = collection(db, "sessions");
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return res.status(404).json({ username: null });
+  }
+
+  const userId = session.docs[0].data().userId;
+  const userDocRef = doc(db, "users", userId);
+
+  getDoc(userDocRef).then((docSnap) => {
+    const data = docSnap.data() as User;
+    const { password, salt, ...sanitizedData } = data;
+
+    const date = data.dateJoined as Timestamp;
+    sanitizedData.dateJoined = date.toDate();
+    res.status(200).json(sanitizedData);
+  });
 });
 
 app.listen(EXPRESS_PORT, () => {
