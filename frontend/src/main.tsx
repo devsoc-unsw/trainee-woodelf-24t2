@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import './App.css';
 import App from './App.tsx';
-import LoginPage from './pages/LoginPage.tsx';
-import HomePage from './pages/HomePage.tsx';
-import PlayPage from './pages/PlayPage.tsx';
-import ProfilePage from './pages/ProfilePage.tsx';
+import LoginPage from './pages/LoginPage/LoginPage.tsx';
+import HomePage from './pages/HomePage/HomePage.tsx';
+import PlayPage from './pages/PlayPage/PlayPage.tsx';
+import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
 
 import {
   createBrowserRouter,
@@ -32,8 +31,8 @@ const router = createBrowserRouter([
         element: <PlayPage/>,
       },
       {
-        path: '/profile',
-        element: <ProfilePage/>,
+        path: '/register',
+        element: <RegisterPage/>,
       },
     ],
   },

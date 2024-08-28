@@ -3,8 +3,9 @@ import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
+import { useNavigate } from "react-router-dom";
 
-function LoginPage({ onClick }: { onClick: () => void }) {
+function Register() {
   const passwordPattern =
     /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
   const usernamePattern = /^[A-Za-z0-9]{3,16}$/;
@@ -99,7 +100,6 @@ function LoginPage({ onClick }: { onClick: () => void }) {
 
       if (resp.ok) {
         console.log("success");
-        onClick();
       } else {
         console.log("failure");
       }
@@ -109,6 +109,8 @@ function LoginPage({ onClick }: { onClick: () => void }) {
       setIsProcessing(false);
     }
   };
+
+  const navigate = useNavigate()
 
   return (
     <Sheet>
@@ -185,7 +187,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         )}
         <input type="submit" className={classes.button} value="Register" />
         <div className={classes.register}>
-          <a className={classes.link} onClick={onClick}>
+          <a className={classes.link} onClick={() => navigate("/login", {replace: true})}>
             Go back
           </a>
         </div>
@@ -194,4 +196,4 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   );
 }
 
-export default LoginPage;
+export default Register;

@@ -1,11 +1,9 @@
-import React from 'react'
+import Login from '../../components/Forms/Login/Login'
 
 
 function LoginPage() {
   return (
-    <>
-        Login!
-    </>
+    <Login/>
   );
 }
 

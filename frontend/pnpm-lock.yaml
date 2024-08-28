@@ -11,12 +11,12 @@ importers:
       '@fontsource/hammersmith-one':
         specifier: ^5.0.13
         version: 5.0.13
-      classnames:
-        specifier: ^2.5.1
-        version: 2.5.1
       '@lachlanshoesmith/mazemap-react':
         specifier: ^1.0.0
         version: 1.0.0
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       firebase:
         specifier: ^10.12.3
         version: 10.12.3
@@ -32,6 +32,12 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-pannellum:
+        specifier: ^0.2.14
+        version: 0.2.14(postcss@8.4.39)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom:
+        specifier: ^6.25.1
+        version: 6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: ^18.3.3

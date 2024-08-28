@@ -3,8 +3,9 @@ import classes from "../Forms.module.scss";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
+import { useNavigate } from "react-router-dom";
 
-function LoginPage({ onClick }: { onClick: () => void }) {
+function Login() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -75,6 +76,8 @@ function LoginPage({ onClick }: { onClick: () => void }) {
     }
   };
 
+  const navigate = useNavigate()
+
   return (
     <Sheet>
       <h1 className={classes.title}>Welcome!</h1>
@@ -126,7 +129,7 @@ function LoginPage({ onClick }: { onClick: () => void }) {
         />
         <div className={classes.register}>
           Don't have an account?{" "}
-          <a className={classes.link} onClick={onClick}>
+          <a className={classes.link} onClick={() => navigate("/register", {replace: true})}>
             Register
           </a>
           <br /> or play as a <a className={classes.link}>guest</a>
@@ -136,4 +139,4 @@ function LoginPage({ onClick }: { onClick: () => void }) {
   );
 }
 
-export default LoginPage;
+export default Login;
