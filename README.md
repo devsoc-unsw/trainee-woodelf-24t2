@@ -10,7 +10,9 @@ by alyssa, ben, chris, lachlan, and osvaldo
 2. set the following value in `backend/.env`:
 ```bash
 SESSION_SECRET=
+NODE_ENV=
 ```
+NODE_ENV is usually either 'development' or 'production'
 3. `cd ../frontend && pnpm i`
 4. set the following values in `frontend/.env`:
 ```bash
