@@ -18,8 +18,10 @@ import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
 
+const sessions = collection(db, "sessions");
+const users = collection(db, "users");
+
 const session_auth = async (sessionId: string) => {
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
@@ -36,21 +38,7 @@ const session_auth = async (sessionId: string) => {
   return true;
 };
 
-// Clears all expired sessions in the db
-// Idea, periodically call this to stay efficient on document reads?
-const clean_sessions = async () => {
-  const sessions = collection(db, "sessions");
-  const allSessions = await getDocs(sessions);
-  allSessions.forEach(async (sessionDoc) => {
-    if (new Date() > sessionDoc.data().expirationDate.toDate()) {
-      const ref = sessionDoc.ref;
-      await deleteDoc(ref);
-    }
-  });
-};
-
 const session_remove = async (sessionId: string) => {
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
@@ -86,13 +74,11 @@ app.use(
 
 app.get("/user", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
-  console.log(sessionId);
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) {
-    return res.status(404).json({ username: null });
+    return res.status(404).send("No user found!");
   }
 
   const userId = session.docs[0].data().userId;
@@ -145,7 +131,6 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
 app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-  const users = collection(db, "users");
   const loginDetails = query(users, where("username", "==", username));
   const details = await getDocs(loginDetails);
 
