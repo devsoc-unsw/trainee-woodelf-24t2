@@ -84,15 +84,6 @@ app.use(
   }),
 );
 
-app.post("/session/validate", async (req: Request, res: Response) => {
-  const sessionId = req.sessionID;
-  if (await session_auth(sessionId)) {
-    res.status(200).send("valid sessionID");
-  } else {
-    res.status(401).send("Invalid sessionID");
-  }
-});
-
 app.get("/user", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
   console.log(sessionId);
