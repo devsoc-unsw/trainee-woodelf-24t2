@@ -18,8 +18,10 @@ import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
 
+const sessions = collection(db, "sessions");
+const users = collection(db, "users");
+
 const session_auth = async (sessionId: string) => {
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
@@ -36,21 +38,7 @@ const session_auth = async (sessionId: string) => {
   return true;
 };
 
-// Clears all expired sessions in the db
-// Idea, periodically call this to stay efficient on document reads?
-const clean_sessions = async () => {
-  const sessions = collection(db, "sessions");
-  const allSessions = await getDocs(sessions);
-  allSessions.forEach(async (sessionDoc) => {
-    if (new Date() > sessionDoc.data().expirationDate.toDate()) {
-      const ref = sessionDoc.ref;
-      await deleteDoc(ref);
-    }
-  });
-};
-
 const session_remove = async (sessionId: string) => {
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
@@ -76,7 +64,7 @@ app.use(
       sameSite: "lax",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
-      secure: (process.env.NODE_ENV !== "development") ? true : false,
+      secure: process.env.NODE_ENV !== "development" ? true : false,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
@@ -84,24 +72,17 @@ app.use(
   }),
 );
 
-app.post("/session/validate", async (req: Request, res: Response) => {
-  const sessionId = req.sessionID;
-  if (await session_auth(sessionId)) {
-    res.status(200).send("valid sessionID");
-  } else {
-    res.status(401).send("Invalid sessionID");
-  }
-});
-
 app.get("/user", async (req: Request, res: Response) => {
+  // if sessionId is in the DB and not expired --> session is a user.
+  // if not --> session is a guest.
   const sessionId = req.sessionID;
-  console.log(sessionId);
-  const sessions = collection(db, "sessions");
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) {
-    return res.status(404).json({ username: null });
+    return res.status(404).send("No user found!");
+  } else if (!(await session_auth(sessionId))) {
+    return res.status(401).send("Session expired.");
   }
 
   const userId = session.docs[0].data().userId;
@@ -154,15 +135,14 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
 app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-  const users = collection(db, "users");
   const loginDetails = query(users, where("username", "==", username));
   const details = await getDocs(loginDetails);
 
   const errorCheck: LoginErrors = {
     usernameNotFound: false,
     passwordInvalid: false,
-  } 
-  
+  };
+
   if (details.empty) {
     errorCheck.usernameNotFound = true;
     return res.status(400).json(errorCheck);
@@ -194,7 +174,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
           };
 
           await addDoc(collection(db, "sessions"), session);
-          return res.status(201).json(errorCheck);
+          return res.status(200).json(errorCheck);
         });
       } else {
         errorCheck.passwordInvalid = true;
