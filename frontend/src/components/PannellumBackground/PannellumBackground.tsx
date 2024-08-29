@@ -1,16 +1,9 @@
 // @ts-ignore
-import ReactPannellum, { isLoaded } from "react-pannellum";
+import ReactPannellum from "react-pannellum";
+import React from "react"
 import panoramaImage from "./testimage.png";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
-import "./HomePage.scss";
-import { useState } from "react";
-import LoginPage from "../Forms/LoginPage/LoginPage";
-import RegisterPage from "../Forms/RegisterPage/RegisterPage";
 
-function HomePage() {
-  const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
-  const [showLogin, setShowLogin] = useState(true);
-  const [showRegister, setShowRegister] = useState(false);
+function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>}) {
 
   const config = {
     type: "equirectangular",
@@ -35,26 +28,8 @@ function HomePage() {
     PointerEvents: "none",
   };
 
-  return (
+  return(
     <>
-      {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root" />
-      {showRegister && (
-        <RegisterPage
-          onClick={() => {
-            setShowRegister(false);
-            setShowLogin(true);
-          }}
-        />
-      )}
-      {showLogin && (
-        <LoginPage
-          onClick={() => {
-            setShowRegister(true);
-            setShowLogin(false);
-          }}
-        />
-      )}
       <ReactPannellum
         id="1"
         sceneId="firstScene"
@@ -71,7 +46,8 @@ function HomePage() {
         }}
       />
     </>
-  );
+  )
+
 }
 
-export default HomePage;
+export default PannellumBackground
