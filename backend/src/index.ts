@@ -64,7 +64,7 @@ app.use(
       sameSite: "lax",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
-      secure: (process.env.NODE_ENV !== "development") ? true : false,
+      secure: process.env.NODE_ENV !== "development" ? true : false,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
@@ -73,12 +73,16 @@ app.use(
 );
 
 app.get("/user", async (req: Request, res: Response) => {
+  // if sessionId is in the DB and not expired --> session is a user.
+  // if not --> session is a guest.
   const sessionId = req.sessionID;
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) {
     return res.status(404).send("No user found!");
+  } else if (!(await session_auth(sessionId))) {
+    return res.status(401).send("Session expired.");
   }
 
   const userId = session.docs[0].data().userId;
@@ -137,8 +141,8 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const errorCheck: LoginErrors = {
     usernameNotFound: false,
     passwordInvalid: false,
-  } 
-  
+  };
+
   if (details.empty) {
     errorCheck.usernameNotFound = true;
     return res.status(400).json(errorCheck);
@@ -170,7 +174,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
           };
 
           await addDoc(collection(db, "sessions"), session);
-          return res.status(201).json(errorCheck);
+          return res.status(200).json(errorCheck);
         });
       } else {
         errorCheck.passwordInvalid = true;
