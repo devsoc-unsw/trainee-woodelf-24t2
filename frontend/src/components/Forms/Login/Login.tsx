@@ -4,6 +4,7 @@ import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
+import { EyeOff, Eye } from "lucide-react";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,8 @@ function Login() {
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const resetState = () => {
     if (!usernameFound) setUsernameFound(true);
@@ -66,7 +68,7 @@ function Login() {
       const errorCheck = await resp.json();
 
       if (resp.ok) {
-        navigate("/home", {replace: true});
+        navigate("/home", { replace: true });
       } else {
         if (errorCheck.usernameNotFound) {
           return setUsernameFound(false);
@@ -74,14 +76,12 @@ function Login() {
           return setPasswordMatch(false);
         }
       }
-
     } catch (err) {
       console.log("Error: ", err);
     } finally {
       setIsProcessing(false);
     }
   };
-
 
   return (
     <Sheet>
@@ -92,7 +92,7 @@ function Login() {
         </label>
         <input
           id="username"
-          className={classNames(classes.input, {
+          className={classNames(classes.input, classes.passwordInput, {
             [classes.inputError]: usernameEmpty || !usernameFound,
           })}
           name="username"
@@ -110,16 +110,34 @@ function Login() {
         <label htmlFor="password" className={classes.label}>
           Password
         </label>
-        <input
-          id="password"
-          className={classNames(classes.input, {
-            [classes.inputError]: passwordEmpty || !passwordMatch,
-          })}
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+        <div className={classes.passwordContainer}>
+          <input
+            id="password"
+            className={classNames(classes.input, classes.passwordInput, {
+              [classes.inputError]: passwordEmpty || !passwordMatch,
+            })}
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={formData.password}
+            onChange={handleChange}
+            style={{
+              paddingRight: "30px",
+              marginBottom: "10px",
+              width: "100%",
+            }}
+          />
+          <button
+            type="button"
+            className={classes.showPasswordButton}
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <Eye size="20" color="hsl(52, 100%, 50%)" />
+            ) : (
+              <EyeOff color="hsl(52, 100%, 50%)" size="20" />
+            )}
+          </button>
+        </div>
         {passwordEmpty && (
           <WarningText text="Please enter your password." paddingBottom={0} />
         )}
@@ -134,7 +152,10 @@ function Login() {
         />
         <div className={classes.register}>
           Don't have an account?{" "}
-          <a className={classes.link} onClick={() => navigate("/register", {replace: true})}>
+          <a
+            className={classes.link}
+            onClick={() => navigate("/register", { replace: true })}
+          >
             Register
           </a>
           <br /> or play as a <a className={classes.link}>guest</a>

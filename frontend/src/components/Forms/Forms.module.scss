@@ -95,3 +95,23 @@ input:-webkit-autofill {
   transition: background-color 10000000s ease-in-out 0s,
     color 10000000s ease-in-out 0s;
 }
+
+.showPasswordButton {
+  position: absolute;
+  top: 20%;
+  right: 0%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.passwordContainer {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInput {
+  padding-right: 30px;
+  margin-bottom: 10px;
+  width: 100%;
+}
