@@ -1,0 +1,93 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+td {
+  color: $white-text;
+  font-size: 1.5rem;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid $dark-line;
+}
+
+tr:last-child > td {
+  border-bottom: none;
+}
+
+.title {
+  color: $primary-yellow;
+  margin: 25px 0px;
+}
+
+.rank {
+  width: 1rem;
+  text-align: left;
+}
+
+.username {
+  text-align: left;
+}
+
+tr:nth-child(1) > td:nth-child(1) {
+  color: $rank-one;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+tr:nth-child(2) > td:nth-child(1) {
+  color: $rank-two;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+tr:nth-child(3) > td:nth-child(1) {
+  color: $rank-three;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.points {
+}
+
+.next {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  color: $primary-yellow;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.page {
+  position: absolute;
+  right: 35px;
+  margin: 0;
+}
+
+button {
+  height: 30px;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
