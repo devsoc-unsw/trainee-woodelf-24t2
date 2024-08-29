@@ -1,6 +1,6 @@
 import express, { Response } from "express";
 import session from "express-session";
-import { TypedRequest, LoginBody } from "./requestTypes";
+import { TypedRequest, LoginBody, ParamsType} from "./requestTypes";
 import bcrypt from "bcrypt";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 import { db } from "./firebase";
@@ -88,3 +88,20 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
+// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
+
+app.get('/startGame', async (req: ParamsType<{roundCount: number}>, res) => {
+
+    const getDoc = await getDocs(collection(db, 'test_locations'));
+    const allLocations = getDoc.docs.map(doc => doc.data);
+
+    const n = req.params.roundCount;
+    // Shuffle array
+    const shuffled = allLocations.sort(() => 0.5 - Math.random());
+
+    // Get sub-array of first n elements after shuffled
+    let selected = shuffled.slice(0, n);
+
+    res.status(200).json(selected);
+    
+})
