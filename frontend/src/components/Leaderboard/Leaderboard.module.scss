@@ -11,6 +11,7 @@
 table {
   border-spacing: 0;
   border-collapse: collapse;
+  margin-bottom: auto;
 }
 
 td {
@@ -27,7 +28,7 @@ tr:last-child > td {
 
 .title {
   color: $primary-yellow;
-  margin: 25px 0px;
+  margin: 0px 0px;
 }
 
 .rank {
@@ -39,19 +40,19 @@ tr:last-child > td {
   text-align: left;
 }
 
-tr:nth-child(1) > td:nth-child(1) {
+.first {
   color: $rank-one;
   font-weight: bold;
   text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-tr:nth-child(2) > td:nth-child(1) {
+.second {
   color: $rank-two;
   font-weight: bold;
   text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-tr:nth-child(3) > td:nth-child(1) {
+.third {
   color: $rank-three;
   font-weight: bold;
   text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
@@ -61,7 +62,6 @@ tr:nth-child(3) > td:nth-child(1) {
 }
 
 .next {
-  margin-top: 10px;
   display: flex;
   align-items: center;
   position: relative;
