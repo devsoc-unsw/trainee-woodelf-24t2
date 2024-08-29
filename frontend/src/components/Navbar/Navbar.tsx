@@ -10,6 +10,10 @@ function Navbar() {
 
   const toggleCredits = () => {
     setShowCredits((prev) => !prev);
+    setTimeout(() => {
+      (document.getElementById("overlay-root") as HTMLElement).style.display =
+        showCredits ? "none" : "flex";
+    }, 10);
   };
 
   return (
@@ -25,12 +29,13 @@ function Navbar() {
         <button className={classes.hover} onClick={toggleCredits}>
           Credits
         </button>
+        <button className={classes.hover}>Logout</button>
         <ProfileIcon url="/yellowshirt.svg" />
       </div>
       {showCredits &&
         createPortal(
-          <Credits />,
-          document.getElementById("overlay-root") as HTMLElement, // Target the new element
+          <Credits onClick={toggleCredits} />,
+          document.getElementById("overlay-root") as HTMLElement,
         )}
     </nav>
   );

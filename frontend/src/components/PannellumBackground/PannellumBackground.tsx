@@ -1,12 +1,9 @@
 // @ts-ignore
-import ReactPannellum, { isLoaded } from "react-pannellum";
+import ReactPannellum from "react-pannellum";
+import React from "react"
 import panoramaImage from "./testimage.png";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
-import "./HomePage.scss";
-import { useState } from "react";
 
-function HomePage() {
-  const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false);
+function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>}) {
 
   const config = {
     type: "equirectangular",
@@ -21,18 +18,23 @@ function HomePage() {
   };
 
   const style = {
+    position: "absolute",
     width: "104vw",
     height: "104vh",
     filter: "blur(12px)",
     left: "-2vw",
     top: "-2vh",
-    zIndex: "0",
+    zIndex: "-1",
+    PointerEvents: "none",
   };
 
-  return (
+  return(
     <>
+<<<<<<< HEAD:frontend/src/components/HomePage/HomePage.tsx
       {!isPanoramaLoaded && <LoadingScreen />}
       <div id="overlay-root"/>
+=======
+>>>>>>> 6710a078189a8cc8d98042bb50909ab983c82427:frontend/src/components/PannellumBackground/PannellumBackground.tsx
       <ReactPannellum
         id="1"
         sceneId="firstScene"
@@ -49,7 +51,8 @@ function HomePage() {
         }}
       />
     </>
-  );
+  )
+
 }
 
-export default HomePage;
+export default PannellumBackground
