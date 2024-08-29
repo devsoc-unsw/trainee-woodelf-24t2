@@ -28,7 +28,7 @@ function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: Rea
   };
 
   return(
-    <React.Fragment>
+    <>
       <ReactPannellum
         id="1"
         sceneId="firstScene"
@@ -44,7 +44,7 @@ function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: Rea
           }, 500);
         }}
       />
-    </React.Fragment>
+    </>
   )
 
 }

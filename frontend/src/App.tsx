@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom';
 import "./App.scss";
 import "@fontsource/hammersmith-one";
@@ -17,15 +17,15 @@ function App() {
   const hasNavbar = !hideNavbarRoutes.includes(location.pathname);
   const hasBackground = panoBackgroundRoutes.includes(location.pathname)
 
-  const [isPanoramaLoaded, setIsPanoramaLoaded] = React.useState(!hasBackground);
+  const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(!hasBackground);
 
   return (
-    <React.Fragment>
+    <>
       {hasNavbar && <Navbar/>}
       {hasBackground && <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded}/>}
       {!isPanoramaLoaded && <LoadingScreen/>}
       <Outlet/>
-    </React.Fragment>
+    </>
   )
 }
 
