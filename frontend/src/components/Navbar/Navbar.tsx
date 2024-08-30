@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 import classes from "./Navbar.module.scss";
 import Logo from "../Logo/Logo";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
+import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useState } from "react";
 import Credits from "../Credits/Credits";
 
@@ -14,6 +15,13 @@ function Navbar() {
       (document.getElementById("overlay-root") as HTMLElement).style.display =
         showCredits ? "none" : "flex";
     }, 10);
+  };
+
+  const [ showDropDown, setShowDropDown ] = useState(false)
+
+  const toggleDropDown = () => {
+    setShowDropDown(!showDropDown);
+    console.log(showDropDown)
   };
 
   return (
@@ -30,7 +38,10 @@ function Navbar() {
           Credits
         </button>
         <button className={classes.hover}>Logout</button>
-        <ProfileIcon url="/yellowshirt.svg" />
+        <div onClick={toggleDropDown}>
+          <ProfileIcon url="/yellowshirt.svg"/>
+          {showDropDown && <ProfileDropdown username='Chris'/>}
+        </div>
       </div>
       {showCredits &&
         createPortal(
