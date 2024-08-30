@@ -26,6 +26,9 @@ importers:
       fs:
         specifier: ^0.0.1-security
         version: 0.0.1-security
+      random-name:
+        specifier: ^0.1.2
+        version: 0.1.2
     devDependencies:
       '@types/express':
         specifier: ^4.17.21
@@ -927,6 +930,9 @@ packages:
   random-bytes@1.0.0:
     resolution: {integrity: sha512-iv7LhNVO047HzYR3InF6pUcUsPQiHTM1Qal51DcGSuZFBil1aBBWG5eHPNek7bvILMaYJ/8RU1e8w1AMdHmLQQ==}
     engines: {node: '>= 0.8'}
+
+  random-name@0.1.2:
+    resolution: {integrity: sha512-3UHvhW50ZMbm6R11J3G1WeKvvys3GWE0uw5IxPzJjIxG+c0QoIbMlWfRKBlji9boEXPBx4CiSL3XWIkO9T/OVA==}
 
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
@@ -2125,6 +2131,8 @@ snapshots:
       side-channel: 1.0.6
 
   random-bytes@1.0.0: {}
+
+  random-name@0.1.2: {}
 
   range-parser@1.2.1: {}
 
