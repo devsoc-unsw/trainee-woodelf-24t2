@@ -1,4 +1,4 @@
-import classes from "./ProfileIcon.module.css";
+import classes from "./ProfileIcon.module.scss";
 
 interface pic {
   url: string;
