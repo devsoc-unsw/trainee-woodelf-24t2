@@ -11,6 +11,7 @@
 table {
   border-spacing: 0;
   border-collapse: collapse;
+  margin-top: 10px;
   margin-bottom: auto;
 }
 
@@ -27,8 +28,8 @@ tr:last-child > td {
 }
 
 .title {
-  color: $primary-yellow;
-  margin: 0px 0px;
+  color: $leaderboard-header;
+  margin: 0;
 }
 
 .rank {
@@ -66,7 +67,7 @@ tr:last-child > td {
   align-items: center;
   position: relative;
   width: 100%;
-  color: $primary-yellow;
+  color: $leaderboard-secondary;
 }
 
 .buttonsContainer {

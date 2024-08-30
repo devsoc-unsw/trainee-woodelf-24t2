@@ -1,62 +1,63 @@
 import classes from "./Leaderboard.module.scss";
 import Sheet from "../Forms/Sheet/Sheet";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ring2 } from "ldrs";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-ring2.register();
 
 interface User {
   rank: number;
   username: string;
-  points: number;
+  score: number;
+}
+
+interface fetchedData {
+  leaderboardData: User[];
+  pageCount: number;
+}
+
+enum Gamemode {
+  EXPLORATION = 0,
+  TIMED_5MIN = 1,
+  TIMED_10MIN = 2,
 }
 
 function Leaderboard() {
-  const [leaderboardPage, setLeaderboardPage] = useState(1);
-  const [isProcessing, setIsProcessing] = useState(true);
+  const [leaderboardPage, setLeaderboardPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
-  const [leaderboardType, setLeaderboardType] = useState("5min");
+  const [leaderboardType, setLeaderboardType] = useState(Gamemode.TIMED_5MIN);
 
   useEffect(() => {
-    const users = [
-      { rank: 1, username: "Chris", points: 1000 },
-      { rank: 2, username: "Alyssa", points: 950 },
-      { rank: 3, username: "Ben", points: 900 },
-    ];
-
-    users.sort((a, b) => b.points - a.points);
-    setTimeout(() => {
-      setUsers(users);
-      setIsProcessing(false);
-    }, 1000);
+    getPageData(1);
   }, []);
 
-  const getPageData = async (pageNum: Number) => {
-    const leaderboardBody = {
-      leaderboardType: leaderboardType,
-      pageNum: pageNum,
-    };
-
-    setIsProcessing(true);
+  const getPageData = async (pageNum: number) => {
+    if (leaderboardPage != 0 && (pageNum <= 0 || pageNum > pageCount)) {
+      return;
+    }
     try {
-      const resp = await fetch("http://localhost:3000/getPageData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const resp = await fetch(
+        `http://localhost:3000/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-        body: JSON.stringify(leaderboardBody),
-      });
+      );
 
       if (resp.ok) {
-        const fetchedLeaderboardData = (await resp.json()) as User[];
-        setUsers(fetchedLeaderboardData);
+        const data = (await resp.json()) as fetchedData;
+        setUsers(data.leaderboardData);
+        if (data.pageCount != pageCount) {
+          setPageCount(data.pageCount);
+        }
+        setLeaderboardPage(pageNum);
       } else {
+        console.log("No users found!");
       }
     } catch (err) {
       console.log("error ", err);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -64,38 +65,25 @@ function Leaderboard() {
     <div className={classes.container}>
       <Sheet sheetLeaderboard={true}>
         <h1 className={classes.title}>Leaderboard</h1>
-        {isProcessing ? (
-          <l-ring-2
-            size="80"
-            stroke="5"
-            stroke-length="0.25"
-            bg-opacity="0.1"
-            speed="0.8"
-            color="hsl(52, 100%, 50%)"
-            // @ts-ignore
-            style={{ margin: "auto 0" }}
-          />
-        ) : (
-          <table>
-            <tbody>
-              {users.map((user, index) => (
-                <tr key={index}>
-                  <td
-                    className={classNames(classes.rank, {
-                      [classes.first]: user.rank === 1,
-                      [classes.second]: user.rank === 2,
-                      [classes.third]: user.rank === 3,
-                    })}
-                  >
-                    {user.rank}
-                  </td>
-                  <td className={classes.username}>{user.username}</td>
-                  <td className={classes.points}>{user.points}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <table>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td
+                  className={classNames(classes.rank, {
+                    [classes.first]: user.rank === 1,
+                    [classes.second]: user.rank === 2,
+                    [classes.third]: user.rank === 3,
+                  })}
+                >
+                  {user.rank}
+                </td>
+                <td className={classes.username}>{user.username}</td>
+                <td className={classes.points}>{user.score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <div className={classes.next}>
           <div className={classes.buttonsContainer}>
             <button
@@ -111,7 +99,9 @@ function Leaderboard() {
               <ChevronRight size={30} />
             </button>
           </div>
-          <p className={classes.page}>Page {leaderboardPage} of x</p>
+          <p className={classes.page}>
+            Page {leaderboardPage} of {pageCount}
+          </p>
         </div>
       </Sheet>
     </div>
