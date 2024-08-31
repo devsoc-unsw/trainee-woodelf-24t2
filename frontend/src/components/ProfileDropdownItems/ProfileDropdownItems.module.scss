@@ -2,19 +2,18 @@
 
 .dropDownItem {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   justify-content: flex-end;
   align-items: center;
 }
 
 .dropDownText {
   padding: 5px 0 0 0;
-  text-align: right;
   text-decoration: none;
   font-size: 0.8em;
-  color: $navbar-dark;
+  color: white;
 }
 
 a:hover {
-  color: $primary-yellow;
+  color: $secondary-yellow;
 }

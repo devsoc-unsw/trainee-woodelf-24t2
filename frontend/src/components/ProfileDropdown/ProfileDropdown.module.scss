@@ -3,18 +3,18 @@
 .username {
   margin: 0 0 5px 0;
   text-align: right;
-  color: black;
-  font-size: 1.2em;
+  color: #e0e0e0;
+  font-size: 1.3em;
   font-weight: normal;
 }
 
 .dropDownMenu {
   width: auto;
   position: absolute;
-  background-color: #817E81;
+  background-color: #757575;
   display: flex;
   flex-direction: column;
-  padding: 20px 20px 15px 10px;
+  padding: 20px 20px 15px 18px;
   right: 1.2vw;
   margin-top: calc(3.5vh - 20px);
   border-radius: 0 0 10px 10px;
