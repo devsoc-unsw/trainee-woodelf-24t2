@@ -1,7 +1,8 @@
+// @ts-ignore
+import { shuffle } from "txt-shuffle";
 import classes from "./Credits.module.scss";
 import { X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
-import { shuffle } from "txt-shuffle";
 import { useEffect, useState } from "react";
 
 function Credits({ onClick }: { onClick: () => void }) {
