@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './ProfileDropdownItems.module.scss'
+import classes from './ProfileDropdownItem.module.scss'
 
 export default function ProfileDropDownItems (props: {href: string, text: string, children?: React.ReactNode}) {
   return (
