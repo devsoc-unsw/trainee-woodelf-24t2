@@ -4,6 +4,7 @@ import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
+import { EyeOff, Eye } from "lucide-react";
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ function LoginPage() {
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const resetState = () => {
     if (!usernameFound) setUsernameFound(true);
@@ -62,12 +65,16 @@ function LoginPage() {
         },
         body: JSON.stringify(formData),
       });
+      const errorCheck = await resp.json();
 
-      // need backend for auth/login to display errors for username not found / password invalid.
       if (resp.ok) {
-        console.log("success");
+        navigate("/home", { replace: true });
       } else {
-        console.log("failure");
+        if (errorCheck.usernameNotFound) {
+          return setUsernameFound(false);
+        } else if (errorCheck.passwordInvalid) {
+          return setPasswordMatch(false);
+        }
       }
     } catch (err) {
       console.log("Error: ", err);
@@ -75,7 +82,6 @@ function LoginPage() {
       setIsProcessing(false);
     }
   };
-  const navigate = useNavigate()
 
   return (
     <Sheet sheetLogin={true}>
@@ -86,8 +92,8 @@ function LoginPage() {
         </label>
         <input
           id="username"
-          className={classNames(classes.input, {
-            [classes.inputError]: usernameEmpty,
+          className={classNames(classes.input, classes.passwordInput, {
+            [classes.inputError]: usernameEmpty || !usernameFound,
           })}
           name="username"
           type="text"
@@ -104,21 +110,39 @@ function LoginPage() {
         <label htmlFor="password" className={classes.label}>
           Password
         </label>
-        <input
-          id="password"
-          className={classNames(classes.input, {
-            [classes.inputError]: passwordEmpty,
-          })}
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+        <div className={classes.passwordContainer}>
+          <input
+            id="password"
+            className={classNames(classes.input, classes.passwordInput, {
+              [classes.inputError]: passwordEmpty || !passwordMatch,
+            })}
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={formData.password}
+            onChange={handleChange}
+            style={{
+              paddingRight: "30px",
+              marginBottom: "10px",
+              width: "100%",
+            }}
+          />
+          <button
+            type="button"
+            className={classes.showPasswordButton}
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <Eye size="20" color="hsl(52, 100%, 50%)" />
+            ) : (
+              <EyeOff color="hsl(52, 100%, 50%)" size="20" />
+            )}
+          </button>
+        </div>
         {passwordEmpty && (
           <WarningText text="Please enter your password." paddingBottom={0} />
         )}
         {!passwordMatch && (
-          <WarningText text="Please enter your username." paddingBottom={0} />
+          <WarningText text="Incorrect password." paddingBottom={0} />
         )}
         <input
           type="submit"
@@ -128,7 +152,10 @@ function LoginPage() {
         />
         <div className={classes.register}>
           Don't have an account?{" "}
-          <a className={classes.link} onClick={() => navigate("/register", {replace: true})}>
+          <a
+            className={classes.link}
+            onClick={() => navigate("/register", { replace: true })}
+          >
             Register
           </a>
           <br /> or play as a <a className={classes.link} onClick={() => navigate("/gamemodes", {replace: false})}>guest</a>
