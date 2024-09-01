@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classes from "../Forms.module.scss";
-import Sheet from "../Sheet/Sheet";
+import Sheet from "../../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
@@ -85,7 +85,7 @@ function LoginPage() {
 
   return (
     <Sheet sheetLogin={true}>
-      <h1 className={classes.title}>Welcome!</h1>
+      <h1 className="title">Welcome!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
           Username
@@ -158,7 +158,10 @@ function LoginPage() {
           >
             Register
           </a>
-          <br /> or play as a <a className={classes.link} onClick={() => navigate("/gamemodes", {replace: false})}>guest</a>
+          <br /> or play as a{" "}
+          <a className={classes.link} onClick={() => navigate("/home")}>
+            guest
+          </a>
         </div>
       </form>
     </Sheet>

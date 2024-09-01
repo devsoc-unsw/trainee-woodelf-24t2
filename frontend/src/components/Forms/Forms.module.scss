@@ -78,17 +78,18 @@ form {
 }
 
 .register {
+  color: $secondary-yellow;
   margin-top: 10px;
   text-align: center;
 }
 
 .link {
-  color: #bdc072;
+  color: #e0dcb5;
   cursor: pointer;
 }
 
 .link:hover {
-  color: darken(#bdc072, 10%);
+  color: darken(#e0dcb5, 10%);
 }
 
 input:-webkit-autofill {

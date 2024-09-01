@@ -21,6 +21,7 @@ function App() {
 
   return (
     <>
+    <div id="overlay-root"></div>
       {hasNavbar && <Navbar/>}
       {hasBackground && <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded}/>}
       {!isPanoramaLoaded && <LoadingScreen/>}

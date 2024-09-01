@@ -6,7 +6,7 @@ import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
 import PlayPage from './pages/PlayPage/PlayPage.tsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
-import GamemodesPage from './components/Gamemodes/Gamemodes.tsx';
+import GamemodesPage from './pages/GamemodesPage/GamemodesPage.tsx';
 
 import {
   createBrowserRouter,

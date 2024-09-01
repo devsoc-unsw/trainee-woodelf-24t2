@@ -7,6 +7,7 @@ interface SheetProps {
   children?: React.ReactNode;
   sheetLogin?: boolean;
   sheetGamemode?: boolean;
+  sheetCredits?: boolean;
 }
 
 function Sheet(props: SheetProps) {
@@ -15,12 +16,14 @@ function Sheet(props: SheetProps) {
       className={classNames({
         [classes.containerLogin]: props.sheetLogin,
         [classes.containerGamemode]: props.sheetGamemode,
+        [classes.containerCredits]: props.sheetCredits,
       })}
     >
       <div
         className={classNames({
           [classes.sheetLogin]: props.sheetLogin,
           [classes.sheetGamemode]: props.sheetGamemode,
+          [classes.sheetCredits]: props.sheetCredits,
         })}
       >
         {props.hasCloseButton && (
