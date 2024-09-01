@@ -11,11 +11,7 @@
   },
   "dependencies": {
     "@fontsource/hammersmith-one": "^5.0.13",
-<<<<<<< HEAD
-    "@lachlanshoesmith/mazemap-react": "^1.0.0",
-=======
     "@lachlanshoesmith/mazemap-react": "^1.0.4",
->>>>>>> f8d61a0ffabdb1c455b4e21fcbe5cb538edd8183
     "classnames": "^2.5.1",
     "firebase": "^10.12.3",
     "ldrs": "^1.0.2",
