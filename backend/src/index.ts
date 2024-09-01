@@ -130,7 +130,6 @@ app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-
     const queryGames = await query(
       games,
       where("gamemode", "==", Number(gamemode)),
@@ -138,6 +137,9 @@ app.get(
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [username: string]: { id: string; score: number } } =
       {};
+    if (querySnapshot.empty) {
+      return res.status(204).send("No data!");
+    }
     querySnapshot.forEach((docSnapshot) => {
       const data = docSnapshot.data();
       const username = data.username;
@@ -167,9 +169,6 @@ app.get(
     const start = (pagenum - 1) * increments;
     const size = queryScoreSnapshot.size;
     const pageCount = Math.ceil(size / increments);
-    if (start >= size || start < 0) {
-      return res.status(400).send("No data!");
-    }
 
     const data: ScoreEntry[] = [];
 

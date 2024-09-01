@@ -30,6 +30,23 @@ tr:last-child > td {
 .title {
   color: $leaderboard-header;
   margin: 0;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.firstOption {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+}
+
+.secondOption {
+  position: absolute;
+  top: 0px;
+  left: 60px;
 }
 
 .rank {
@@ -60,6 +77,7 @@ tr:last-child > td {
 }
 
 .points {
+  color: rgb(255, 255, 255);
 }
 
 .next {
@@ -91,4 +109,19 @@ button {
   font: inherit;
   cursor: pointer;
   outline: inherit;
+}
+
+.button {
+  color: $white-text;
+  width: 30px;
+  height: 35px;
+  font-size: 1.2rem;
+}
+
+.button:hover {
+  color: darken($white-text, 10%);
+}
+
+.pressed {
+  color: $secondary-yellow;
 }

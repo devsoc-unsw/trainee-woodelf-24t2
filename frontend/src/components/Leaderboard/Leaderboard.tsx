@@ -26,10 +26,12 @@ function Leaderboard() {
   const [pageCount, setPageCount] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
   const [leaderboardType, setLeaderboardType] = useState(Gamemode.TIMED_5MIN);
+  const [tenMinPressed, setTenMinPressed] = useState(false);
+  const [fiveMinPressed, setFiveMinPressed] = useState(true);
 
   useEffect(() => {
     getPageData(1);
-  }, []);
+  }, [leaderboardType]);
 
   const getPageData = async (pageNum: number) => {
     if (leaderboardPage != 0 && (pageNum <= 0 || pageNum > pageCount)) {
@@ -46,15 +48,19 @@ function Leaderboard() {
         },
       );
 
-      if (resp.ok) {
+      if (resp.status === 200) {
         const data = (await resp.json()) as fetchedData;
         setUsers(data.leaderboardData);
         if (data.pageCount != pageCount) {
           setPageCount(data.pageCount);
         }
         setLeaderboardPage(pageNum);
+      } else if (resp.status === 204) {
+        setUsers([]);
+        setLeaderboardPage(1);
+        setPageCount(1);
       } else {
-        console.log("No users found!");
+        console.error("Error: ", resp.status);
       }
     } catch (err) {
       console.log("error ", err);
@@ -64,7 +70,39 @@ function Leaderboard() {
   return (
     <div className={classes.container}>
       <Sheet sheetLeaderboard={true}>
-        <h1 className={classes.title}>Leaderboard</h1>
+        <h1 className={classes.title}>
+          Leaderboard
+          <div className={classes.firstOption}>
+            <button
+              className={classNames(classes.button, {
+                [classes.pressed]: fiveMinPressed,
+              })}
+              onClick={async () => {
+                if (leaderboardType === Gamemode.TIMED_5MIN) return;
+                setLeaderboardType(Gamemode.TIMED_5MIN);
+                setTenMinPressed(false);
+                setFiveMinPressed(true);
+              }}
+            >
+              5min
+            </button>
+          </div>
+          <div className={classes.secondOption}>
+            <button
+              className={classNames(classes.button, {
+                [classes.pressed]: tenMinPressed,
+              })}
+              onClick={async () => {
+                if (leaderboardType === Gamemode.TIMED_10MIN) return;
+                setLeaderboardType(Gamemode.TIMED_10MIN);
+                setFiveMinPressed(false);
+                setTenMinPressed(true);
+              }}
+            >
+              10min
+            </button>
+          </div>
+        </h1>
         <table>
           <tbody>
             {users.map((user, index) => (
