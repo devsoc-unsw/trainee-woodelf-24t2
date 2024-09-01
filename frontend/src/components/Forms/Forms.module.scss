@@ -28,7 +28,7 @@ input {
   border-bottom: 2px $secondary-yellow solid;
   width: 100%;
   padding: 15px 0;
-  font-size: 18px;
+  font-size: 15px;
   color: #fff;
 }
 
@@ -94,4 +94,24 @@ form {
 input:-webkit-autofill {
   transition: background-color 10000000s ease-in-out 0s,
     color 10000000s ease-in-out 0s;
+}
+
+.showPasswordButton {
+  position: absolute;
+  top: 20%;
+  right: 0%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.passwordContainer {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInput {
+  padding-right: 30px;
+  margin-bottom: 10px;
+  width: 100%;
 }
