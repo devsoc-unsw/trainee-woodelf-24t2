@@ -12,7 +12,6 @@
   align-items: center;
   justify-content: space-between;
   opacity: 80%;
-  padding: 0px 1vw 0px 1vw;
 }
 
 .navbar > div {
@@ -69,4 +68,33 @@
 .hover:hover:after {
   width: 100%;
   left: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    height: 7vh;
+    width: 100vw;
+    background-color: $navbar-dark;
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    text-align: center;
+    opacity: 80%;
+  }
+  
+  .hideOnMobile {
+    display: none;
+  }
+
+  // .container {
+  //   position: absolute;
+  //   width: 100%;
+  // }
+
+  .hamburger {
+    position: relative;
+    left: 0px;
+  }
 }

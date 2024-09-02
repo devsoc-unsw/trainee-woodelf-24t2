@@ -6,6 +6,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useState } from "react";
 import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
 
 function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
@@ -19,7 +20,7 @@ function Navbar() {
     }, 10);
   };
 
-  const [ showDropDown, setShowDropDown ] = useState(false)
+  const [showDropDown, setShowDropDown] = useState(false);
 
   const toggleDropDown = () => {
     setShowDropDown(!showDropDown);
@@ -27,21 +28,40 @@ function Navbar() {
 
   return (
     <nav className={classes.navbar}>
-      <div>
-        <button className={`${classes.hover} ${classes.logo}`} onClick={() => navigate("/home")}>
+      <div className={classes.container}>
+          <Menu className={classes.hamburger} />
+        <button
+          className={`${classes.hover} ${classes.logo}`}
+          onClick={() => navigate("/home")}
+        >
           <Logo size="lg" />
         </button>
-        <button className={classes.hover} onClick={() => navigate("/leaderboard")}>Leaderboard</button>
-        <button className={classes.hover} onClick={() => navigate("/gamemodes")}>Gamemodes</button>
-        <button className={classes.hover}>Help</button>
+        <button
+          className={`${classes.hover} ${classes.hideOnMobile}`}
+          onClick={() => navigate("/leaderboard")}
+        >
+          Leaderboard
+        </button>
+        <button
+          className={`${classes.hover} ${classes.hideOnMobile}`}
+          onClick={() => navigate("/gamemodes")}
+        >
+          Gamemodes
+        </button>
+        <button className={`${classes.hover} ${classes.hideOnMobile}`}>
+          Help
+        </button>
       </div>
       <div>
-        <button className={classes.hover} onClick={toggleCredits}>
+        <button
+          className={`${classes.hover} ${classes.hideOnMobile}`}
+          onClick={toggleCredits}
+        >
           Credits
         </button>
-        <div onClick={toggleDropDown}>
-          <ProfileIcon url="/yellowshirt.svg"/>
-          {showDropDown && <ProfileDropdown username='Chris'/>}
+        <div onClick={toggleDropDown} className={classes.hideOnMobile}>
+          <ProfileIcon url="/yellowshirt.svg" />
+          {showDropDown && <ProfileDropdown username="Chris" />}
         </div>
       </div>
       {showCredits &&
