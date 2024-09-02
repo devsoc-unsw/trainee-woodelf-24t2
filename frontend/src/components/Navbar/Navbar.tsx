@@ -21,7 +21,6 @@ function Navbar() {
 
   const toggleDropDown = () => {
     setShowDropDown(!showDropDown);
-    console.log(showDropDown)
   };
 
   return (
