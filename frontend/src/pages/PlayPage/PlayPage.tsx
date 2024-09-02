@@ -1,4 +1,5 @@
-import { MazeMap } from "@lachlanshoesmith/mazemap-react";
+// TODO: change to actual import
+import { MazeMap } from "../../../../../mazemap-react";
 
 function PlayPage() {
   return (
