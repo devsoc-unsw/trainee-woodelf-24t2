@@ -1,16 +1,16 @@
+import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 
 function PlayPage() {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        height: "100%",
-        justifyContent:"center"
-      }}
-    >
-     PLAY PAGE IN CONSTRUCTION!
-    </div>
+    <>
+      <MazeMap
+        campuses={111}
+        zoom={14.5}
+        height="100vh"
+        width="100vw"
+        center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
+      />
+    </>
   );
 }
 

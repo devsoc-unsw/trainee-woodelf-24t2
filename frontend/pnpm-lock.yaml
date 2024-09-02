@@ -12,8 +12,8 @@ importers:
         specifier: ^5.0.13
         version: 5.0.13
       '@lachlanshoesmith/mazemap-react':
-        specifier: ^1.0.4
-        version: 1.0.4
+        specifier: ^1.0.5
+        version: 1.0.5
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -574,8 +574,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lachlanshoesmith/mazemap-react@1.0.4':
-    resolution: {integrity: sha512-MAySSFQr+WoX1Kl6qKmz/iaLbkStZha4iqIEOevF5Y6YEAEF6YxNFrVTNpSqXRo7Fdc2E4mrETnwiF6kd1Mv2Q==}
+  '@lachlanshoesmith/mazemap-react@1.0.5':
+    resolution: {integrity: sha512-gpnZACo2pChT0bqdAsrHrDol+DirpashqmK6xLgVFx5DrwV/7fHHMA39Qe+c+Gm8VAcdx/jkBl6L6hlP7yDINQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2149,7 +2149,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lachlanshoesmith/mazemap-react@1.0.4':
+  '@lachlanshoesmith/mazemap-react@1.0.5':
     dependencies:
       mazemap-react: 'link:'
 
