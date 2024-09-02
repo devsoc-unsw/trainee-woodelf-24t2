@@ -31,6 +31,7 @@ function Navbar() {
         <button className={`${classes.hover} ${classes.logo}`} onClick={() => navigate("/home")}>
           <Logo size="lg" />
         </button>
+        <button className={classes.hover} onClick={() => navigate("/leaderboard")}>Leaderboard</button>
         <button className={classes.hover} onClick={() => navigate("/gamemodes")}>Gamemodes</button>
         <button className={classes.hover}>Help</button>
       </div>

@@ -1,4 +1,14 @@
+import { Gamemode } from "./interfaces";
+
 export interface TypedRequest<T> extends Express.Request {
+  body: T;
+}
+
+export interface TypedRequestQuery<T> extends Express.Request {
+  query: T;
+}
+
+export interface TypedResponse<T> extends Express.Response {
   body: T;
 }
 
@@ -7,6 +17,8 @@ export interface LoginBody {
   password: string;
 }
 
-export interface LogoutBody {
-  sessionId: string;
+export interface LeaderboardQuery {
+  pagenum: number;
+  gamemode: number;
+  increments: number;
 }

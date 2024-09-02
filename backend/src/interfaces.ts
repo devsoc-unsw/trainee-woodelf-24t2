@@ -5,6 +5,12 @@ export enum GameState {
   FINISHED = 1,
 }
 
+export enum Gamemode {
+  EXPLORATION = 0,
+  TIMED_5MIN = 1,
+  TIMED_10MIN = 2,
+}
+
 export interface Level {
   id?: string;
   photoLink: string;
@@ -17,9 +23,10 @@ export interface Level {
 export interface Game {
   id?: string;
   status: GameState;
+  gamemode: Gamemode;
   levels: Level[];
   score: number;
-  owner: string;
+  username: string;
   startTime: Date; // To calculate time bonuses?
 }
 
@@ -39,6 +46,12 @@ export interface SessionStorage {
   userId: string;
   creationDate: Date;
   expirationDate: Date;
+}
+
+export interface ScoreEntry {
+  rank: number;
+  username: string;
+  score: number;
 }
 
 // Adds a new property to req.session

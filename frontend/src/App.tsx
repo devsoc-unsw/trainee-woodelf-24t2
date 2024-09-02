@@ -17,6 +17,7 @@ function App() {
     "/profile",
     "/home",
     "/gamemodes",
+    "/leaderboard",
   ];
 
   // Determine if the Navbar should be hidden

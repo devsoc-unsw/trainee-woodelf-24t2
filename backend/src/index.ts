@@ -1,6 +1,11 @@
 import express, { Response, Request } from "express";
 import session from "express-session";
-import { TypedRequest, LoginBody } from "./requestTypes";
+import {
+  TypedRequest,
+  TypedRequestQuery,
+  LoginBody,
+  LeaderboardQuery,
+} from "./requestTypes";
 import { SessionStorage, User, LoginErrors } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
@@ -9,15 +14,19 @@ import {
   getDocs,
   where,
   query,
-  deleteDoc,
-  getDoc,
   doc,
+  deleteDoc,
+  orderBy,
   Timestamp,
+  getDoc,
 } from "firebase/firestore";
+import { ScoreEntry } from "./interfaces";
 import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
 
+const EXPRESS_PORT = 3000;
+const games = collection(db, "games");
 const sessions = collection(db, "sessions");
 const users = collection(db, "users");
 
@@ -52,7 +61,6 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
-const EXPRESS_PORT = 3000;
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -107,7 +115,7 @@ app.listen(EXPRESS_PORT, () => {
 app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
 
-  const querySnapshot = await getDocs(collection(db, "users"));
+  const querySnapshot = await getDocs(users);
   if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
     return res.status(400).send("Username already exists");
   }
@@ -128,7 +136,7 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
     shirts: 0,
   };
 
-  await addDoc(collection(db, "users"), newUser);
+  await addDoc(users, newUser);
 
   return res.status(201).send("User Successfully Registered");
 });
@@ -173,7 +181,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
             expirationDate: expiryTime,
           };
 
-          await addDoc(collection(db, "sessions"), session);
+          await addDoc(sessions, session);
           return res.status(200).json(errorCheck);
         });
       } else {
@@ -183,6 +191,66 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
+
+app.get(
+  "/leaderboard/data",
+  async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
+    const { pagenum, gamemode, increments } = req.query;
+    const queryGames = await query(
+      games,
+      where("gamemode", "==", Number(gamemode)),
+    );
+    const querySnapshot = await getDocs(queryGames);
+    const highestScores: { [username: string]: { id: string; score: number } } =
+      {};
+    if (querySnapshot.empty) {
+      return res.status(204).send("No data!");
+    }
+    querySnapshot.forEach((docSnapshot) => {
+      const data = docSnapshot.data();
+      const username = data.username;
+      const score = data.score;
+      const id = docSnapshot.id;
+
+      if (!highestScores[username] || score > highestScores[username].score) {
+        highestScores[username] = { id, score };
+      }
+    });
+
+    const ids = Object.values(highestScores).map(user => user.id);
+    
+    if (ids.length == 0) {
+      return res.status(400).send("error");
+    }
+
+    const queryUniqueScores = await query(
+      games,
+      where("__name__", "in", ids),
+      orderBy("score", "desc"),
+    );
+    const queryScoreSnapshot = await getDocs(queryUniqueScores);
+
+    const start = (pagenum - 1) * increments;
+    const size = queryScoreSnapshot.size;
+    const pageCount = Math.ceil(size / increments);
+
+    const data: ScoreEntry[] = [];
+
+    for (let i = 0; i < increments && i + start < size; i++) {
+      const dataEntry: ScoreEntry = {
+        rank: i + start + 1,
+        username: queryScoreSnapshot.docs[i + start].data().username,
+        score: queryScoreSnapshot.docs[i + start].data().score,
+      };
+      data.push(dataEntry);
+    }
+
+    return res.status(200).json({
+      leaderboardData: data,
+      pageCount: pageCount,
+    });
+  },
+);
 
 app.post("/logout", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
