@@ -1,0 +1,18 @@
+@import "../../variables";
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 50px;
+  flex-shrink: initial;
+  margin: 0 75px;
+}
+
+.title {
+  padding: 15px;
+  margin: 0;
+  font-size: 3rem;
+  text-align: center;
+  color: $secondary-yellow;
+}

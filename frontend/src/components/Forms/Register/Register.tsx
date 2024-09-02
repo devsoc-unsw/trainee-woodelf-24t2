@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classes from "../Forms.module.scss";
-import Sheet from "../Sheet/Sheet";
+import Sheet from "../../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
@@ -115,8 +115,8 @@ function Register() {
   };
 
   return (
-    <Sheet>
-      <h1 className={classes.title}>Register!</h1>
+    <Sheet sheetLogin>
+      <h1 className="title">Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
           Username
