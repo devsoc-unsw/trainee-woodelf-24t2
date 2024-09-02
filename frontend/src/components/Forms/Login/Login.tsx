@@ -84,7 +84,7 @@ function LoginPage() {
   };
 
   return (
-    <Sheet sheetLogin={true}>
+    <Sheet login>
       <h1 className={classes.title}>Welcome!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
@@ -158,7 +158,10 @@ function LoginPage() {
           >
             Register
           </a>
-          <br /> or play as a <a className={classes.link} onClick={() => navigate("/gamemodes", {replace: false})}>guest</a>
+          <br /> or play as a{" "}
+          <a className={classes.link} onClick={() => navigate("/gamemodes")}>
+            guest
+          </a>
         </div>
       </form>
     </Sheet>

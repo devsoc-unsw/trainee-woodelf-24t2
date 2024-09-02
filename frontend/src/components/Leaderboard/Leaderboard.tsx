@@ -69,7 +69,7 @@ function Leaderboard() {
 
   return (
     <div className={classes.container}>
-      <Sheet sheetLeaderboard={true}>
+      <Sheet leaderboard>
         <h1 className={classes.title}>
           Leaderboard
           <div className={classes.firstOption}>

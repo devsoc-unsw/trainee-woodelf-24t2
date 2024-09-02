@@ -217,10 +217,8 @@ app.get(
       }
     });
 
-    const ids: string[] = [];
-    for (const usernames in highestScores) {
-      ids.push(highestScores[usernames].id);
-    }
+    const ids = Object.values(highestScores).map(user => user.id);
+    
     if (ids.length == 0) {
       return res.status(400).send("error");
     }

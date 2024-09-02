@@ -8,7 +8,7 @@ import hacker from "/hackermans.gif";
 
 function GamemodesPage() {
   return (
-    <Sheet sheetGamemode={true}>
+    <Sheet gamemode>
       <h1 className={classes.title}>Select Gamemode</h1>
       <div className={classes.mainContent}>
         <Card

@@ -26,6 +26,7 @@ function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: Rea
     top: "-2vh",
     zIndex: "-1",
     PointerEvents: "none",
+    background: "rgba(0, 0, 0, 0.2)",
   };
 
   return(

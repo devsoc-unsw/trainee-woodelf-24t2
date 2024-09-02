@@ -6,7 +6,7 @@ import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 import { EyeOff, Eye } from "lucide-react";
 
-function LoginPage() {
+function Register() {
   const passwordPattern =
     /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
   const usernamePattern = /^[A-Za-z0-9]{3,16}$/;
@@ -115,7 +115,7 @@ function LoginPage() {
   };
 
   return (
-    <Sheet sheetLogin={true}>
+    <Sheet login>
       <h1 className={classes.title}>Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
@@ -232,4 +232,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default Register;
