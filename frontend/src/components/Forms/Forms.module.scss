@@ -29,7 +29,7 @@ input {
   width: 100%;
   padding: 15px 0;
   font-size: 15px;
-  color: #fff;
+  color: white;
 }
 
 .inputError {
@@ -84,12 +84,12 @@ form {
 }
 
 .link {
-  color: #e0dcb5;
+  color: hsl(54.4, 41%, 79.4%);
   cursor: pointer;
 }
 
 .link:hover {
-  color: darken(#e0dcb5, 10%);
+  color: darken(hsl(54.4, 41%, 79.4%), 10%);
 }
 
 input:-webkit-autofill {
