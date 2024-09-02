@@ -3,7 +3,7 @@
 .username {
   margin: 0 0 5px 0;
   text-align: right;
-  color: #e0e0e0;
+  color: hsl(0, 0%, 88%);
   font-size: 1.3em;
   font-weight: normal;
 }
@@ -11,7 +11,7 @@
 .dropDownMenu {
   width: auto;
   position: absolute;
-  background-color: #757575;
+  background-color: hsl(0, 0%, 46%);
   display: flex;
   flex-direction: column;
   padding: 20px 20px 15px 18px;
