@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classes from "../Forms.module.scss";
-import Sheet from "../Sheet/Sheet";
+import Sheet from "../../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";

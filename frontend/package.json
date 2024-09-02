@@ -19,7 +19,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pannellum": "^0.2.14",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "txt-shuffle": "^1.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

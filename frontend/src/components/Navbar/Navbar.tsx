@@ -21,11 +21,11 @@ function Navbar() {
   return (
     <nav className={classes.navbar}>
       <div>
-        <button className={`${classes.hover} ${classes.logo}`}>
+        <button className={`${classes.hover} ${classes.logo}`} onClick={() => navigate("/home")}>
           <Logo size="lg" />
         </button>
-        <button className={classes.hover}>Gamemodes</button>
         <button className={classes.hover} onClick={() => navigate("/leaderboard")}>Leaderboard</button>
+        <button className={classes.hover} onClick={() => navigate("/gamemodes")}>Gamemodes</button>
         <button className={classes.hover}>Help</button>
       </div>
       <div>

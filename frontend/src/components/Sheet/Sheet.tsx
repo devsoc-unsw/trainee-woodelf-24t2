@@ -8,6 +8,7 @@ interface SheetProps {
   login?: boolean;
   gamemode?: boolean;
   leaderboard?: boolean;
+  credits?: boolean;
 }
 
 function Sheet(props: SheetProps) {
@@ -17,6 +18,7 @@ function Sheet(props: SheetProps) {
         [classes.containerLogin]: props.login,
         [classes.containerGamemode]: props.gamemode,
         [classes.containerLeaderboard]: props.leaderboard,
+        [classes.containerCredits]: props.credits,
       })}
     >
       <div
@@ -24,6 +26,7 @@ function Sheet(props: SheetProps) {
           [classes.sheetLogin]: props.login,
           [classes.sheetGamemode]: props.gamemode,
           [classes.sheetLeaderboard]: props.leaderboard,
+          [classes.sheetCredits]: props.credits,
         })}
       >
         {props.hasCloseButton && (

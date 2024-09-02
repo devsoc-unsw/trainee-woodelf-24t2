@@ -1,5 +1,5 @@
 import classes from "./Leaderboard.module.scss";
-import Sheet from "../Forms/Sheet/Sheet";
+import Sheet from "../Sheet/Sheet";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
