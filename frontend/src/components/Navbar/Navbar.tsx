@@ -5,9 +5,11 @@ import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useState } from "react";
 import Credits from "../Credits/Credits";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
+  const navigate = useNavigate();
 
   const toggleCredits = () => {
     setShowCredits((prev) => !prev);
@@ -26,10 +28,10 @@ function Navbar() {
   return (
     <nav className={classes.navbar}>
       <div>
-        <button className={`${classes.hover} ${classes.logo}`}>
+        <button className={`${classes.hover} ${classes.logo}`} onClick={() => navigate("/home")}>
           <Logo size="lg" />
         </button>
-        <button className={classes.hover}>Gamemodes</button>
+        <button className={classes.hover} onClick={() => navigate("/gamemodes")}>Gamemodes</button>
         <button className={classes.hover}>Help</button>
       </div>
       <div>
