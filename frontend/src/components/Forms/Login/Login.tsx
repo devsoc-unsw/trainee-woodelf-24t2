@@ -85,7 +85,7 @@ function LoginPage() {
 
   return (
     <Sheet login>
-      <h1 className={classes.title}>Welcome!</h1>
+      <h1 className="title">Welcome!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
           Username

@@ -116,7 +116,7 @@ function Register() {
 
   return (
     <Sheet login>
-      <h1 className={classes.title}>Register!</h1>
+      <h1 className="title">Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
           Username
