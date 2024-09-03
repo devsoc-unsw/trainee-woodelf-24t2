@@ -28,8 +28,8 @@ input {
   border-bottom: 2px $secondary-yellow solid;
   width: 100%;
   padding: 15px 0;
-  font-size: 18px;
-  color: #fff;
+  font-size: 15px;
+  color: white;
 }
 
 .inputError {
@@ -78,20 +78,41 @@ form {
 }
 
 .register {
+  color: $secondary-yellow;
   margin-top: 10px;
   text-align: center;
 }
 
 .link {
-  color: #bdc072;
+  color: hsl(54.4, 41%, 79.4%);
   cursor: pointer;
 }
 
 .link:hover {
-  color: darken(#bdc072, 10%);
+  color: darken(hsl(54.4, 41%, 79.4%), 10%);
 }
 
 input:-webkit-autofill {
   transition: background-color 10000000s ease-in-out 0s,
     color 10000000s ease-in-out 0s;
+}
+
+.showPasswordButton {
+  position: absolute;
+  top: 20%;
+  right: 0%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.passwordContainer {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInput {
+  padding-right: 30px;
+  margin-bottom: 10px;
+  width: 100%;
 }

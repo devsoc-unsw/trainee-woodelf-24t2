@@ -24,11 +24,10 @@
 }
 
 .creditstext {
-  font-size: 1.5rem;
+  font-size: 2rem;
   display: flex;
-  height: calc(100% - 3rem - 10px);
   flex-direction: column;
-  color: rgb(250, 225, 81);
+  color: hsl(51, 94%, 65%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -37,8 +36,13 @@
   margin: 0;
 }
 
-.creditstext li {
-  margin: 0;
+.creditstext > li {
+  margin-bottom: 10px;
+  color: $primary-yellow;
+}
+
+.creditstext > li:hover {
+  color: darken($secondary-yellow, 10%)
 }
 
 .close {
@@ -50,5 +54,6 @@
   cursor: pointer;
   position: absolute;
   background: transparent;
-  right: 20px;
+  top: 15px;
+  right: 15px;
 }

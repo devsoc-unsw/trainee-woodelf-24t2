@@ -56,3 +56,26 @@ ul {
   height: 100%;
   z-index: 1;
 }
+
+.title {
+  padding: 15px;
+  margin: 0;
+  font-size: 3rem;
+  text-align: center;
+  color: $secondary-yellow;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  font: inherit;
+}

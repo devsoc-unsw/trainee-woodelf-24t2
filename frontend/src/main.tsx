@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
 import PlayPage from './pages/PlayPage/PlayPage.tsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
+import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage.tsx';
+import GamemodesPage from './pages/GamemodesPage/GamemodesPage.tsx';
 
 import {
   createBrowserRouter,
@@ -27,12 +29,20 @@ const router = createBrowserRouter([
         element: <HomePage/>,
       },
       {
+        path: '/gamemodes',
+        element: <GamemodesPage/>,
+      },
+      {
         path: '/play',
         element: <PlayPage/>,
       },
       {
         path: '/register',
         element: <RegisterPage/>,
+      },
+      {
+        path: '/leaderboard',
+        element: <LeaderboardPage/>,
       },
     ],
   },

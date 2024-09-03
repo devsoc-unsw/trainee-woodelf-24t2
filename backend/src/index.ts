@@ -1,16 +1,66 @@
-import express, { Response } from "express";
+import express, { Response, Request } from "express";
 import session from "express-session";
-import { TypedRequest, LoginBody, ParamsType} from "./requestTypes";
+import {
+  TypedRequest,
+  TypedRequestQuery,
+  LoginBody,
+  LeaderboardQuery,
+} from "./requestTypes";
+import { SessionStorage, User, LoginErrors } from "./interfaces";
 import bcrypt from "bcrypt";
-import { collection, addDoc, getDocs, where, query, doc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  where,
+  query,
+  doc,
+  deleteDoc,
+  orderBy,
+  Timestamp,
+  getDoc,
+} from "firebase/firestore";
+import { ScoreEntry } from "./interfaces";
 import { db } from "./firebase";
 import cors from "cors";
 import crypto from "crypto";
 
 const EXPRESS_PORT = 3000;
+const games = collection(db, "games");
+const sessions = collection(db, "sessions");
+const users = collection(db, "users");
 
-// only meant for debugging / delete for production
-const store = new session.MemoryStore();
+const session_auth = async (sessionId: string) => {
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return false;
+  }
+
+  // if current time is greater than expiration date, return false and
+  // removes it from the database
+  if (new Date() > session.docs[0].data().expirationDate.toDate()) {
+    await session_remove(sessionId);
+    return false;
+  }
+  return true;
+};
+
+const session_remove = async (sessionId: string) => {
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) return false;
+
+  session.forEach(async (sessionDoc) => {
+    const ref = sessionDoc.ref;
+    await deleteDoc(ref);
+  });
+
+  return true;
+};
+
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -22,36 +72,39 @@ app.use(
       sameSite: "lax",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
-      secure: (process.env.NODE_ENV !== "development") ? true : false,
+      secure: process.env.NODE_ENV !== "development" ? true : false,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true
+    resave: true,
   }),
 );
 
-app.post('/logout', async (req, res) => {
+app.get("/user", async (req: Request, res: Response) => {
+  // if sessionId is in the DB and not expired --> session is a user.
+  // if not --> session is a guest.
   const sessionId = req.sessionID;
-  const querySnapshot = await getDocs(collection(db, 'sessions'))
-  let docRef: string | undefined;
-  querySnapshot.forEach(doc => {
-    if (doc.data().sessionId === sessionId) {
-      docRef = doc.id;
-    }
-  })
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
 
-  if (docRef === undefined) {
-    res.send('Not logged in').status(400);
-    return;
+  if (session.empty) {
+    return res.status(404).send("No user found!");
+  } else if (!(await session_auth(sessionId))) {
+    return res.status(401).send("Session expired.");
   }
-  deleteDoc(doc(db, 'sessions', docRef));
 
-  req.session.destroy(() => {
-    console.log('cookies removed');
+  const userId = session.docs[0].data().userId;
+  const userDocRef = doc(db, "users", userId);
+
+  getDoc(userDocRef).then((docSnap) => {
+    const data = docSnap.data() as User;
+    const { password, salt, ...sanitizedData } = data;
+
+    const date = data.dateJoined as Timestamp;
+    sanitizedData.dateJoined = date.toDate();
+    res.status(200).json(sanitizedData);
   });
-
-  res.send('Goodbye!').status(200);
-})
+});
 
 app.listen(EXPRESS_PORT, () => {
   console.log(
@@ -62,7 +115,7 @@ app.listen(EXPRESS_PORT, () => {
 app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
 
-  const querySnapshot = await getDocs(collection(db, "users"));
+  const querySnapshot = await getDocs(users);
   if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
     return res.status(400).send("Username already exists");
   }
@@ -72,28 +125,35 @@ app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
 
   const saltRounds: number = 10;
   const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
-  const userLoginDetailsRef = await addDoc(collection(db, "userLoginDetails"), {
+
+  const newUser: User = {
     username,
     password: hashedPassword,
     salt: salt,
-  });
+    dateJoined: new Date(),
+    highScore: 0,
+    cumulativeScore: 0,
+    shirts: 0,
+  };
 
-  const docRef = await addDoc(collection(db, "userDetails"), {
-    username,
-    dateJoined: Date(),
-  });
+  await addDoc(users, newUser);
 
-  res.status(201).send("User Successfully Registered");
+  return res.status(201).send("User Successfully Registered");
 });
 
 app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-  const users = collection(db, "users");
   const loginDetails = query(users, where("username", "==", username));
   const details = await getDocs(loginDetails);
 
+  const errorCheck: LoginErrors = {
+    usernameNotFound: false,
+    passwordInvalid: false,
+  };
+
   if (details.empty) {
-    return res.status(400).send("Username not found");
+    errorCheck.usernameNotFound = true;
+    return res.status(400).json(errorCheck);
   }
 
   const saltedPassword = password.concat(details.docs[0].data().salt);
@@ -101,25 +161,44 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    (err, result) => {
+    async (err: Error | null, result: boolean) => {
       if (err) {
         return res.status(500).send("Error processing password");
       }
 
-      return result
-        ? res.status(201).send("User Successfully Logged In")
-        : res.status(401).send("Incorrect password");
+      if (result) {
+        req.session.regenerate(async (err: Error | null) => {
+          if (err) {
+            return res.status(500).send("Error regenerating session.");
+          }
+          const expiryTime: Date = new Date();
+          expiryTime.setDate(expiryTime.getDate() + 7);
+
+          const session: SessionStorage = {
+            sessionId: req.sessionID,
+            userId: details.docs[0].id, // assuming userId is the docRef
+            creationDate: new Date(),
+            expirationDate: expiryTime,
+          };
+
+          await addDoc(sessions, session);
+          return res.status(200).json(errorCheck);
+        });
+      } else {
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
+      }
     },
   );
 });
 // curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
 
-app.get('/startGame', async (req: ParamsType<{roundCount: number}>, res) => {
+app.get('/startGame', async (req: TypedRequestQuery<{roundCount: number}>, res) => {
 
     const getDoc = await getDocs(collection(db, 'test_locations'));
     const allLocations = getDoc.docs.map(doc => doc.data);
 
-    const n = req.params.roundCount;
+    const n = req.query.roundCount;
     // Shuffle array
     const shuffled = allLocations.sort(() => 0.5 - Math.random());
 
@@ -129,3 +208,78 @@ app.get('/startGame', async (req: ParamsType<{roundCount: number}>, res) => {
     res.status(200).json(selected);
     
 })
+
+app.get(
+  "/leaderboard/data",
+  async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
+    const { pagenum, gamemode, increments } = req.query;
+    const queryGames = await query(
+      games,
+      where("gamemode", "==", Number(gamemode)),
+    );
+    const querySnapshot = await getDocs(queryGames);
+    const highestScores: { [username: string]: { id: string; score: number } } =
+      {};
+    if (querySnapshot.empty) {
+      return res.status(204).send("No data!");
+    }
+    querySnapshot.forEach((docSnapshot) => {
+      const data = docSnapshot.data();
+      const username = data.username;
+      const score = data.score;
+      const id = docSnapshot.id;
+
+      if (!highestScores[username] || score > highestScores[username].score) {
+        highestScores[username] = { id, score };
+      }
+    });
+
+    const ids = Object.values(highestScores).map(user => user.id);
+    
+    if (ids.length == 0) {
+      return res.status(400).send("error");
+    }
+
+    const queryUniqueScores = await query(
+      games,
+      where("__name__", "in", ids),
+      orderBy("score", "desc"),
+    );
+    const queryScoreSnapshot = await getDocs(queryUniqueScores);
+
+    const start = (pagenum - 1) * increments;
+    const size = queryScoreSnapshot.size;
+    const pageCount = Math.ceil(size / increments);
+
+    const data: ScoreEntry[] = [];
+
+    for (let i = 0; i < increments && i + start < size; i++) {
+      const dataEntry: ScoreEntry = {
+        rank: i + start + 1,
+        username: queryScoreSnapshot.docs[i + start].data().username,
+        score: queryScoreSnapshot.docs[i + start].data().score,
+      };
+      data.push(dataEntry);
+    }
+
+    return res.status(200).json({
+      leaderboardData: data,
+      pageCount: pageCount,
+    });
+  },
+);
+
+app.post("/logout", async (req: Request, res: Response) => {
+  const sessionId = req.sessionID;
+  if (!(await session_remove(sessionId))) {
+    return res.send("Not logged in").status(400);
+  }
+
+  req.session.destroy((err) => {
+    if (err) {
+      return res.send("Error destroying session.").status(400);
+    }
+
+    return res.send("Logout Successful!").status(200);
+  });
+});

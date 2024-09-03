@@ -1,9 +1,10 @@
 import { useState } from "react";
 import classes from "../Forms.module.scss";
-import Sheet from "../Sheet/Sheet";
+import Sheet from "../../Sheet/Sheet";
 import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
+import { EyeOff, Eye } from "lucide-react";
 
 function Register() {
   const passwordPattern =
@@ -21,7 +22,10 @@ function Register() {
   const [confirmPasswordEmpty, setConfirmPasswordEmpty] = useState(false);
   const [passwordValid, setPasswordValid] = useState(true);
   const [usernameValid, setUsernameValid] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
   const resetState = () => {
     if (!passwordMatch) setPasswordMatch(true);
@@ -99,7 +103,7 @@ function Register() {
       });
 
       if (resp.ok) {
-        console.log("success");
+        navigate("/login", { replace: true });
       } else {
         console.log("failure");
       }
@@ -110,11 +114,9 @@ function Register() {
     }
   };
 
-  const navigate = useNavigate()
-
   return (
-    <Sheet>
-      <h1 className={classes.title}>Register!</h1>
+    <Sheet login>
+      <h1 className="title">Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
         <label htmlFor="username" className={classes.label}>
           Username
@@ -145,33 +147,64 @@ function Register() {
         <label htmlFor="password" className={classes.label}>
           Password
         </label>
-        <input
-          id="password"
-          className={classNames(classes.input, {
-            [classes.inputError]: !passwordValid || passwordEmpty,
-          })}
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+        <div className={classes.passwordContainer}>
+          <input
+            id="password"
+            className={classNames(classes.input, classes.passwordInput, {
+              [classes.inputError]: !passwordValid || passwordEmpty,
+            })}
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={formData.password}
+            onChange={handleChange}
+            style={{
+              paddingRight: "30px",
+              marginBottom: "10px",
+              width: "100%",
+            }}
+          />
+          <button
+            type="button"
+            className={classes.showPasswordButton}
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <Eye size="20" color="hsl(52, 100%, 50%)" />
+            ) : (
+              <EyeOff color="hsl(52, 100%, 50%)" size="20" />
+            )}
+          </button>
+        </div>
         {passwordEmpty && (
           <WarningText text="Please enter your password." paddingBottom={10} />
         )}
         <label htmlFor="confirmPassword" className={classes.label}>
           Confirm Password
         </label>
-        <input
-          id="confirmPassword"
-          className={classNames(classes.input, {
-            [classes.inputError]:
-              confirmPasswordEmpty || !passwordMatch || !passwordValid,
-          })}
-          name="confirmPassword"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
+        <div className={classes.passwordContainer}>
+          <input
+            id="confirmPassword"
+            className={classNames(classes.input, classes.passwordInput, {
+              [classes.inputError]:
+                confirmPasswordEmpty || !passwordMatch || !passwordValid,
+            })}
+            name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+          <button
+            type="button"
+            className={classes.showPasswordButton}
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? (
+              <Eye size="20" color="hsl(52, 100%, 50%)" />
+            ) : (
+              <EyeOff color="hsl(52, 100%, 50%)" size="20" />
+            )}
+          </button>
+        </div>
         {confirmPasswordEmpty && (
           <WarningText text="Please enter your password." paddingBottom={0} />
         )}
@@ -187,7 +220,10 @@ function Register() {
         )}
         <input type="submit" className={classes.button} value="Register" />
         <div className={classes.register}>
-          <a className={classes.link} onClick={() => navigate("/login", {replace: true})}>
+          <a
+            className={classes.link}
+            onClick={() => navigate("/login", { replace: true })}
+          >
             Go back
           </a>
         </div>

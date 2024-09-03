@@ -1,4 +1,4 @@
-import classes from "./ProfileIcon.module.css";
+import classes from "./ProfileIcon.module.scss";
 
 interface pic {
   url: string;
@@ -6,8 +6,10 @@ interface pic {
 
 function ProfileIcon(props: pic) {
   return (
-    <div className={classes.profileIcon}>
-      <img className={classes.profile} src={props.url} />
+    <div className={classes.profileIconContainer}>
+      <div className={classes.profileIcon}>
+        <img className={classes.profile} src={props.url} />
+      </div>
     </div>
   );
 }
