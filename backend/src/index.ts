@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Game, Gamemode, GameState } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -60,6 +60,17 @@ const session_remove = async (sessionId: string) => {
 
   return true;
 };
+
+const sessionIdToUserId = async (sessionId: string) => {
+    const sessionData = query(sessions, where("sessionId", "==", sessionId));
+    const session = await getDocs(sessionData);
+  
+    if (session.empty) {
+      return "guest";
+    } else {
+      return session.docs[0].id;
+    }
+  };
 
 
 const app = express();
@@ -193,19 +204,41 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
 });
 // curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
 
-app.get('/startGame', async (req: TypedRequestQuery<{roundCount: number}>, res) => {
+app.get('/startGame', async (req: TypedRequestQuery<{roundCount: number, gameMode: Gamemode}>, res) => {
 
-    const getDoc = await getDocs(collection(db, 'test_locations'));
-    const allLocations = getDoc.docs.map(doc => doc.data);
+    const getDoc = await getDocs(collection(db, 'levels'));
+    const allLocations = getDoc.docs.map(doc => doc.data());
 
-    const n = req.query.roundCount;
-    // Shuffle array
+    const {roundCount, gameMode} = req.query;
     const shuffled = allLocations.sort(() => 0.5 - Math.random());
 
     // Get sub-array of first n elements after shuffled
-    let selected = shuffled.slice(0, n);
+    let selected = shuffled.slice(0, roundCount);
+    const levels : Level[] = [];
+    selected.forEach(location => 
+        levels.push({
+            photoLink: location.panorama,
+            locationName: location.title,
+            latitude: location.latitude,
+            longitude: location.longitude,
+            zPosition: location.floor
+        }))
 
-    res.status(200).json(selected);
+    const game : Game = {
+        status: GameState.IN_PROGRESS,
+        gamemode: gameMode,
+        levels: levels,
+        score: 0,
+        userid: await sessionIdToUserId(req.sessionID),
+        startTime: new Date(),
+
+    }
+
+    if (game.userid != "guest") {
+      addDoc(collection(db, "games"), game);
+    }
+
+    res.status(200).json("game successfully started");
     
 })
 

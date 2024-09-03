@@ -17,7 +17,7 @@ export interface Level {
   locationName: string | undefined;
   latitude: number;
   longitude: number;
-  zPosition: number | undefined;
+  zPosition: string | undefined;
 }
 
 export interface Game {
@@ -26,7 +26,7 @@ export interface Game {
   gamemode: Gamemode;
   levels: Level[];
   score: number;
-  username: string;
+  userid: string;
   startTime: Date; // To calculate time bonuses?
 }
 
