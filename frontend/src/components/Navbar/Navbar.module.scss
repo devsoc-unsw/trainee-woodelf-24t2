@@ -1,13 +1,14 @@
 @import "../../variables";
 
 .navbar {
-  height: 7vh;
+  height: 50px;
   width: 100vw;
   background-color: $navbar-dark;
   display: flex;
   position: fixed;
   left: 0;
   top: 0;
+  padding: 0 10px;
   z-index: 100;
   align-items: center;
   justify-content: space-between;
@@ -70,31 +71,58 @@
   left: 0;
 }
 
-@media screen and (max-width: 768px) {
+.hamburger {
+  display: none;
+}
+
+.sheet {
+  display: none;
+}
+
+@media screen and (max-width: 770px) {
   .navbar {
-    height: 7vh;
     width: 100vw;
+    padding: 0 10px;
     background-color: $navbar-dark;
     display: flex;
     position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
-    text-align: center;
     opacity: 80%;
   }
-  
+
   .hideOnMobile {
     display: none;
   }
 
-  // .container {
-  //   position: absolute;
-  //   width: 100%;
-  // }
+  .container {
+    position: absolute;
+    width: 100%;
+  }
 
   .hamburger {
-    position: relative;
-    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .hamburger:active {
+    background-color: darken(white, 90%);
+  }
+
+  .userIcon {
+    padding: 0;
+    margin: 0;
+    height: 25px;
+    width: 32px;
+  }
+
+  .sheet {
+    display: block;
   }
 }
