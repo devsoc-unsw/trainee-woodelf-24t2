@@ -11,7 +11,7 @@
 .dropDownMenu {
   width: auto;
   position: absolute;
-  background-color: hsl(0, 0%, 46%);
+  background-color: $navbar-dark;
   display: flex;
   flex-direction: column;
   padding: 20px 20px 15px 18px;

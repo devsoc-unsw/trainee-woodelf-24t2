@@ -1,7 +1,7 @@
 @import "../../variables";
 
 .navbar {
-  height: 50px;
+  height: 60px;
   width: 100vw;
   background-color: $navbar-dark;
   display: flex;
@@ -124,5 +124,9 @@
 
   .sheet {
     display: block;
+  }
+
+  .hover:after {
+    display: none;
   }
 }

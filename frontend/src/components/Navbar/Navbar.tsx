@@ -3,7 +3,7 @@ import classes from "./Navbar.module.scss";
 import Logo from "../Logo/Logo";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
 import { Menu, User, X } from "lucide-react";
@@ -23,13 +23,18 @@ function Navbar() {
     }, 10);
   };
 
+  const handleNavigation = (path: string) => {
+    setShowDropDown(false);
+    navigate(path);
+  };
+
   return (
     <div>
       <nav className={classes.navbar}>
         <div>
           <button
             className={`${classes.hover} ${classes.logo}`}
-            onClick={() => navigate("/home")}
+            onClick={() => handleNavigation("/home")}
           >
             <Logo size="lg" />
           </button>
@@ -79,16 +84,27 @@ function Navbar() {
       </nav>
       {showDropDown && (
         <Sheet dropdownNavbar className={classes.sheet}>
-          <button onClick={() => navigate("/leaderboard")}>
-            🏆Leaderboard
-          </button>
-          <button onClick={() => navigate("/gamemodes")}>📌Gamemodes</button>
-          <button onClick={() => navigate("/credits")}>💛Credits</button>
-          <button onClick={() => navigate("/credits")}>
+          <button onClick={() => handleNavigation("/profile")}>
             <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
             Profile
           </button>
-          <button onClick={() => navigate("/credits")}>😢Logout</button>
+          <button onClick={() => handleNavigation("/gamemodes")}>
+            📌Gamemodes
+          </button>
+          <button onClick={() => handleNavigation("/leaderboard")}>
+            🏆Leaderboard
+          </button>
+          <button onClick={() => {
+            if (showCredits) {
+              setShowDropDown(false);
+              return;
+            } 
+            toggleCredits();
+            setShowDropDown(false);
+          }}>
+            💛Credits
+          </button>
+          <button>😢Logout</button>
         </Sheet>
       )}
     </div>

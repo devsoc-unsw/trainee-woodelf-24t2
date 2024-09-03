@@ -11,7 +11,7 @@ function Credits({ onClick }: { onClick: () => void }) {
   const [chrisText, setChrisText] = useState("");
   const [lachlanText, setLachlanText] = useState("");
   const [osvaldoText, setOsvaldoText] = useState("");
-  
+
   const names: string[] = [
     "Alyssa Cheong",
     "Ben Goldwin",

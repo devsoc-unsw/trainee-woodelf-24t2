@@ -30,9 +30,9 @@ function App() {
     <>
       <div id="overlay-root"></div>
       {hasNavbar && <Navbar />}
-      {/* {hasBackground && (
+      {hasBackground && (
         <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded} />
-      )} */}
+      )}
       {!isPanoramaLoaded && <LoadingScreen />}
       <Outlet />
     </>
