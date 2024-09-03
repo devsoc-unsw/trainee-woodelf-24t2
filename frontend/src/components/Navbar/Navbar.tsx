@@ -3,7 +3,7 @@ import classes from "./Navbar.module.scss";
 import Logo from "../Logo/Logo";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
 import { Menu, User, X } from "lucide-react";
