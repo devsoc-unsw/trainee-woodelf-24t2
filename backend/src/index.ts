@@ -201,28 +201,31 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   );
 });
 
+/* This code was tested by querying 'collection(db, "test_game")' instead of 'games'
+** bcs the game objects in the games collection currently uses username instead of userid
+*/
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-    const queryGames = await query(
+    const queryGames = query(
       games,
       where("gamemode", "==", Number(gamemode)),
     );
     const querySnapshot = await getDocs(queryGames);
-    const highestScores: { [username: string]: { id: string; score: number } } =
+    const highestScores: { [userid: string]: { id: string; score: number } } =
       {};
     if (querySnapshot.empty) {
       return res.status(204).send("No data!");
     }
-    querySnapshot.forEach((docSnapshot) => {
+    querySnapshot.forEach(async (docSnapshot) => {
       const data = docSnapshot.data();
-      const username = data.username;
+      const userid = data.userid;
       const score = data.score;
       const id = docSnapshot.id;
 
-      if (!highestScores[username] || score > highestScores[username].score) {
-        highestScores[username] = { id, score };
+      if (!highestScores[userid] || score > highestScores[userid].score) {
+        highestScores[userid] = { id, score };
       }
     });
 
@@ -248,7 +251,7 @@ app.get(
     for (let i = 0; i < increments && i + start < size; i++) {
       const dataEntry: ScoreEntry = {
         rank: i + start + 1,
-        username: queryScoreSnapshot.docs[i + start].data().username,
+        username: await getUsername(queryScoreSnapshot.docs[i + start].data().userid),
         score: queryScoreSnapshot.docs[i + start].data().score,
       };
       data.push(dataEntry);
@@ -275,3 +278,13 @@ app.post("/logout", async (req: Request, res: Response) => {
     return res.send("Logout Successful!").status(200);
   });
 });
+
+app.get("/testlog", async (req, res) => {
+  const queryGames = query(
+    collection(db, "test_game"),
+    where("gamemode", "==", 1),
+  );
+  const querySnapshot = await getDocs(queryGames);
+
+  console.log(querySnapshot.docs[0].data());
+})
