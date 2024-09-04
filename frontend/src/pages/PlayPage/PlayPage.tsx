@@ -1,16 +1,11 @@
 // @ts-ignore
 import ReactPannellum from "react-pannellum";
-import panoramaImage from "/testimage.png";
-import level1 from "./testLevels/IMG_20240803_123419_00_023.jpg";
-import level2 from "./testLevels/IMG_20240803_130954_00_035.jpg";
-import level3 from "./testLevels/IMG_20240803_140913_00_058.jpg";
 import { useEffect, useState } from "react";
 // change this to your local version
 import { MazeMap } from "../../../../../mazemap-react";
 // import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
-import { LucideAlignVerticalSpaceAround } from "lucide-react";
 
 enum Gamemode {
   EXPLORATION = 0,
