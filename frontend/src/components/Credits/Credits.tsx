@@ -43,7 +43,7 @@ function Credits({ onClick }: { onClick: () => void }) {
   }, []);
 
   return (
-    <Sheet sheetCredits>
+    <Sheet credits>
       <button className={classes.close} onClick={onClick}>
         <X />
       </button>

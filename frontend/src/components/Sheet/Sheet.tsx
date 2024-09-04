@@ -5,25 +5,28 @@ import classNames from "classnames";
 interface SheetProps {
   hasCloseButton?: () => void;
   children?: React.ReactNode;
-  sheetLogin?: boolean;
-  sheetGamemode?: boolean;
-  sheetCredits?: boolean;
+  login?: boolean;
+  gamemode?: boolean;
+  leaderboard?: boolean;
+  credits?: boolean;
 }
 
 function Sheet(props: SheetProps) {
   return (
     <div
       className={classNames({
-        [classes.containerLogin]: props.sheetLogin,
-        [classes.containerGamemode]: props.sheetGamemode,
-        [classes.containerCredits]: props.sheetCredits,
+        [classes.containerLogin]: props.login,
+        [classes.containerGamemode]: props.gamemode,
+        [classes.containerLeaderboard]: props.leaderboard,
+        [classes.containerCredits]: props.credits,
       })}
     >
       <div
         className={classNames({
-          [classes.sheetLogin]: props.sheetLogin,
-          [classes.sheetGamemode]: props.sheetGamemode,
-          [classes.sheetCredits]: props.sheetCredits,
+          [classes.sheetLogin]: props.login,
+          [classes.sheetGamemode]: props.gamemode,
+          [classes.sheetLeaderboard]: props.leaderboard,
+          [classes.sheetCredits]: props.credits,
         })}
       >
         {props.hasCloseButton && (

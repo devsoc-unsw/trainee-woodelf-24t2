@@ -1,0 +1,19 @@
+@import '../../variables';
+
+.dropDownItem {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.dropDownText {
+  padding: 5px 0 0 0;
+  text-decoration: none;
+  font-size: 0.8em;
+  color: white;
+}
+
+a:hover {
+  color: $secondary-yellow;
+}

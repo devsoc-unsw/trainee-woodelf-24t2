@@ -4,14 +4,13 @@
   height: 100vh;
   width: 100vw;
   opacity: 95%;
-  background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
 .containerGamemode {
-  height: 100vh;
+  height: 107vh;
   width: 100vw;
   opacity: 95%;
   display: flex;
@@ -38,6 +37,18 @@
   width: 100%;
   max-width: 400px;
   position: relative;
+}
+
+.sheetLeaderboard {
+  color: $yellow-button;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  align-items: center;
+  border-radius: 10px;
+  width: 500px;
+  height: 520px;
 }
 
 .sheetCredits {

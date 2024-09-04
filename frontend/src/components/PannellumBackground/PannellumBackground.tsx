@@ -1,10 +1,13 @@
 // @ts-ignore
 import ReactPannellum from "react-pannellum";
-import React from "react"
+import React from "react";
 import panoramaImage from "/testimage.png";
 
-function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>}) {
-
+function PannellumBackground({
+  setIsPanoramaLoaded,
+}: {
+  setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const config = {
     type: "equirectangular",
     autoLoad: true,
@@ -28,7 +31,7 @@ function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: Rea
     PointerEvents: "none",
   };
 
-  return(
+  return (
     <>
       <ReactPannellum
         id="1"
@@ -46,8 +49,7 @@ function PannellumBackground({ setIsPanoramaLoaded }: { setIsPanoramaLoaded: Rea
         }}
       />
     </>
-  )
-
+  );
 }
 
-export default PannellumBackground
+export default PannellumBackground;
