@@ -6,10 +6,11 @@ import level2 from "./testLevels/IMG_20240803_130954_00_035.jpg";
 import level3 from "./testLevels/IMG_20240803_140913_00_058.jpg";
 import { useEffect, useState } from "react";
 // change this to your local version
-// import { MazeMap } from "../../../../../mazemap-react";
-import { MazeMap } from "@lachlanshoesmith/mazemap-react";
+import { MazeMap } from "../../../../../mazemap-react";
+// import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
+import { LucideAlignVerticalSpaceAround } from "lucide-react";
 
 enum Gamemode {
   EXPLORATION = 0,
@@ -43,6 +44,16 @@ function PlayPage(props: PlayPageProps) {
     // insert fetch request for levels here
   }, []);
 
+  // fake data
+  const levels = {
+    level1:
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media&token=7f607942-d19f-4674-9627-e882ad132524",
+    level2:
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105158_00_016.jpg?alt=media&token=ec0fee7f-5bec-416a-926e-04104e2639c8",
+    level3:
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105419_00_018.jpg?alt=media&token=b29f06bb-e549-4807-a4a6-e26c4d8fc607",
+  };
+
   const { seconds, minutes } = useTimer({
     expiryTimestamp,
     onExpire: () => console.warn("GAME OVER!!!"),
@@ -53,7 +64,7 @@ function PlayPage(props: PlayPageProps) {
   const config = {
     type: "equirectangular",
     autoLoad: true,
-    showControls: true,
+    showControls: false,
     mouseZoom: true,
     draggable: true,
     keyboardZoom: false,
@@ -93,7 +104,7 @@ function PlayPage(props: PlayPageProps) {
             id="1"
             sceneId="scene1"
             style={style}
-            imageSource={level1}
+            imageSource={levels.level1}
             config={config}
           />
         </div>
