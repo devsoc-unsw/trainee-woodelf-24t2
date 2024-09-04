@@ -34,7 +34,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/play',
-        element: <PlayPage/>,
+        // hard coded rn to 10 min gamemode
+        element: <PlayPage Gamemodes={2}/>,
       },
       {
         path: '/register',

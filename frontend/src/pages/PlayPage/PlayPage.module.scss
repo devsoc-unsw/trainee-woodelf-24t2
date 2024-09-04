@@ -1,0 +1,81 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.canvasWrapper {
+  height: 350px;
+  width: 500px;
+  position: relative;
+  margin: 20px;
+  z-index: 10;
+}
+
+.reactPannellumWrapper {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.guessButton {
+  width: 500px;
+  height: 45px;
+  background-color: $yellow-button;
+  border-radius: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  border-radius: 5px;
+  width: 100px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 1.5rem;
+  color: white;
+  text-align: center;
+  position: absolute;
+  z-index: 3;
+}
+
+.score {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 5px;
+  width: 150px;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 1.2rem;
+  color: white;
+  z-index: 3;
+  gap: 10px;
+}
+
+.guessButton:active {
+  background-color: darken($yellow-button, 10%);
+}
+
+.timer {
+}

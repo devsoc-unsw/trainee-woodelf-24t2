@@ -10,7 +10,7 @@ function App() {
   const location = useLocation();
 
   // List of routes that do not include the Navbar
-  const hideNavbarRoutes = ["/login", "/register"];
+  const hideNavbarRoutes = ["/login", "/register", "/play"];
   const panoBackgroundRoutes = [
     "/login",
     "/register",
