@@ -61,6 +61,15 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const getUsername = async (userId: string) => {
+  const sessionData = query(users, where("__name__", "==", userId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) return 'user not found';
+
+  return session.docs[0].data().username;
+};
+
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -218,7 +227,7 @@ app.get(
     });
 
     const ids = Object.values(highestScores).map(user => user.id);
-    
+
     if (ids.length == 0) {
       return res.status(400).send("error");
     }
