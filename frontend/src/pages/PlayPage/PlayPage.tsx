@@ -1,61 +1,49 @@
-// @ts-ignore
-import ReactPannellum, { addScene, loadScene, addHotSpot } from "react-pannellum";
-import { useEffect, useState } from "react";
+import ReactPannellum, {
+  addScene,
+  loadScene,
+  addHotSpot,
+  // @ts-ignore
+} from "react-pannellum";
+import { useEffect, useRef, useState } from "react";
 // change this to your local version
 // import { MazeMap } from "../../../../../mazemap-react";
 // import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
-
-enum Gamemode {
+enum Gamemodes {
   EXPLORATION = 0,
   TIMED_5MIN = 1,
   TIMED_10MIN = 2,
 }
 
 interface PlayPageProps {
-  Gamemodes?: Gamemode;
+  Gamemode: Gamemodes;
 }
 
-function PlayPage(props: PlayPageProps) {
-  const [score, setScore] = useState(0);
-  const [round, setRound] = useState(1);
-  const [totalRounds, setTotalRounds] = useState(0);
-  const [showTimer, setShowTimer] = useState(false);
-  const [hoverOnMap, setHoverOnMap] = useState(false);
-
-  const expiryTimestamp = new Date();
+// Skips this useEffect running on mount.
+// - Ensures this only runs after panorama is loaded!
+const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    if (props.Gamemodes === Gamemode.TIMED_5MIN) {
-      setShowTimer(true);
-      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 150);
-    } else if (props.Gamemodes === Gamemode.TIMED_10MIN) {
-      setShowTimer(true);
-      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 300);
-    } else {
-      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 0);
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
     }
-    // insert fetch request for levels here
-  }, []);
 
-  // fake data
-  const levels = {
-    level1:
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media&token=7f607942-d19f-4674-9627-e882ad132524",
-    level2:
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105158_00_016.jpg?alt=media&token=ec0fee7f-5bec-416a-926e-04104e2639c8",
-    level3:
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105419_00_018.jpg?alt=media&token=b29f06bb-e549-4807-a4a6-e26c4d8fc607",
-  };
+    fn();
+  }, deps);
+};
 
-  const { seconds, minutes } = useTimer({
-    expiryTimestamp,
-    onExpire: () => console.warn("GAME OVER!!!"),
-  });
-  const formattedSeconds = String(seconds).padStart(2, "0");
-  const formattedMinutes = String(minutes).padStart(1, "0");
-
+function PlayPage(props: PlayPageProps) {
+  const [levels, setLevels] = useState<string[]>([]);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(1);
+  const [maxRounds, setMaxRounds] = useState(0);
+  const [showTimer, setShowTimer] = useState(false);
+  const [hoverOnMap, setHoverOnMap] = useState(false);
+  const [panoramaLoaded, setPanoramaLoaded] = useState(false);
   const config = {
     type: "equirectangular",
     autoLoad: true,
@@ -72,17 +60,51 @@ function PlayPage(props: PlayPageProps) {
     height: "100%",
   };
 
-  const otherConfig = { ...config, imageSource: levels.level2}
+  const expiryTimestamp = new Date();
 
-  const hotspotconfig = {
+  const restartTimer = () => {
+    if (props.Gamemode === Gamemodes.TIMED_5MIN) {
+      setShowTimer(true);
+      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 150);
+    } else if (props.Gamemode === Gamemodes.TIMED_10MIN) {
+      setShowTimer(true);
+      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 300);
+    }
+    restart(expiryTimestamp);
+  };
 
-  }
+  useEffect(() => {
+    // make request to get levels here
+    setLevels([
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media&token=7f607942-d19f-4674-9627-e882ad132524",
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105158_00_016.jpg?alt=media&token=ec0fee7f-5bec-416a-926e-04104e2639c8",
+      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105419_00_018.jpg?alt=media&token=b29f06bb-e549-4807-a4a6-e26c4d8fc607",
+    ]);
 
-  addScene(
-    "scene-id",
-    otherConfig,
-    () => {}
-  )
+    setDataFetched(true);
+  }, []);
+
+  const { seconds, minutes, restart } = useTimer({
+    expiryTimestamp,
+    onExpire: () => console.warn("GAME OVER!!!"),
+  });
+  const formattedSeconds = String(seconds).padStart(2, "0");
+  const formattedMinutes = String(minutes).padStart(1, "0");
+
+  // adds levels to panorama after it loads!
+  useEffectAfterMount(() => {
+    setMaxRounds(levels.length);
+    for (let i = 0; i < levels.length; i++) {
+      let otherConfig = { ...config, imageSource: levels[i] };
+      addScene(`level${i}`, otherConfig, () => {});
+    }
+  }, [panoramaLoaded]);
+
+  const guess = () => {
+    restartTimer();
+    loadScene(`level${round}`);
+    if (round < maxRounds) setRound(round + 1);
+  };
 
   return (
     <>
@@ -91,7 +113,7 @@ function PlayPage(props: PlayPageProps) {
           <div>
             <div>Round</div>
             <div>
-              {round}/{totalRounds}
+              {round}/{maxRounds}
             </div>
           </div>
           <div>
@@ -107,13 +129,19 @@ function PlayPage(props: PlayPageProps) {
               </div>
             </div>
           )}
-          <ReactPannellum
-            id="1"
-            sceneId="scene1"
-            style={style}
-            imageSource={levels.level1}
-            config={config}
-          />
+          {dataFetched && (
+            <ReactPannellum
+              id="1"
+              sceneId="scene1"
+              style={style}
+              imageSource={levels[0]}
+              config={config}
+              onPanoramaLoaded={() => {
+                restartTimer();
+                setPanoramaLoaded(true);
+              }}
+            />
+          )}
         </div>
 
         <div className={classes.canvasWrapper}>
@@ -124,7 +152,9 @@ function PlayPage(props: PlayPageProps) {
             width={hoverOnMap ? "700px" : "500px"}
             center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
           /> */}
-          <button className={classes.guessButton} onClick={() => {loadScene("scene-id")}}>Guess</button>
+          <button className={classes.guessButton} onClick={guess}>
+            Guess
+          </button>
         </div>
       </div>
     </>
