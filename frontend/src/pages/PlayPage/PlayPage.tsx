@@ -1,8 +1,8 @@
 // @ts-ignore
-import ReactPannellum from "react-pannellum";
+import ReactPannellum, { addScene, loadScene, addHotSpot } from "react-pannellum";
 import { useEffect, useState } from "react";
 // change this to your local version
-import { MazeMap } from "../../../../../mazemap-react";
+// import { MazeMap } from "../../../../../mazemap-react";
 // import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
@@ -72,6 +72,18 @@ function PlayPage(props: PlayPageProps) {
     height: "100%",
   };
 
+  const otherConfig = { ...config, imageSource: levels.level2}
+
+  const hotspotconfig = {
+
+  }
+
+  addScene(
+    "scene-id",
+    otherConfig,
+    () => {}
+  )
+
   return (
     <>
       <div className={classes.container}>
@@ -105,14 +117,14 @@ function PlayPage(props: PlayPageProps) {
         </div>
 
         <div className={classes.canvasWrapper}>
-          <MazeMap
+          {/* <MazeMap
             campuses={111}
             zoom={14.5}
             height={hoverOnMap ? "450px" : "300px"}
             width={hoverOnMap ? "700px" : "500px"}
             center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
-          />
-          <button className={classes.guessButton}>Guess</button>
+          /> */}
+          <button className={classes.guessButton} onClick={() => {loadScene("scene-id")}}>Guess</button>
         </div>
       </div>
     </>
