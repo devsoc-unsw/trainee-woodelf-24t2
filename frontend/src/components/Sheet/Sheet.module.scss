@@ -10,7 +10,7 @@
 }
 
 .containerGamemode {
-  height: 107vh;
+  height: calc(100vh + $navbar-height);
   width: 100vw;
   opacity: 95%;
   display: flex;
@@ -26,7 +26,7 @@
 }
 
 .containerDropdownNavbar {
-  z-index: 3;
+  z-index: 1000;
   position: fixed;
   display: flex;
   justify-content: flex-end;
@@ -41,9 +41,10 @@
   display: flex;
   flex-direction: column;
   background-color: $dark;
+  opacity: 80%;
   gap: 5px;
   height: inherit;
-  width: 50vw;
+  width: 200px;
 }
 
 .sheetDropdownNavbar > button {

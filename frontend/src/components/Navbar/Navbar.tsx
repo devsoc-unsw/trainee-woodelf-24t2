@@ -8,6 +8,7 @@ import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
 import { Menu, User, X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
+import classNames from "classnames";
 
 function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
@@ -82,33 +83,37 @@ function Navbar() {
           {showDropDown ? <X color="white" /> : <Menu color="white" />}
         </button>
       </nav>
-      {showDropDown && (
-          <Sheet dropdownNavbar className={classes.sheet}>
-            <button onClick={() => handleNavigation("/profile")}>
-              <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
-              Profile
-            </button>
-            <button onClick={() => handleNavigation("/gamemodes")}>
-              📌Gamemodes
-            </button>
-            <button onClick={() => handleNavigation("/leaderboard")}>
-              🏆Leaderboard
-            </button>
-            <button
-              onClick={() => {
-                if (showCredits) {
-                  setShowDropDown(false);
-                  return;
-                }
-                toggleCredits();
-                setShowDropDown(false);
-              }}
-            >
-              💛Credits
-            </button>
-            <button>😢Logout</button>
-          </Sheet>
-      )}
+      <Sheet
+        dropdownNavbar
+        className={classNames(classes.sheet, {
+          [classes.slide_in]: showDropDown,
+          [classes.slide_out]: !showDropDown,
+        })}
+      >
+        <button onClick={() => handleNavigation("/profile")}>
+          <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
+          Profile
+        </button>
+        <button onClick={() => handleNavigation("/gamemodes")}>
+          📌Gamemodes
+        </button>
+        <button onClick={() => handleNavigation("/leaderboard")}>
+          🏆Leaderboard
+        </button>
+        <button
+          onClick={() => {
+            if (showCredits) {
+              setShowDropDown(false);
+              return;
+            }
+            toggleCredits();
+            setShowDropDown(false);
+          }}
+        >
+          💛Credits
+        </button>
+        <button>😢Logout</button>
+      </Sheet>
     </div>
   );
 }
