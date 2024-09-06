@@ -83,29 +83,31 @@ function Navbar() {
         </button>
       </nav>
       {showDropDown && (
-        <Sheet dropdownNavbar className={classes.sheet}>
-          <button onClick={() => handleNavigation("/profile")}>
-            <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
-            Profile
-          </button>
-          <button onClick={() => handleNavigation("/gamemodes")}>
-            📌Gamemodes
-          </button>
-          <button onClick={() => handleNavigation("/leaderboard")}>
-            🏆Leaderboard
-          </button>
-          <button onClick={() => {
-            if (showCredits) {
-              setShowDropDown(false);
-              return;
-            } 
-            toggleCredits();
-            setShowDropDown(false);
-          }}>
-            💛Credits
-          </button>
-          <button>😢Logout</button>
-        </Sheet>
+          <Sheet dropdownNavbar className={classes.sheet}>
+            <button onClick={() => handleNavigation("/profile")}>
+              <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
+              Profile
+            </button>
+            <button onClick={() => handleNavigation("/gamemodes")}>
+              📌Gamemodes
+            </button>
+            <button onClick={() => handleNavigation("/leaderboard")}>
+              🏆Leaderboard
+            </button>
+            <button
+              onClick={() => {
+                if (showCredits) {
+                  setShowDropDown(false);
+                  return;
+                }
+                toggleCredits();
+                setShowDropDown(false);
+              }}
+            >
+              💛Credits
+            </button>
+            <button>😢Logout</button>
+          </Sheet>
       )}
     </div>
   );

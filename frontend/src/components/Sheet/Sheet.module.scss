@@ -29,11 +29,11 @@
   z-index: 3;
   position: fixed;
   display: flex;
-
+  justify-content: flex-end;
   color: white;
-  width: 50vw;
+  width: 100vw;
   height: calc(100vh - $navbar-height);
-  margin-top: 60px;
+  margin-top: $navbar-height;
 }
 
 .sheetDropdownNavbar {
@@ -42,9 +42,8 @@
   flex-direction: column;
   background-color: $dark;
   gap: 5px;
-  margin: auto;
   height: inherit;
-  width: inherit;
+  width: 50vw;
 }
 
 .sheetDropdownNavbar > button {
