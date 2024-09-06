@@ -17,7 +17,7 @@ export interface Level {
   locationName: string | undefined;
   latitude: number;
   longitude: number;
-  zPosition: string | undefined;
+  zPosition: number | undefined;
 }
 
 export interface Game {
