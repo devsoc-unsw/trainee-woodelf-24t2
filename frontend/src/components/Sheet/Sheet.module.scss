@@ -1,0 +1,90 @@
+@import "../../variables";
+
+.containerLogin {
+  height: 100vh;
+  width: 100vw;
+  opacity: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.containerGamemode {
+  height: 107vh;
+  width: 100vw;
+  opacity: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.containerCredits {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $secondary-yellow;
+}
+
+.sheetLogin {
+  color: $yellow-button;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  align-items: center;
+  margin: auto;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+}
+
+.sheetLeaderboard {
+  color: $yellow-button;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  align-items: center;
+  border-radius: 10px;
+  width: 500px;
+  height: 520px;
+}
+
+.sheetCredits {
+  position: relative;
+  padding: 10px 10px;
+  width: 350px;
+  height: 350px;
+  border-radius: 8px;
+  background-color: $dark;
+  opacity: 95%;
+  text-align: center;
+}
+
+.sheetGamemode {
+  color: $yellow-button;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  margin: auto;
+  width: 100%;
+  height: 700px;
+  position: relative;
+}
+
+.close {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  position: absolute;
+  background: transparent;
+  right: 20px;
+}
+
+.close:hover {
+  color: darken($secondary-yellow, 10%);
+}

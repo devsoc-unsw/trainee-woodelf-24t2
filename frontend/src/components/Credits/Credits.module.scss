@@ -1,0 +1,59 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $secondary-yellow;
+}
+
+.box {
+  position: relative;
+  padding: 20px;
+  width: 300px;
+  height: 275px;
+  border-radius: 8px;
+  background-color: $dark;
+  opacity: 95%;
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.creditstext {
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  color: hsl(51, 94%, 65%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.creditstext > li {
+  margin-bottom: 10px;
+  color: $primary-yellow;
+}
+
+.creditstext > li:hover {
+  color: darken($secondary-yellow, 10%)
+}
+
+.close {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: $secondary-yellow;
+  cursor: pointer;
+  position: absolute;
+  background: transparent;
+  top: 15px;
+  right: 15px;
+}

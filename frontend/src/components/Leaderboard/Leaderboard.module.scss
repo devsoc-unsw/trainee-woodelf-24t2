@@ -1,0 +1,116 @@
+@import "../../variables";
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: auto;
+}
+
+td {
+  color: white;
+  font-size: 1.5rem;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid $dark-line;
+}
+
+tr:last-child > td {
+  border-bottom: none;
+}
+
+.title {
+  color: $leaderboard-header;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.firstOption {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+}
+
+.secondOption {
+  position: absolute;
+  top: 0px;
+  left: 60px;
+}
+
+.rank {
+  width: 1rem;
+  text-align: left;
+}
+
+.username {
+  text-align: left;
+}
+
+.first {
+  color: $rank-one;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.second {
+  color: $rank-two;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.third {
+  color: $rank-three;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(92, 83, 83, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.points {
+  color: white;
+}
+
+.next {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  color: $leaderboard-secondary;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.page {
+  position: absolute;
+  right: 35px;
+  margin: 0;
+}
+
+.button {
+  color: white;
+  width: 30px;
+  height: 35px;
+  font-size: 1.2rem;
+}
+
+.button:hover {
+  color: darken($secondary-yellow, 10%);
+}
+
+.pressed {
+  color: $secondary-yellow;
+}

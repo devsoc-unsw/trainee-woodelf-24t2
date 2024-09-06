@@ -1,0 +1,72 @@
+@import "../../variables";
+
+.navbar {
+  height: 7vh;
+  width: 100vw;
+  background-color: $navbar-dark;
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 80%;
+  padding: 0px 1vw 0px 1vw;
+}
+
+.navbar > div {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  font-size: 1.3rem;
+  color: white;
+}
+
+.navbar button {
+  background: none;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.profile {
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+}
+
+.hover {
+  position: relative;
+  display: inline-block;
+}
+
+.hover:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: $secondary-yellow;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.logo:after {
+  background: hsl(28, 68%, 65%);
+  bottom: -0.2vh;
+}
+
+.logo:hover:after {
+  width: 80%;
+  left: 0;
+}
+
+.hover:hover:after {
+  width: 100%;
+  left: 0;
+}

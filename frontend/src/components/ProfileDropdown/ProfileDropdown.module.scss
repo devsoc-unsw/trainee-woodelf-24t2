@@ -1,0 +1,22 @@
+@import '../../variables';
+
+.username {
+  margin: 0 0 5px 0;
+  text-align: right;
+  color: hsl(0, 0%, 88%);
+  font-size: 1.3em;
+  font-weight: normal;
+}
+
+.dropDownMenu {
+  width: auto;
+  position: absolute;
+  background-color: hsl(0, 0%, 46%);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 15px 18px;
+  right: 0.85vw;
+  margin-top: calc(3.5vh - 20px);
+  border-radius: 0 0 10px 10px;
+}
+  
