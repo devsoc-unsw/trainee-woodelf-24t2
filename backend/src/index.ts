@@ -243,7 +243,7 @@ app.get(
         locationName: location.title,
         latitude: location.latitude,
         longitude: location.longitude,
-        zPosition: floorMap[location.floor],
+        zPosition: floorMap[location.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
       }),
     );
 
