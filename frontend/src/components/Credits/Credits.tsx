@@ -14,7 +14,7 @@ function Credits({ onClick }: { onClick: () => void }) {
 
   const names: string[] = [
     "Alyssa Cheong",
-    "Ben Goldwin",
+    "Ben Godwin",
     "Chris Wong",
     "Lachlan Shoesmith",
     "Osvaldo Prajitno",
