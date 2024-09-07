@@ -10,6 +10,7 @@ import { MazeMap } from "../../../../../mazemap-react";
 // import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
+import getDistance from "geolib/es/getPreciseDistance";
 
 enum Gamemodes {
   EXPLORATION = 0,
@@ -24,7 +25,7 @@ interface PlayPageProps {
 interface Coordinates {
   lng: number;
   lat: number;
-  zLevel: number;
+  zLevel: number | undefined;
 }
 
 // Skips this useEffect running on mount.
@@ -57,13 +58,7 @@ function PlayPage(props: PlayPageProps) {
     zLevel: -1,
   });
   const [locationCoordinates, setLocationCoordinates] = useState<Coordinates[]>(
-    [
-      {
-        lng: -1,
-        lat: -1,
-        zLevel: -1,
-      },
-    ],
+    [],
   );
   const config = {
     type: "equirectangular",
@@ -110,17 +105,62 @@ function PlayPage(props: PlayPageProps) {
 
   useEffect(() => {
     // make request to get levels here
+    const levelTestArray = [
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media",
+        latitude: -33.9168905801594,
+        longitude: 151.2279747161422,
+        zPosition: 1,
+      },
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_182147_00_114.jpg?alt=media",
+        latitude: -33.91713209975908,
+        longitude: 151.23261616290625,
+        zPosition: 1,
+      },
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_151906_00_088.jpg?alt=media",
+        latitude: -33.91672599260816,
+        longitude: 151.22944083431207,
+        zPosition: 1,
+      },
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_183833_00_121.jpg?alt=media",
+        latitude: -33.917497802856055,
+        longitude: 151.23431816023904,
+        zPosition: 1,
+      },
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_150928_00_084.jpg?alt=media",
+        latitude: -33.918044098384186,
+        longitude: 151.2299776186045,
+        zPosition: 1,
+      },
+      {
+        photoLink:
+          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_154156_00_094.jpg?alt=media",
+        latitude: -33.91697170041918,
+        longitude: 151.2278685198697,
+        zPosition: 1,
+      },
+    ];
 
-    // const levelTestArray = [{
-    //   photoLink: "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media&token=7f607942-d19f-4674-9627-e882ad132524",
-    //   latitude:
-    // }]
-    setLevels([
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media&token=7f607942-d19f-4674-9627-e882ad132524",
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105158_00_016.jpg?alt=media&token=ec0fee7f-5bec-416a-926e-04104e2639c8",
-      "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_105419_00_018.jpg?alt=media&token=b29f06bb-e549-4807-a4a6-e26c4d8fc607",
-    ]);
+    const levelDataParsed: string[] = levelTestArray.map(
+      (level) => level.photoLink,
+    );
+    const locationDataParsed: Coordinates[] = levelTestArray.map((level) => ({
+      lat: level.latitude,
+      lng: level.longitude,
+      zLevel: level.zPosition,
+    }));
 
+    setLevels(levelDataParsed);
+    setLocationCoordinates(locationDataParsed);
     setDataFetched(true);
   }, []);
 
@@ -145,6 +185,12 @@ function PlayPage(props: PlayPageProps) {
   };
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
+    const distanceInMetres = getDistance(
+      { latitude: location.lat, longitude: location.lng },
+      { latitude: marker.lat, longitude: marker.lng },
+    );
+
+    console.log(distanceInMetres);
     setScore(score + 1);
   };
 
