@@ -56,11 +56,15 @@ function PlayPage(props: PlayPageProps) {
     lat: -1,
     zLevel: -1,
   });
-  const [locationCoordinates, setLocationCoordinates] = useState<Coordinates[]>([{
-    lng: -1,
-    lat: -1,
-    zLevel: -1,
-  }]);
+  const [locationCoordinates, setLocationCoordinates] = useState<Coordinates[]>(
+    [
+      {
+        lng: -1,
+        lat: -1,
+        zLevel: -1,
+      },
+    ],
+  );
   const config = {
     type: "equirectangular",
     autoLoad: true,
@@ -142,7 +146,7 @@ function PlayPage(props: PlayPageProps) {
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
     setScore(score + 1);
-  }
+  };
 
   return (
     <>
