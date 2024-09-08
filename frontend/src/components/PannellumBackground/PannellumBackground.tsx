@@ -33,11 +33,6 @@ function PannellumBackground({
 
   return (
     <>
-<<<<<<< HEAD:frontend/src/components/HomePage/HomePage.tsx
-      {!isPanoramaLoaded && <LoadingScreen />}
-      <div id="overlay-root"/>
-=======
->>>>>>> 6710a078189a8cc8d98042bb50909ab983c82427:frontend/src/components/PannellumBackground/PannellumBackground.tsx
       <ReactPannellum
         id="1"
         sceneId="firstScene"
