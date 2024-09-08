@@ -1,12 +1,11 @@
-import classes from './YellowButton.module.css';
+import classes from './YellowButton.module.scss';
 
 function YellowButton() {
-    return (
-        <div>
-          <button>
-            <p className={classes.text} >Next</p>
-            </button>
-        </div>
-      );
-    }
+  return (
+    <button className={classes.button}>
+      Next
+    </button>
+  );
+}
+
 export default YellowButton;
