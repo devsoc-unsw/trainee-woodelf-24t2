@@ -259,7 +259,6 @@ app.get(
     if (game.userid != "guest") {
       addDoc(collection(db, "games"), game);
     }
-    console.log(game.userid);
     res.status(200).json("game successfully started");
   },
 );
