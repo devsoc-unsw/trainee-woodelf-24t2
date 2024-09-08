@@ -62,12 +62,12 @@ const session_remove = async (sessionId: string) => {
 };
 
 const getUsername = async (userId: string) => {
-  const sessionData = query(users, where("__name__", "==", userId));
-  const session = await getDocs(sessionData);
+  const userData = query(users, where("__name__", "==", userId));
+  const user = await getDocs(userData);
 
-  if (session.empty) return 'user not found';
+  if (user.empty) return 'user not found';
 
-  return session.docs[0].data().username;
+  return user.docs[0].data().username;
 };
 
 
