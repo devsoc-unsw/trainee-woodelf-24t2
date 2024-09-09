@@ -16,6 +16,8 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  z-index: -1;
+  position: relative;
 }
 
 .containerCredits {
@@ -26,7 +28,6 @@
 }
 
 .containerDropdownNavbar {
-  z-index: 1000;
   position: fixed;
   display: flex;
   justify-content: flex-end;

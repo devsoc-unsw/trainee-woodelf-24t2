@@ -91,14 +91,13 @@ function Navbar() {
         })}
       >
         <button onClick={() => handleNavigation("/profile")}>
-          <User className={classes.userIcon} color="hsl(52, 100%, 50%)" />
           Profile
         </button>
         <button onClick={() => handleNavigation("/gamemodes")}>
-          📌Gamemodes
+          Gamemodes
         </button>
         <button onClick={() => handleNavigation("/leaderboard")}>
-          🏆Leaderboard
+          Leaderboard
         </button>
         <button
           onClick={() => {
@@ -110,9 +109,9 @@ function Navbar() {
             setShowDropDown(false);
           }}
         >
-          💛Credits
+          Credits
         </button>
-        <button>😢Logout</button>
+        <button>Logout</button>
       </Sheet>
     </div>
   );
