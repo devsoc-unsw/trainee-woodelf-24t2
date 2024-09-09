@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -190,6 +190,40 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
       }
     },
   );
+});
+
+app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
+  const levelId = req.query.levelId;
+  const docRef =  doc(db, "levels", levelId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    res.status(404).json({ error: "Level not found" });
+    return;
+  }
+
+  const levelData = docSnap.data();
+
+  const floorMap = {
+    LG: 0,
+    G: 1,
+    L1: 2,
+    L2: 3,
+    L3: 4,
+    L4: 5,
+    L5: 6,
+    L6: 7,
+  };
+
+  const level: Level = {
+    photoLink: levelData.panorama,
+    locationName: levelData.title,
+    latitude: levelData.latitude,
+    longitude: levelData.longitude,
+    zPosition: floorMap[levelData.floor] ?? 1 // if floor is undefined, then location must be G (eg. a lawn)
+  }
+
+  res.status(200).json(level);
 });
 
 app.get(
