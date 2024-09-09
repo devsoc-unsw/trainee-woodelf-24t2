@@ -247,19 +247,21 @@ app.get(
       }),
     );
 
-    const game: Game = {
-      status: GameState.IN_PROGRESS,
-      gamemode: gameMode,
-      levels: levels,
-      score: 0,
-      userid: await sessionIdToUserId(req.sessionID),
-      startTime: new Date(),
-    };
+    const userId = await sessionIdToUserId(req.sessionID);
 
-    if (game.userid != "guest") {
+    if (userId !== "guest") {
+      const game: Game = {
+        status: GameState.IN_PROGRESS,
+        gamemode: gameMode,
+        levels: levels,
+        score: 0,
+        userid: userId,
+        startTime: new Date(),
+      };
+
       addDoc(collection(db, "games"), game);
     }
-    res.status(200).json("game successfully started");
+    res.status(200).json(levels);
   },
 );
 
