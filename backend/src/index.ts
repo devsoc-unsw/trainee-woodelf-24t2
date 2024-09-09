@@ -218,10 +218,8 @@ app.get(
     res,
   ) => {
     const getDoc = await getDocs(collection(db, "levels"));
-    const allLocations = getDoc.docs.map((doc) => doc.data());
 
     const { roundCount, gameMode } = req.query;
-    const shuffled = allLocations.sort(() => 0.5 - Math.random());
 
     const floorMap = {
       LG: 0,
@@ -234,19 +232,15 @@ app.get(
       L6: 7,
     };
 
+    // array of level IDs
+    const docIds = getDoc.docs.map(doc => doc.id);
+    const shuffled = docIds.sort(() => 0.5 - Math.random());
+
     // Get sub-array of first n elements after shuffled
     let selected = shuffled.slice(0, roundCount);
-    const levels: Level[] = [];
-    selected.forEach((location) =>
-      levels.push({
-        photoLink: location.panorama,
-        locationName: location.title,
-        latitude: location.latitude,
-        longitude: location.longitude,
-        zPosition: floorMap[location.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
-      }),
-    );
-
+    const levels: Level["id"][] = [];
+    selected.forEach((location) => levels.push(location))
+   
     const userId = await sessionIdToUserId(req.sessionID);
 
     if (userId !== "guest") {
