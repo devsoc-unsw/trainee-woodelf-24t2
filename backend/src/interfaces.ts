@@ -22,12 +22,11 @@ export interface Level {
 }
 
 export interface Hotspot {
-  id?: string;
-  photoLink: string;
-  locationName: string | undefined;
-  latitude: number;
-  longitude: number;
-  zPosition: number | undefined;
+  levelId: string;
+  pitch: number;
+  yaw: number;
+  targetPitch: number;
+  targetYaw: number;
 }
 
 export interface Game {

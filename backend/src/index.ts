@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Hotspot } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -215,13 +215,27 @@ app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Respons
     L6: 7,
   };
 
+  const hotspots: Hotspot[] = []
+  levelData.hotspots.forEach((h) => {
+    hotspots.push(
+      {
+        levelId: h.levelId,
+        pitch: h.pitch,
+        yaw: h.yaw,
+        targetPitch: h.targetPitch,
+        targetYaw: h.targetYaw,
+      }
+    )
+  })
+
+
   const level: Level = {
     photoLink: levelData.panorama,
     locationName: levelData.title,
     latitude: levelData.latitude,
     longitude: levelData.longitude,
     zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
-    hotspots: levelData.hotspots,
+    hotspots: hotspots,
   }
 
   res.status(200).json(level);
@@ -253,7 +267,7 @@ app.get(
     });
 
     const ids = Object.values(highestScores).map(user => user.id);
-    
+
     if (ids.length == 0) {
       return res.status(400).send("error");
     }
