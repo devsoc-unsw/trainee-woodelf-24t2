@@ -18,6 +18,15 @@ export interface Level {
   latitude: number;
   longitude: number;
   zPosition: number | undefined;
+  hotspots: Hotspot[];
+}
+
+export interface Hotspot {
+  levelId: string;
+  pitch: number;
+  yaw: number;
+  targetPitch: number;
+  targetYaw: number;
 }
 
 export interface Game {
