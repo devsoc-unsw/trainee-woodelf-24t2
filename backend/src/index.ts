@@ -65,7 +65,7 @@ const getUsername = async (userId: string) => {
   const userData = query(users, where("__name__", "==", userId));
   const user = await getDocs(userData);
 
-  if (user.empty) return 'user not found';
+  if (user.empty) return undefined;
 
   return user.docs[0].data().username;
 };
@@ -247,11 +247,16 @@ app.get(
     const pageCount = Math.ceil(size / increments);
 
     const data: ScoreEntry[] = [];
-
-    for (let i = 0; i < increments && i + start < size; i++) {
+    const end = Math.min(start + increments, size);
+    for (let i = start; i < end; i++) {
+      // if username is undefined, don't add to leaderboard
+      let username: string;
+      if(!(username = await getUsername(queryScoreSnapshot.docs[i + start].data().userid))) {
+        continue;
+      }
       const dataEntry: ScoreEntry = {
         rank: i + start + 1,
-        username: await getUsername(queryScoreSnapshot.docs[i + start].data().userid),
+        username: username,
         score: queryScoreSnapshot.docs[i + start].data().score,
       };
       data.push(dataEntry);
