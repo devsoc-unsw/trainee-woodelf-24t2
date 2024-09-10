@@ -221,17 +221,6 @@ app.get(
 
     const { roundCount, gameMode } = req.query;
 
-    const floorMap = {
-      LG: 0,
-      G: 1,
-      L1: 2,
-      L2: 3,
-      L3: 4,
-      L4: 5,
-      L5: 6,
-      L6: 7,
-    };
-
     // array of level IDs
     const docIds = getDoc.docs.map(doc => doc.id);
     const shuffled = docIds.sort(() => 0.5 - Math.random());
@@ -241,20 +230,6 @@ app.get(
     const levels: Level["id"][] = [];
     selected.forEach((location) => levels.push(location))
    
-    const userId = await sessionIdToUserId(req.sessionID);
-
-    if (userId !== "guest") {
-      const game: Game = {
-        status: GameState.IN_PROGRESS,
-        gamemode: gameMode,
-        levels: levels,
-        score: 0,
-        userid: userId,
-        startTime: new Date(),
-      };
-
-      addDoc(collection(db, "games"), game);
-    }
     res.status(200).json(levels);
   },
 );
