@@ -109,7 +109,7 @@ tr:last-child > td {
 }
 
 .button:hover {
-  color: darken(white, 10%);
+  color: darken($secondary-yellow, 10%);
 }
 
 .pressed {
