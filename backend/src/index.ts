@@ -74,7 +74,7 @@ const sessionIdToUserId = async (sessionId: string) => {
   const session = await getDocs(sessionData);
 
   if (session.empty) {
-    return "guest";
+    return undefined;
   } else {
     return session.docs[0].data().userId;
   }
@@ -229,32 +229,36 @@ app.get(
     let selected = shuffled.slice(0, roundCount);
     const levels: Level["id"][] = [];
     selected.forEach((location) => levels.push(location))
-   
+
     res.status(200).json(levels);
   },
 );
 
 app.post(
-  "endGame", 
+  "endGame",
   async (
-  req: TypedRequest<{gameMode: Gamemode, levels: Level["id"][], score: number}>, 
-  res: Response
+    req: TypedRequest<{ gameMode: Gamemode, levels: Level["id"][], score: number }>,
+    res: Response
   ) => {
     const { gameMode, levels, score } = req.body;
-  
+
     const userId = await sessionIdToUserId(req.sessionID);
 
-      if (userId !== "guest") {
-        const game: Game = {
-          gamemode: gameMode,
-          levels: levels,
-          score: score,
-          userid: userId
-        };
+    if (!userId) {
+      res.status(200).send("Game Ended Successfully (unsaved)");
+      return;
+    }
 
-        addDoc(collection(db, "games"), game);
-      }
-    
+    const game: Game = {
+      gamemode: gameMode,
+      levels: levels,
+      score: score,
+      userid: userId
+    };
+
+    addDoc(collection(db, "games"), game);
+
+
     res.status(200).send("Game Ended Successfully");
   }
 )
