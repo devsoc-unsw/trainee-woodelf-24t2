@@ -220,7 +220,8 @@ app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Respons
     locationName: levelData.title,
     latitude: levelData.latitude,
     longitude: levelData.longitude,
-    zPosition: floorMap[levelData.floor] ?? 1 // if floor is undefined, then location must be G (eg. a lawn)
+    zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
+    hotspots: levelData.hotspots,
   }
 
   res.status(200).json(level);

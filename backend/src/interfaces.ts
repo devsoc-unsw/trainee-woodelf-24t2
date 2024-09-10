@@ -18,6 +18,16 @@ export interface Level {
   latitude: number;
   longitude: number;
   zPosition: number | undefined;
+  hotspots: Hotspot[];
+}
+
+export interface Hotspot {
+  id?: string;
+  photoLink: string;
+  locationName: string | undefined;
+  latitude: number;
+  longitude: number;
+  zPosition: number | undefined;
 }
 
 export interface Game {
