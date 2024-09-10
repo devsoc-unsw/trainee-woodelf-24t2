@@ -22,12 +22,10 @@ export interface Level {
 
 export interface Game {
   id?: string;
-  status: GameState;
   gamemode: Gamemode;
   levels: Level["id"][];
   score: number;
   userid: string;
-  startTime: Date; // To calculate time bonuses?
 }
 
 export interface User {

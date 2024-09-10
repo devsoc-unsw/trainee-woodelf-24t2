@@ -234,6 +234,31 @@ app.get(
   },
 );
 
+app.post(
+  "endGame", 
+  async (
+  req: TypedRequest<{gameMode: Gamemode, levels: Level["id"][], score: number}>, 
+  res: Response
+  ) => {
+    const { gameMode, levels, score } = req.body;
+  
+    const userId = await sessionIdToUserId(req.sessionID);
+
+      if (userId !== "guest") {
+        const game: Game = {
+          gamemode: gameMode,
+          levels: levels,
+          score: score,
+          userid: userId
+        };
+
+        addDoc(collection(db, "games"), game);
+      }
+    
+    res.status(200).send("Game Ended Successfully");
+  }
+)
+
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
