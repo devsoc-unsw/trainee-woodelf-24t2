@@ -170,10 +170,18 @@ function PlayPage(props: PlayPageProps) {
   // adds levels to panorama after it loads!
   useEffectAfterMount(() => {
     setMaxRounds(levels.length);
+    let hotspotConfig = {   
+      pitch: 0.02479237230752626,
+      yaw: -14.050930134291509,
+      type: "scene",
+      text: "Area",
+      sceneId: "level1",
+    };
     for (let i = 0; i < levels.length; i++) {
       let otherConfig = { ...config, imageSource: levels[i] };
       addScene(`level${i}`, otherConfig, () => {});
     }
+    addHotSpot(hotspotConfig, "level1");
   }, [panoramaLoaded]);
 
   const guess = () => {
