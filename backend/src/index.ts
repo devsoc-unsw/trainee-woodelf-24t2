@@ -69,12 +69,14 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
-const sessionIdToUserId = async (sessionId: string) => {
+const sessionIdToUserId = async (
+  sessionId: string,
+): Promise<string | undefined> => {
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
   const session = await getDocs(sessionData);
 
   if (session.empty) {
-    return "guest";
+    return undefined;
   } else {
     return session.docs[0].data().userId;
   }
@@ -222,14 +224,14 @@ app.get(
     const { roundCount, gameMode } = req.query;
 
     // array of level IDs
-    const docIds = getDoc.docs.map(doc => doc.id);
+    const docIds = getDoc.docs.map((doc) => doc.id);
     const shuffled = docIds.sort(() => 0.5 - Math.random());
 
     // Get sub-array of first n elements after shuffled
     let selected = shuffled.slice(0, roundCount);
     const levels: Level["id"][] = [];
-    selected.forEach((location) => levels.push(location))
-   
+    selected.forEach((location) => levels.push(location));
+
     res.status(200).json(levels);
   },
 );
