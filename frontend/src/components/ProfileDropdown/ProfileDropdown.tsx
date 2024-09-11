@@ -22,7 +22,7 @@ function ProfileDropdown(props: { username: string }) {
       } else {
         console.log(resp);
       }
-      navigate("/home", { replace: true });
+      navigate("/login", { replace: true });
     } catch (e) {
       console.log("Error: ", e);
     }
