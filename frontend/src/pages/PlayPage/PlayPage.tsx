@@ -199,7 +199,7 @@ function PlayPage(props: PlayPageProps) {
 
     const maxScore = 1000; 
 
-    const calculatedScore: number = maxScore * ((Math.E) ^ ((Math.log(1000)/90) * distanceInMetres))
+    const calculatedScore: number = maxScore * ((Math.E) ^ (-(Math.log(1000)/90) * distanceInMetres))
     console.log(distanceInMetres);
     setScore(score + calculatedScore);
   };
