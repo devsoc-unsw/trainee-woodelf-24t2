@@ -19,10 +19,10 @@ function ProfileDropdown(props: { username: string }) {
       if (resp.ok) {
         // here for testing change later
         console.log("Log out success");
+        navigate("/login", { replace: true });
       } else {
         console.log(resp);
       }
-      navigate("/login", { replace: true });
     } catch (e) {
       console.log("Error: ", e);
     }
