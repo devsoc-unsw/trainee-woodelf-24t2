@@ -18,6 +18,15 @@ enum Gamemodes {
   TIMED_10MIN = 2,
 }
 
+interface Hotspot {
+  levelId: string;
+  pitch: number;
+  panorama: string;
+  yaw: number;
+  targetPitch: number;
+  targetYaw: number;
+}
+
 interface PlayPageProps {
   Gamemode: Gamemodes;
 }
@@ -44,22 +53,27 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
 };
 
 function PlayPage(props: PlayPageProps) {
-  const [levels, setLevels] = useState<string[]>([]);
+  const [levelPano, setLevelPano] = useState<string>("");
   const [dataFetched, setDataFetched] = useState(false);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
+  const [levelId, setLevelId] = useState("");
+  const [hotspotConfigs, setHotspotConfigs] = useState([{}]);
   const [maxRounds, setMaxRounds] = useState(0);
   const [showTimer, setShowTimer] = useState(false);
   const [hoverOnMap, setHoverOnMap] = useState(false);
   const [panoramaLoaded, setPanoramaLoaded] = useState(false);
+  const [loadCount, setLoadCount] = useState(0);
   const [markerCoordinates, setMarkerCoordinates] = useState<Coordinates>({
     lng: -1,
     lat: -1,
     zLevel: -1,
   });
-  const [locationCoordinates, setLocationCoordinates] = useState<Coordinates[]>(
-    [],
-  );
+  const [locationCoordinates, setLocationCoordinates] = useState<Coordinates>({
+    lng: -1,
+    lat: -1,
+    zLevel: -1,
+  });
   const config = {
     type: "equirectangular",
     autoLoad: true,
@@ -104,92 +118,88 @@ function PlayPage(props: PlayPageProps) {
   };
 
   useEffect(() => {
-    // make request to get levels here
-    const levelTestArray = [
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media",
-        latitude: -33.9168905801594,
-        longitude: 151.2279747161422,
-        zPosition: 1,
-      },
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_182147_00_114.jpg?alt=media",
-        latitude: -33.91713209975908,
-        longitude: 151.23261616290625,
-        zPosition: 1,
-      },
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_151906_00_088.jpg?alt=media",
-        latitude: -33.91672599260816,
-        longitude: 151.22944083431207,
-        zPosition: 1,
-      },
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_183833_00_121.jpg?alt=media",
-        latitude: -33.917497802856055,
-        longitude: 151.23431816023904,
-        zPosition: 1,
-      },
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_150928_00_084.jpg?alt=media",
-        latitude: -33.918044098384186,
-        longitude: 151.2299776186045,
-        zPosition: 1,
-      },
-      {
-        photoLink:
-          "https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_154156_00_094.jpg?alt=media",
-        latitude: -33.91697170041918,
-        longitude: 151.2278685198697,
-        zPosition: 1,
-      },
-    ];
-
-    const levelDataParsed: string[] = levelTestArray.map(
-      (level) => level.photoLink,
-    );
-    const locationDataParsed: Coordinates[] = levelTestArray.map((level) => ({
-      lat: level.latitude,
-      lng: level.longitude,
-      zLevel: level.zPosition,
-    }));
-
-    setLevels(levelDataParsed);
-    setLocationCoordinates(locationDataParsed);
-    setDataFetched(true);
+    setMaxRounds(8);
+    loadLevel();
+    setTimeout(() => {
+      setDataFetched(true);
+    }, 1000);
   }, []);
 
   const formattedSeconds = String(seconds).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(1, "0");
 
-  // adds levels to panorama after it loads!
-  useEffectAfterMount(() => {
-    setMaxRounds(levels.length);
-    let hotspotConfig = {   
-      pitch: 0.02479237230752626,
-      yaw: -14.050930134291509,
-      type: "scene",
-      text: "Area",
-      sceneId: "level1",
+  const loadLevel = async () => {
+    const data = await fetch(
+      "http://localhost:3000/level?levelId=bJZAu949bn3GL4sm54O3",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    )
+      .then((response) => response.json())
+      .catch((err) => {
+        console.error("Error fetching level:", err);
+      });
+
+    console.log(data);
+    const nextLevel = {
+      photoLink: data.photoLink,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      zPosition: data.zPosition,
     };
-    for (let i = 0; i < levels.length; i++) {
-      let otherConfig = { ...config, imageSource: levels[i] };
-      addScene(`level${i}`, otherConfig, () => {});
+    setLevelPano(nextLevel.photoLink);
+
+    if ("hotspots" in data) {
+      data.hotspots.forEach((hotspot: Hotspot) => {
+        console.log(hotspot.levelId);
+        addScene(
+          hotspot.levelId,
+          { ...config, imageSource: hotspot.panorama },
+          () => {},
+        );
+      });
+      const hotspotData = data.hotspots.map(
+        ({ pitch, yaw, levelId }: Hotspot) => ({
+          pitch,
+          yaw,
+          sceneId: levelId,
+          type: "scene",
+        }),
+      );
+      setHotspotConfigs(hotspotData)
     }
-    addHotSpot(hotspotConfig, "level1");
-  }, [panoramaLoaded]);
+
+    // const hotspotConfig = {
+    //   pitch: 0.02479237230752626,
+    //   yaw: -14.050930134291509,
+    //   type: "scene",
+    //   sceneId: "imgId1",
+    // };
+    // setHotspotConfig(hotspotConfig);
+    setLevelId("bJZAu949bn3GL4sm54O3");
+    addScene("bJZAu949bn3GL4sm54O3", { ...config, imageSource: levelPano }, () => {});
+    setTimeout(() => {
+      loadScene(`bJZAu949bn3GL4sm54O3`);
+    }, 1);
+    setLocationCoordinates({
+      lat: nextLevel.latitude,
+      lng: nextLevel.longitude,
+      zLevel: nextLevel.zPosition,
+    });
+  };
 
   const guess = () => {
-    restartTimer();
-    loadScene(`level${round}`);
-    calculateScore(markerCoordinates, locationCoordinates[round - 1]);
-    // put here what happens after last round
-    if (round < maxRounds) setRound(round + 1);
+    if (round < maxRounds) {
+      loadLevel();
+      calculateScore(markerCoordinates, locationCoordinates);
+      setRound(round + 1);
+    } else {
+      // put here what happens after last round
+      console.log("round over");
+    }
   };
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
@@ -228,12 +238,20 @@ function PlayPage(props: PlayPageProps) {
           {dataFetched && (
             <ReactPannellum
               id="1"
-              sceneId="scene1"
+              sceneId={levelId}
               style={style}
-              imageSource={levels[0]}
+              imageSource={levelPano}
               config={config}
               onPanoramaLoaded={() => {
+                // this onPanoLoaded gets called twicfe during refresh
+                // causing hotspots to bug out so this ignores the second call.
+                setLoadCount(loadCount + 1);
+                if (loadCount === 1) return;
                 restartTimer();
+                hotspotConfigs.forEach((hotspot) => {
+                  console.log("hotspots: ", hotspot, levelId);
+                  addHotSpot(hotspot, levelId);
+                })
                 setPanoramaLoaded(true);
               }}
             />
@@ -241,7 +259,7 @@ function PlayPage(props: PlayPageProps) {
         </div>
 
         <div className={classes.canvasWrapper}>
-          <MazeMap
+          {/* <MazeMap
             campuses={111}
             zoom={14.5}
             height={hoverOnMap ? "450px" : "300px"}
@@ -254,8 +272,7 @@ function PlayPage(props: PlayPageProps) {
                 zLevel: zLevel,
               });
             }}
-            // having issues with marker and line, consult lachlan
-          />
+          />  */}
           <button className={classes.guessButton} onClick={guess}>
             Guess
           </button>

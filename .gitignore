@@ -37,6 +37,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
-
-
+# firebase cors config
+cors.json

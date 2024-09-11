@@ -24,6 +24,7 @@ export interface Level {
 export interface Hotspot {
   levelId: string;
   pitch: number;
+  panorama: string;
   yaw: number;
   targetPitch: number;
   targetYaw: number;

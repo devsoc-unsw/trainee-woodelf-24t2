@@ -220,6 +220,7 @@ app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Respons
     hotspots.push(
       {
         levelId: h.levelId,
+        panorama: h.panorama,
         pitch: h.pitch,
         yaw: h.yaw,
         targetPitch: h.targetPitch,
