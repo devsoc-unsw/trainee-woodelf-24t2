@@ -100,8 +100,6 @@ tr:last-child > td {
   margin: 0;
 }
 
-
-
 .button {
   color: white;
   width: 30px;
@@ -110,7 +108,7 @@ tr:last-child > td {
 }
 
 .button:hover {
-  color: darken(white, 10%);
+  color: darken($secondary-yellow, 10%);
 }
 
 .pressed {
