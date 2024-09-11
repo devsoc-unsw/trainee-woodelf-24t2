@@ -122,7 +122,7 @@ function PlayPage(props: PlayPageProps) {
     loadLevel();
     setTimeout(() => {
       setDataFetched(true);
-    }, 1000);
+    }, 500);
   }, []);
 
   const formattedSeconds = String(seconds).padStart(2, "0");
@@ -169,21 +169,18 @@ function PlayPage(props: PlayPageProps) {
           type: "scene",
         }),
       );
-      setHotspotConfigs(hotspotData)
+      setHotspotConfigs(hotspotData);
     }
 
-    // const hotspotConfig = {
-    //   pitch: 0.02479237230752626,
-    //   yaw: -14.050930134291509,
-    //   type: "scene",
-    //   sceneId: "imgId1",
-    // };
-    // setHotspotConfig(hotspotConfig);
     setLevelId("bJZAu949bn3GL4sm54O3");
-    addScene("bJZAu949bn3GL4sm54O3", { ...config, imageSource: levelPano }, () => {});
+    addScene(
+      "bJZAu949bn3GL4sm54O3",
+      { ...config, imageSource: levelPano },
+      () => {},
+    );
     setTimeout(() => {
       loadScene(`bJZAu949bn3GL4sm54O3`);
-    }, 1);
+    }, 1000);
     setLocationCoordinates({
       lat: nextLevel.latitude,
       lng: nextLevel.longitude,
@@ -248,10 +245,12 @@ function PlayPage(props: PlayPageProps) {
                 setLoadCount(loadCount + 1);
                 if (loadCount === 1) return;
                 restartTimer();
-                hotspotConfigs.forEach((hotspot) => {
-                  console.log("hotspots: ", hotspot, levelId);
-                  addHotSpot(hotspot, levelId);
-                })
+                setTimeout(() => {
+                  hotspotConfigs.forEach((hotspot) => {
+                    console.log("hotspots: ", hotspot, levelId);
+                    addHotSpot(hotspot, levelId);
+                  });
+                }, 1000);
                 setPanoramaLoaded(true);
               }}
             />
