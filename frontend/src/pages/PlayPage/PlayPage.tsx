@@ -142,15 +142,12 @@ function PlayPage(props: PlayPageProps) {
       .catch((err) => {
         console.error("Error fetching level:", err);
       });
-
-    console.log(data);
-    const nextLevel = {
-      photoLink: data.photoLink,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      zPosition: data.zPosition,
-    };
-    setLevelPano(nextLevel.photoLink);
+    setLevelPano(data.photoLink);
+    setLocationCoordinates({
+      lat: data.latitude,
+      lng: data.longitude,
+      zLevel: data.zPosition,
+    });
 
     if ("hotspots" in data) {
       data.hotspots.forEach((hotspot: Hotspot) => {
@@ -181,11 +178,6 @@ function PlayPage(props: PlayPageProps) {
     setTimeout(() => {
       loadScene(`bJZAu949bn3GL4sm54O3`);
     }, 1000);
-    setLocationCoordinates({
-      lat: nextLevel.latitude,
-      lng: nextLevel.longitude,
-      zLevel: nextLevel.zPosition,
-    });
   };
 
   const guess = () => {
