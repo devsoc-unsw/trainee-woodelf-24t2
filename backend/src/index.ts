@@ -96,7 +96,7 @@ app.use(
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true,
+    resave: false,
   }),
 );
 
@@ -240,10 +240,7 @@ app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-    const queryGames = await query(
-      games,
-      where("gamemode", "==", Number(gamemode)),
-    );
+    const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [username: string]: { id: string; score: number } } =
       {};
