@@ -198,10 +198,25 @@ function PlayPage(props: PlayPageProps) {
     );
 
     const maxScore = 1000; 
-
-    const calculatedScore: number = maxScore * ((Math.E) ^ (-(Math.log(1000)/90) * distanceInMetres))
+    let calculatedScore: number = maxScore * ((Math.E) ^ (-(Math.log(1000)/90) * distanceInMetres))
     console.log(distanceInMetres);
+    
+    if (marker.zLevel != undefined && location.zLevel != undefined) {
+        const levelDifference: number = Math.abs(marker.zLevel - location.zLevel);
+        if (levelDifference < 1) {
+            calculatedScore = calculatedScore * 2;
+        } else if (levelDifference < 2) {
+            calculatedScore = calculatedScore * 1.8;
+        } else if (levelDifference < 3) {
+            calculatedScore = calculatedScore * 1.6;
+        } else if (levelDifference < 4) {
+            calculatedScore = calculatedScore * 1.4;
+        } else if (levelDifference < 5) {
+            calculatedScore = calculatedScore * 1.2;
+        }
+    }
     setScore(score + calculatedScore);
+
   };
 
   return (
