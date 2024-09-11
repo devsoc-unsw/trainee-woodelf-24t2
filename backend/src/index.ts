@@ -61,18 +61,20 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
-
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_LOCAL as string,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_LOCAL as string,
+    credentials: true,
+    optionsSuccessStatus: 200,
+  }),
+);
 app.use(
   session({
     cookie: {
-      sameSite: process.env.NODE_ENV !== "development" ? "lax" : "none",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
       secure: process.env.NODE_ENV !== "development" ? true : false,
@@ -221,8 +223,8 @@ app.get(
       }
     });
 
-    const ids = Object.values(highestScores).map(user => user.id);
-    
+    const ids = Object.values(highestScores).map((user) => user.id);
+
     if (ids.length == 0) {
       return res.status(400).send("error");
     }
@@ -259,13 +261,16 @@ app.get(
 app.post("/logout", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
   if (!(await session_remove(sessionId))) {
+    console.log("Not logged in");
     return res.status(400).send("Not logged in");
   }
 
   req.session.destroy((err) => {
     if (err) {
+      console.log("Couldn't destroy session");
       return res.status(400).send("Error destroying session.");
     }
+    console.log("Successfully logged out");
     return res.status(200).send("Logout Successful!");
   });
 });

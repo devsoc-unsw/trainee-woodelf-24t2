@@ -39,7 +39,7 @@ function Leaderboard() {
     }
     try {
       const resp = await fetch(
-        `http://localhost:3000/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
+        `/api/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
         {
           method: "GET",
           headers: {
