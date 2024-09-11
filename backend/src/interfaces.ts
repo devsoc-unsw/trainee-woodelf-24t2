@@ -18,15 +18,24 @@ export interface Level {
   latitude: number;
   longitude: number;
   zPosition: number | undefined;
+  hotspots: Hotspot[];
+}
+
+export interface Hotspot {
+  levelId: string;
+  pitch: number;
+  yaw: number;
+  targetPitch: number;
+  targetYaw: number;
 }
 
 export interface Game {
   id?: string;
   status: GameState;
   gamemode: Gamemode;
-  levels: Level[];
+  levels: Level["id"][];
   score: number;
-  username: string;
+  userid: string;
   startTime: Date; // To calculate time bonuses?
 }
 

@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Gamemode, Hotspot } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -61,6 +61,19 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const sessionIdToUserId = async (
+  sessionId: string,
+): Promise<string | undefined> => {
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return undefined;
+  } else {
+    return session.docs[0].data().userId;
+  }
+};
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -82,7 +95,7 @@ app.use(
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true,
+    resave: false,
   }),
 );
 
@@ -197,15 +210,85 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
+// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
+
+app.get(
+  "/startGame",
+  async (
+    req: TypedRequestQuery<{ roundCount: number; gameMode: Gamemode }>,
+    res,
+  ) => {
+    const getDoc = await getDocs(collection(db, "levels"));
+
+    const { roundCount, gameMode } = req.query;
+
+    // array of level IDs
+    const docIds = getDoc.docs.map((doc) => doc.id);
+    const shuffled = docIds.sort(() => 0.5 - Math.random());
+
+    // Get sub-array of first n elements after shuffled
+    let selected = shuffled.slice(0, roundCount);
+    const levels: Level["id"][] = [];
+    selected.forEach((location) => levels.push(location));
+
+    res.status(200).json(levels);
+  },
+);
+
+app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
+  const levelId = req.query.levelId;
+  const docRef =  doc(db, "levels", levelId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    res.status(404).json({ error: "Level not found" });
+    return;
+  }
+
+  const levelData = docSnap.data();
+
+  const floorMap = {
+    LG: 0,
+    G: 1,
+    L1: 2,
+    L2: 3,
+    L3: 4,
+    L4: 5,
+    L5: 6,
+    L6: 7,
+  };
+
+  const hotspots: Hotspot[] = []
+  levelData.hotspots.forEach((h) => {
+    hotspots.push(
+      {
+        levelId: h.levelId,
+        pitch: h.pitch,
+        yaw: h.yaw,
+        targetPitch: h.targetPitch,
+        targetYaw: h.targetYaw,
+      }
+    )
+  })
+
+
+  const level: Level = {
+    photoLink: levelData.panorama,
+    locationName: levelData.title,
+    latitude: levelData.latitude,
+    longitude: levelData.longitude,
+    zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
+    hotspots: hotspots,
+  }
+
+  res.status(200).json(level);
+});
 
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-    const queryGames = await query(
-      games,
-      where("gamemode", "==", Number(gamemode)),
-    );
+    const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [username: string]: { id: string; score: number } } =
       {};
