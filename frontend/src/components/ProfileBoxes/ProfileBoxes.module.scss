@@ -1,0 +1,46 @@
+@import '../../variables';
+
+.BoxOne {
+    background-color: #222222;
+    width: 35vw;
+    height: 60vh;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.BoxTwo {
+    background-color: #222222;
+    width: 35vw;
+    height: 30.5vh;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    width: 30vw;
+
+}
+
+.BoxThree {
+    background-color: #222222;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    width: 30vw;
+    height: 25.5vh;
+}
+
+.profileIcon {
+    width: 250px;
+    height: 250px;
+    background-color: #f1d440;
+    border-radius: 50%;
+    position: absolute;
+    top: 175px;
+    border: 2px solid white;
+
+}
+
+.usernameText {
+    color: white;
+}
