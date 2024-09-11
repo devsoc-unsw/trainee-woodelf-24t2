@@ -94,7 +94,7 @@ function Register() {
     if (isProcessing) return;
     setIsProcessing(true);
     try {
-      const resp = await fetch("http://localhost:3000/register", {
+      const resp = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
