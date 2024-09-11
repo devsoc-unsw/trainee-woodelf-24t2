@@ -6,7 +6,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useState } from "react";
 import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
-import { Menu, User, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
 import classNames from "classnames";
 
