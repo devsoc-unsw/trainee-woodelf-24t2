@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.scss";
 import "@fontsource/hammersmith-one";
 import Navbar from "./components/Navbar/Navbar";
@@ -8,6 +8,7 @@ import PannellumBackground from "./components/PannellumBackground/PannellumBackg
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate()
 
   // List of routes that do not include the Navbar
   const hideNavbarRoutes = ["/login", "/register"];
@@ -25,6 +26,12 @@ function App() {
   const hasBackground = panoBackgroundRoutes.includes(location.pathname);
 
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(!hasBackground);
+
+  useEffect(() => {
+    if (location.pathname == "/")
+      navigate('/login')
+      // should be updated when user endpoint works...
+  }, [location.pathname])
 
   return (
     <>

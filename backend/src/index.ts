@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Hotspot } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Gamemode, Hotspot } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -61,6 +61,19 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const sessionIdToUserId = async (
+  sessionId: string,
+): Promise<string | undefined> => {
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return undefined;
+  } else {
+    return session.docs[0].data().userId;
+  }
+};
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -81,7 +94,7 @@ app.use(
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true,
+    resave: false,
   }),
 );
 
@@ -201,6 +214,30 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
+// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
+
+app.get(
+  "/startGame",
+  async (
+    req: TypedRequestQuery<{ roundCount: number; gameMode: Gamemode }>,
+    res,
+  ) => {
+    const getDoc = await getDocs(collection(db, "levels"));
+
+    const { roundCount, gameMode } = req.query;
+
+    // array of level IDs
+    const docIds = getDoc.docs.map((doc) => doc.id);
+    const shuffled = docIds.sort(() => 0.5 - Math.random());
+
+    // Get sub-array of first n elements after shuffled
+    let selected = shuffled.slice(0, roundCount);
+    const levels: Level["id"][] = [];
+    selected.forEach((location) => levels.push(location));
+
+    res.status(200).json(levels);
+  },
+);
 
 app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
   const levelId = req.query.levelId;
@@ -255,10 +292,7 @@ app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-    const queryGames = await query(
-      games,
-      where("gamemode", "==", Number(gamemode)),
-    );
+    const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [username: string]: { id: string; score: number } } =
       {};
