@@ -10,12 +10,14 @@
 }
 
 .containerGamemode {
-  height: 107vh;
+  height: calc(100vh + $navbar-height);
   width: 100vw;
   opacity: 95%;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  z-index: -1;
+  position: relative;
 }
 
 .containerCredits {
@@ -23,6 +25,32 @@
   justify-content: center;
   align-items: center;
   color: $secondary-yellow;
+}
+
+.containerDropdownNavbar {
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+  width: 100vw;
+  height: calc(100vh - $navbar-height);
+  margin-top: $navbar-height;
+}
+
+.sheetDropdownNavbar {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  opacity: 80%;
+  gap: 5px;
+  height: inherit;
+  width: 200px;
+}
+
+.sheetDropdownNavbar > button {
+  font-size: 1.3rem;
+  text-align: left;
 }
 
 .sheetLogin {
@@ -55,7 +83,7 @@
   position: relative;
   padding: 10px 10px;
   width: 350px;
-  height: 350px;
+  height: 365px;
   border-radius: 8px;
   background-color: $dark;
   opacity: 95%;

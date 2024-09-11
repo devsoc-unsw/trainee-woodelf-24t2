@@ -133,10 +133,15 @@ app.listen(EXPRESS_PORT, () => {
 
 app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-
   const querySnapshot = await getDocs(users);
+
+  const errorCheck: LoginErrors = {
+    usernameNotFound: true,
+  };
+
   if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
-    return res.status(400).send("Username already exists");
+    errorCheck.usernameNotFound = false;
+    return res.status(400).json(errorCheck);
   }
 
   const salt: string = crypto.randomBytes(128).toString("base64");

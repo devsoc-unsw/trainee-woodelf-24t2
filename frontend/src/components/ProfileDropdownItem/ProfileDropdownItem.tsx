@@ -6,6 +6,9 @@ export default function ProfileDropDownItems (props: {href: string, text: string
     <div className={classes.dropDownItem} onClick={props.handleClick}>
       <button className={classes.dropDownText}>{props.text}</button>
       {props.children}
+      <a href={props.href} className={classes.dropDownText}>
+        {props.text}
+      </a>
     </div>
-  )
+  );
 }

@@ -1,10 +1,9 @@
-@import '../../variables';
+@import "../../variables";
 
 .dropDownItem {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
-  align-items: center;
+  align-items: left;
 }
 
 .dropDownText {

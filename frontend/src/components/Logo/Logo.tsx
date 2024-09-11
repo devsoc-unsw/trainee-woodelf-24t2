@@ -10,7 +10,7 @@ const Logo = ({ size }: LogoProps) => {
   const fontSize = {
     sm: 1,
     md: 1.5,
-    lg: 1.7,
+    lg: 1.8,
   }[size];
 
   return (

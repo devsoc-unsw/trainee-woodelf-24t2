@@ -9,32 +9,38 @@ interface SheetProps {
   gamemode?: boolean;
   leaderboard?: boolean;
   credits?: boolean;
+  dropdownNavbar?: boolean;
+  className?: string;
 }
 
 function Sheet(props: SheetProps) {
   return (
-    <div
-      className={classNames({
-        [classes.containerLogin]: props.login,
-        [classes.containerGamemode]: props.gamemode,
-        [classes.containerLeaderboard]: props.leaderboard,
-        [classes.containerCredits]: props.credits,
-      })}
-    >
+    <div className={`${props.className}`}>
       <div
         className={classNames({
-          [classes.sheetLogin]: props.login,
-          [classes.sheetGamemode]: props.gamemode,
-          [classes.sheetLeaderboard]: props.leaderboard,
-          [classes.sheetCredits]: props.credits,
+          [classes.containerLogin]: props.login,
+          [classes.containerGamemode]: props.gamemode,
+          [classes.containerLeaderboard]: props.leaderboard,
+          [classes.containerCredits]: props.credits,
+          [classes.containerDropdownNavbar]: props.dropdownNavbar,
         })}
       >
-        {props.hasCloseButton && (
-          <button className={classes.close} onClick={props.hasCloseButton}>
-            <X />
-          </button>
-        )}
-        {props.children}
+        <div
+          className={classNames({
+            [classes.sheetLogin]: props.login,
+            [classes.sheetGamemode]: props.gamemode,
+            [classes.sheetLeaderboard]: props.leaderboard,
+            [classes.sheetCredits]: props.credits,
+            [classes.sheetDropdownNavbar]: props.dropdownNavbar,
+          })}
+        >
+          {props.hasCloseButton && (
+            <button className={classes.close} onClick={props.hasCloseButton}>
+              <X />
+            </button>
+          )}
+          {props.children}
+        </div>
       </div>
     </div>
   );
