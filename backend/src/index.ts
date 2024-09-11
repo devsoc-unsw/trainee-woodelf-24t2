@@ -237,9 +237,9 @@ app.get(
   },
 );
 
-app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
+app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
   const levelId = req.query.levelId;
-  const docRef =  doc(db, "levels", levelId);
+  const docRef = doc(db, "levels", levelId);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
@@ -333,7 +333,7 @@ app.get(
     for (let i = start; i < end; i++) {
       // if username is undefined, don't add to leaderboard
       let username: string;
-      if(!(username = await getUsername(queryScoreSnapshot.docs[i + start].data().userid))) {
+      if (!(username = await getUsername(queryScoreSnapshot.docs[i + start].data().userid))) {
         continue;
       }
       const dataEntry: ScoreEntry = {
@@ -365,13 +365,3 @@ app.post("/logout", async (req: Request, res: Response) => {
     return res.send("Logout Successful!").status(200);
   });
 });
-
-app.get("/testlog", async (req, res) => {
-  const queryGames = query(
-    collection(db, "test_game"),
-    where("gamemode", "==", 1),
-  );
-  const querySnapshot = await getDocs(queryGames);
-
-  console.log(querySnapshot.docs[0].data());
-})
