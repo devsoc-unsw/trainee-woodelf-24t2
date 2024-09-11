@@ -190,8 +190,11 @@ function PlayPage(props: PlayPageProps) {
       { latitude: marker.lat, longitude: marker.lng },
     );
 
+    const maxScore = 1000; 
+
+    const calculatedScore: number = maxScore * ((Math.E) ^ ((Math.log(1000)/90) * distanceInMetres))
     console.log(distanceInMetres);
-    setScore(score + 1);
+    setScore(score + calculatedScore);
   };
 
   return (
