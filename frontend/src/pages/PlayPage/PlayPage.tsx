@@ -43,12 +43,11 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
   const isMounted = useRef(false);
 
   useEffect(() => {
-    if (!isMounted.current) {
+    if (isMounted.current) {
+      fn();
+    } else {
       isMounted.current = true;
-      return;
     }
-
-    fn();
   }, deps);
 };
 
@@ -74,6 +73,7 @@ function PlayPage(props: PlayPageProps) {
     lat: -1,
     zLevel: -1,
   });
+  const [hotpoint, setHotpoint] = useState("");
   const config = {
     type: "equirectangular",
     autoLoad: true,
@@ -125,16 +125,55 @@ function PlayPage(props: PlayPageProps) {
   const formattedSeconds = String(seconds).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(1, "0");
 
-  const loadLevel = async () => {
-    const data = await fetch(
-      "/api/level?levelId=bJZAu949bn3GL4sm54O3",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  useEffectAfterMount(() => {
+    loadHotspots();
+  }, [hotpoint]);
+
+  const loadHotspots = async () => {
+    if (hotpoint === "") return;
+    const data = await fetch(`/api/level?levelId=${hotpoint}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    )
+    })
+      .then((response) => response.json())
+      .catch((err) => {
+        console.error("Error fetching level:", err);
+      });
+
+    if ("hotspots" in data) {
+      data.hotspots.forEach((hotspot: Hotspot) => {
+        addScene(
+          hotspot.levelId,
+          { ...config, imageSource: hotspot.panorama },
+          () => {},
+        );
+      });
+    }
+
+    const hotspotData = data.hotspots.map(
+      ({ pitch, yaw, levelId }: Hotspot) => ({
+        pitch,
+        yaw,
+        sceneId: levelId,
+        type: "scene",
+        clickHandlerFunc: () => {
+          setHotpoint(levelId);
+        },
+      }),
+    );
+    setHotspotConfigs(hotspotData);
+    setLevelId(hotpoint);
+  };
+
+  const loadLevel = async () => {
+    const data = await fetch("/api/level?levelId=bJZAu949bn3GL4sm54O3", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .catch((err) => {
         console.error("Error fetching level:", err);
@@ -148,7 +187,6 @@ function PlayPage(props: PlayPageProps) {
 
     if ("hotspots" in data) {
       data.hotspots.forEach((hotspot: Hotspot) => {
-        console.log(hotspot.levelId);
         addScene(
           hotspot.levelId,
           { ...config, imageSource: hotspot.panorama },
@@ -161,6 +199,9 @@ function PlayPage(props: PlayPageProps) {
           yaw,
           sceneId: levelId,
           type: "scene",
+          clickHandlerFunc: () => {
+            setHotpoint(levelId);
+          },
         }),
       );
       setHotspotConfigs(hotspotData);
@@ -195,26 +236,26 @@ function PlayPage(props: PlayPageProps) {
       { latitude: marker.lat, longitude: marker.lng },
     );
 
-    const maxScore = 1000; 
-    let calculatedScore: number = maxScore * ((Math.E) ^ (-(Math.log(1000)/90) * distanceInMetres))
+    const maxScore = 1000;
+    let calculatedScore: number =
+      maxScore * (Math.E ^ (-(Math.log(1000) / 90) * distanceInMetres));
     console.log(distanceInMetres);
-    
+
     if (marker.zLevel != undefined && location.zLevel != undefined) {
-        const levelDifference: number = Math.abs(marker.zLevel - location.zLevel);
-        if (levelDifference < 1) {
-            calculatedScore = calculatedScore * 2;
-        } else if (levelDifference < 2) {
-            calculatedScore = calculatedScore * 1.8;
-        } else if (levelDifference < 3) {
-            calculatedScore = calculatedScore * 1.6;
-        } else if (levelDifference < 4) {
-            calculatedScore = calculatedScore * 1.4;
-        } else if (levelDifference < 5) {
-            calculatedScore = calculatedScore * 1.2;
-        }
+      const levelDifference: number = Math.abs(marker.zLevel - location.zLevel);
+      if (levelDifference < 1) {
+        calculatedScore = calculatedScore * 2;
+      } else if (levelDifference < 2) {
+        calculatedScore = calculatedScore * 1.8;
+      } else if (levelDifference < 3) {
+        calculatedScore = calculatedScore * 1.6;
+      } else if (levelDifference < 4) {
+        calculatedScore = calculatedScore * 1.4;
+      } else if (levelDifference < 5) {
+        calculatedScore = calculatedScore * 1.2;
+      }
     }
     setScore(score + calculatedScore);
-
   };
 
   return (
@@ -255,7 +296,6 @@ function PlayPage(props: PlayPageProps) {
                 restartTimer();
                 setTimeout(() => {
                   hotspotConfigs.forEach((hotspot) => {
-                    console.log("hotspot: ", hotspot, levelId);
                     addHotSpot(hotspot, levelId);
                   });
                 }, 1000);
