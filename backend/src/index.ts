@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Hotspot } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Gamemode, Hotspot } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -61,22 +61,41 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const sessionIdToUserId = async (
+  sessionId: string,
+): Promise<string | undefined> => {
+  const sessionData = query(sessions, where("sessionId", "==", sessionId));
+  const session = await getDocs(sessionData);
+
+  if (session.empty) {
+    return undefined;
+  } else {
+    return session.docs[0].data().userId;
+  }
+};
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_LOCAL as string,
+    credentials: true,
+    optionsSuccessStatus: 200,
+  }),
+);
 app.use(
   session({
     cookie: {
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
       secure: process.env.NODE_ENV !== "development" ? true : false,
+      httpOnly: true,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true,
+    resave: false,
   }),
 );
 
@@ -114,10 +133,15 @@ app.listen(EXPRESS_PORT, () => {
 
 app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
-
   const querySnapshot = await getDocs(users);
+
+  const errorCheck: LoginErrors = {
+    usernameNotFound: true,
+  };
+
   if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
-    return res.status(400).send("Username already exists");
+    errorCheck.usernameNotFound = false;
+    return res.status(400).json(errorCheck);
   }
 
   const salt: string = crypto.randomBytes(128).toString("base64");
@@ -191,6 +215,30 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     },
   );
 });
+// curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
+
+app.get(
+  "/startGame",
+  async (
+    req: TypedRequestQuery<{ roundCount: number; gameMode: Gamemode }>,
+    res,
+  ) => {
+    const getDoc = await getDocs(collection(db, "levels"));
+
+    const { roundCount, gameMode } = req.query;
+
+    // array of level IDs
+    const docIds = getDoc.docs.map((doc) => doc.id);
+    const shuffled = docIds.sort(() => 0.5 - Math.random());
+
+    // Get sub-array of first n elements after shuffled
+    let selected = shuffled.slice(0, roundCount);
+    const levels: Level["id"][] = [];
+    selected.forEach((location) => levels.push(location));
+
+    res.status(200).json(levels);
+  },
+);
 
 app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
   const levelId = req.query.levelId;
@@ -246,10 +294,7 @@ app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     const { pagenum, gamemode, increments } = req.query;
-    const queryGames = await query(
-      games,
-      where("gamemode", "==", Number(gamemode)),
-    );
+    const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [username: string]: { id: string; score: number } } =
       {};
@@ -267,7 +312,7 @@ app.get(
       }
     });
 
-    const ids = Object.values(highestScores).map(user => user.id);
+    const ids = Object.values(highestScores).map((user) => user.id);
 
     if (ids.length == 0) {
       return res.status(400).send("error");
@@ -305,14 +350,16 @@ app.get(
 app.post("/logout", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
   if (!(await session_remove(sessionId))) {
-    return res.send("Not logged in").status(400);
+    console.log("Not logged in");
+    return res.status(400).send("Not logged in");
   }
 
   req.session.destroy((err) => {
     if (err) {
-      return res.send("Error destroying session.").status(400);
+      console.log("Couldn't destroy session");
+      return res.status(400).send("Error destroying session.");
     }
-
-    return res.send("Logout Successful!").status(200);
+    console.log("Successfully logged out");
+    return res.status(200).send("Logout Successful!");
   });
 });

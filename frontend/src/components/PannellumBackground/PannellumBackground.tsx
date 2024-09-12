@@ -20,12 +20,11 @@ function PannellumBackground({
   };
 
   const style = {
-    position: "absolute",
-    width: "104vw",
-    height: "104vh",
+    position: "fixed",
+    width: "100vw",
+    height: "100vh",
     filter: "blur(12px)",
-    left: "-2vw",
-    top: "-2vh",
+    transform: "scale(1.1)",
     zIndex: "-1",
     PointerEvents: "none",
   };

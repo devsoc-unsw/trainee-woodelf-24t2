@@ -34,9 +34,9 @@ export interface Game {
   id?: string;
   status: GameState;
   gamemode: Gamemode;
-  levels: Level[];
+  levels: Level["id"][];
   score: number;
-  username: string;
+  userid: string;
   startTime: Date; // To calculate time bonuses?
 }
 
@@ -72,6 +72,6 @@ declare module "express-session" {
 }
 
 export interface LoginErrors {
-  usernameNotFound: boolean;
-  passwordInvalid: boolean;
+  usernameNotFound?: boolean;
+  passwordInvalid?: boolean;
 }

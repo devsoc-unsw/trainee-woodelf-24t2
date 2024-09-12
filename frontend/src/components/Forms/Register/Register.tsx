@@ -94,7 +94,7 @@ function Register() {
     if (isProcessing) return;
     setIsProcessing(true);
     try {
-      const resp = await fetch("http://localhost:3000/register", {
+      const resp = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,8 @@ function Register() {
       if (resp.ok) {
         navigate("/login", { replace: true });
       } else {
-        console.log("failure");
+        const errorCheck = await resp.json();
+        if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
       }
     } catch (err) {
       console.log("Error: ", err);
