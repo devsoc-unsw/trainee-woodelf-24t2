@@ -120,9 +120,6 @@ function PlayPage(props: PlayPageProps) {
   useEffect(() => {
     setMaxRounds(8);
     loadLevel();
-    setTimeout(() => {
-      setDataFetched(true);
-    }, 500);
   }, []);
 
   const formattedSeconds = String(seconds).padStart(2, "0");
@@ -172,12 +169,13 @@ function PlayPage(props: PlayPageProps) {
     setLevelId("bJZAu949bn3GL4sm54O3");
     addScene(
       "bJZAu949bn3GL4sm54O3",
-      { ...config, imageSource: levelPano },
+      { ...config, imageSource: data.photoLink },
       () => {},
     );
     setTimeout(() => {
       loadScene(`bJZAu949bn3GL4sm54O3`);
     }, 1000);
+    setDataFetched(true);
   };
 
   const guess = () => {
@@ -257,7 +255,7 @@ function PlayPage(props: PlayPageProps) {
                 restartTimer();
                 setTimeout(() => {
                   hotspotConfigs.forEach((hotspot) => {
-                    console.log("hotspots: ", hotspot, levelId);
+                    console.log("hotspot: ", hotspot, levelId);
                     addHotSpot(hotspot, levelId);
                   });
                 }, 1000);
