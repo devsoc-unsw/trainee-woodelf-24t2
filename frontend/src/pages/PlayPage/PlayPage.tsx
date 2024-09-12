@@ -224,6 +224,11 @@ function PlayPage(props: PlayPageProps) {
       loadLevel();
       calculateScore(markerCoordinates, locationCoordinates);
       setRound(round + 1);
+      setMarkerCoordinates({
+        lng: -1,
+        lat: -1,
+        zLevel: -1,
+      })
     } else {
       // put here what happens after last round
       console.log("round over");
@@ -235,6 +240,8 @@ function PlayPage(props: PlayPageProps) {
       { latitude: location.lat, longitude: location.lng },
       { latitude: marker.lat, longitude: marker.lng },
     );
+
+    if (marker.lat === -1) return;
 
     const maxScore = 1000;
     let calculatedScore: number =
