@@ -5,7 +5,6 @@ import "@fontsource/hammersmith-one";
 import Navbar from "./components/Navbar/Navbar";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import PannellumBackground from "./components/PannellumBackground/PannellumBackground";
-import Summary from "./components/Summary/Summary";
 
 function App() {
   const location = useLocation();
