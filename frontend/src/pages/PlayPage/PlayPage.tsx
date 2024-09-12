@@ -18,6 +18,11 @@ enum Gamemodes {
   TIMED_10MIN = 2,
 }
 
+enum Roundstate {
+  ROUND_STARTED = 0,
+  IN_PROGRESS = 1,
+}
+
 interface Hotspot {
   levelId: string;
   pitch: number;
@@ -63,6 +68,7 @@ function PlayPage(props: PlayPageProps) {
   const [hoverOnMap, setHoverOnMap] = useState(false);
   const [panoramaLoaded, setPanoramaLoaded] = useState(false);
   const [loadCount, setLoadCount] = useState(0);
+  const [roundstate, setRoundstate] = useState<Roundstate>(Roundstate.ROUND_STARTED);
   const [markerCoordinates, setMarkerCoordinates] = useState<Coordinates>({
     lng: -1,
     lat: -1,
@@ -222,6 +228,7 @@ function PlayPage(props: PlayPageProps) {
   const guess = () => {
     if (round < maxRounds) {
       loadLevel();
+      setRoundstate(Roundstate.ROUND_STARTED);
       calculateScore(markerCoordinates, locationCoordinates);
       setRound(round + 1);
       setMarkerCoordinates({
@@ -300,12 +307,15 @@ function PlayPage(props: PlayPageProps) {
                 // causing hotspots to bug out so this ignores the second call.
                 setLoadCount(loadCount + 1);
                 if (loadCount === 1) return;
-                restartTimer();
+                if (roundstate === Roundstate.ROUND_STARTED) {
+                  restartTimer();
+                  setRoundstate(Roundstate.IN_PROGRESS);
+                }
                 setTimeout(() => {
                   hotspotConfigs.forEach((hotspot) => {
                     addHotSpot(hotspot, levelId);
                   });
-                }, 1000);
+                }, 100);
                 setPanoramaLoaded(true);
               }}
             />
