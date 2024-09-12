@@ -68,7 +68,9 @@ function PlayPage(props: PlayPageProps) {
   const [hoverOnMap, setHoverOnMap] = useState(false);
   const [panoramaLoaded, setPanoramaLoaded] = useState(false);
   const [loadCount, setLoadCount] = useState(0);
-  const [roundstate, setRoundstate] = useState<Roundstate>(Roundstate.ROUND_STARTED);
+  const [roundstate, setRoundstate] = useState<Roundstate>(
+    Roundstate.ROUND_STARTED,
+  );
   const [markerCoordinates, setMarkerCoordinates] = useState<Coordinates>({
     lng: -1,
     lat: -1,
@@ -235,7 +237,7 @@ function PlayPage(props: PlayPageProps) {
         lng: -1,
         lat: -1,
         zLevel: -1,
-      })
+      });
     } else {
       // put here what happens after last round
       console.log("round over");
@@ -311,11 +313,9 @@ function PlayPage(props: PlayPageProps) {
                   restartTimer();
                   setRoundstate(Roundstate.IN_PROGRESS);
                 }
-                setTimeout(() => {
-                  hotspotConfigs.forEach((hotspot) => {
-                    addHotSpot(hotspot, levelId);
-                  });
-                }, 100);
+                hotspotConfigs.forEach((hotspot) => {
+                  addHotSpot(hotspot, levelId);
+                });
                 setPanoramaLoaded(true);
               }}
             />
