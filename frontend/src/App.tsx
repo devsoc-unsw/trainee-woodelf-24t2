@@ -43,7 +43,6 @@ function App() {
       )}
       {!isPanoramaLoaded && <LoadingScreen />}
       <br/>
-      <Summary totalScore={1} personalBest={2}/>
       <Outlet />
     </>
   );
