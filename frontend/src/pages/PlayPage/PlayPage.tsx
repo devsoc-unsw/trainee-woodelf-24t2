@@ -127,7 +127,7 @@ function PlayPage(props: PlayPageProps) {
 
   const loadLevel = async () => {
     const data = await fetch(
-      "http://localhost:3000/level?levelId=bJZAu949bn3GL4sm54O3",
+      "/api/level?levelId=bJZAu949bn3GL4sm54O3",
       {
         method: "GET",
         headers: {
