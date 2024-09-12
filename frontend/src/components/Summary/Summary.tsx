@@ -1,5 +1,6 @@
 import classes from "./Summary.module.scss";
 import SummaryRow from "../SummaryRow/SummaryRow";
+import { useNavigate } from "react-router-dom";
 
 interface SummaryProps {
   correctGuesses: number;
@@ -9,6 +10,8 @@ interface SummaryProps {
 }
 
 function Summary(props: SummaryProps) {
+  const navigate = useNavigate();
+
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Summary</h1>
@@ -17,7 +20,7 @@ function Summary(props: SummaryProps) {
         <table className={classes.fields}>
           <tbody>
             <SummaryRow
-              summaryType="guesses"
+              summaryType="score"
               summaryAttribute={props.correctGuesses}
             />
             <SummaryRow
@@ -31,7 +34,7 @@ function Summary(props: SummaryProps) {
       <div className={classes.result}>
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
       </div>
-      <button className={classes.button}>Good job!</button>
+      <button className={classes.button} onClick={() => navigate("/gamemodes")}>Good job!</button>
     </div>
   );
 }
