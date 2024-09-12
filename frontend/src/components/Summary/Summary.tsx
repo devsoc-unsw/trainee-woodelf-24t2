@@ -3,10 +3,10 @@ import SummaryRow from "../SummaryRow/SummaryRow";
 import { useNavigate } from "react-router-dom";
 
 interface SummaryProps {
-  correctGuesses: number;
-  correctBuilding: number;
-  timeBonus: number;
-  shirtsAcquried: number;
+  totalScore: number;
+  personalBest: number;
+  // timeBonus: number;
+  // shirtsAcquried: number;
 }
 
 function Summary(props: SummaryProps) {
@@ -21,19 +21,20 @@ function Summary(props: SummaryProps) {
           <tbody>
             <SummaryRow
               summaryType="score"
-              summaryAttribute={props.correctGuesses}
+              summaryAttribute={props.totalScore}
             />
             <SummaryRow
-              summaryType="building"
-              summaryAttribute={props.correctBuilding}
+              summaryType="personalRecord"
+              summaryAttribute={props.personalBest}
             />
-            <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} />
+            {/* <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} /> */}
           </tbody>
         </table>
       </div>
-      <div className={classes.result}>
+      {/* <div className={classes.result}>
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
-      </div>
+      </div> */}
+      <br/>
       <button className={classes.button} onClick={() => navigate("/gamemodes")}>Good job!</button>
     </div>
   );
