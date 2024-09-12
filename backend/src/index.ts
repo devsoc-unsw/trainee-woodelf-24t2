@@ -77,14 +77,21 @@ const sessionIdToUserId = async (
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_LOCAL as string,
+    credentials: true,
+    optionsSuccessStatus: 200,
+  }),
+);
 app.use(
   session({
     cookie: {
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 604800000,
       // If not development, assume production and set secure to true
       secure: process.env.NODE_ENV !== "development" ? true : false,
+      httpOnly: true,
     },
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
@@ -366,14 +373,16 @@ app.get(
 app.post("/logout", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
   if (!(await session_remove(sessionId))) {
-    return res.send("Not logged in").status(400);
+    console.log("Not logged in");
+    return res.status(400).send("Not logged in");
   }
 
   req.session.destroy((err) => {
     if (err) {
-      return res.send("Error destroying session.").status(400);
+      console.log("Couldn't destroy session");
+      return res.status(400).send("Error destroying session.");
     }
-
-    return res.send("Logout Successful!").status(200);
+    console.log("Successfully logged out");
+    return res.status(200).send("Logout Successful!");
   });
 });
