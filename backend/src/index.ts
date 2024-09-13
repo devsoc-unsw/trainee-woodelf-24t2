@@ -61,6 +61,15 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const getUsername = async (userId: string) => {
+  const userData = query(users, where("__name__", "==", userId));
+  const user = await getDocs(userData);
+
+  if (user.empty) return undefined;
+
+  return user.docs[0].data().username;
+};
+
 const sessionIdToUserId = async (
   sessionId: string,
 ): Promise<string | undefined> => {
@@ -240,9 +249,9 @@ app.get(
   },
 );
 
-app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
+app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
   const levelId = req.query.levelId;
-  const docRef =  doc(db, "levels", levelId);
+  const docRef = doc(db, "levels", levelId);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
@@ -292,22 +301,27 @@ app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Respons
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
-    const { pagenum, gamemode, increments } = req.query;
+    // const { pagenum, gamemode, increments } = req.query;
+    // ↓ Had to do it this way to bcs apparently there's no "legal" way to parseInt together with deconstructing?
+    const pagenum = parseInt(req.query.pagenum);
+    const gamemode = parseInt(req.query.gamemode);
+    const increments = parseInt(req.query.increments);
+
     const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
-    const highestScores: { [username: string]: { id: string; score: number } } =
+    const highestScores: { [userid: string]: { id: string; score: number } } =
       {};
     if (querySnapshot.empty) {
       return res.status(204).send("No data!");
     }
-    querySnapshot.forEach((docSnapshot) => {
+    querySnapshot.forEach(async (docSnapshot) => {
       const data = docSnapshot.data();
-      const username = data.username;
+      const userid = data.userid;
       const score = data.score;
       const id = docSnapshot.id;
 
-      if (!highestScores[username] || score > highestScores[username].score) {
-        highestScores[username] = { id, score };
+      if (!highestScores[userid] || score > highestScores[userid].score) {
+        highestScores[userid] = { id, score };
       }
     });
 
@@ -329,12 +343,17 @@ app.get(
     const pageCount = Math.ceil(size / increments);
 
     const data: ScoreEntry[] = [];
-
-    for (let i = 0; i < increments && i + start < size; i++) {
+    const end = Math.min(start + increments, size);
+    for (let i = start; i < end; i++) {
+      // if username is undefined, don't add to leaderboard
+      let username: string;
+      if (!(username = await getUsername(queryScoreSnapshot.docs[i].data().userid))) {
+        return res.status(500).send("invalid userId in game database");
+      }
       const dataEntry: ScoreEntry = {
-        rank: i + start + 1,
-        username: queryScoreSnapshot.docs[i + start].data().username,
-        score: queryScoreSnapshot.docs[i + start].data().score,
+        rank: i + 1,
+        username: username,
+        score: queryScoreSnapshot.docs[i].data().score,
       };
       data.push(dataEntry);
     }
