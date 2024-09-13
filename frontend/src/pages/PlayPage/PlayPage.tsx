@@ -6,17 +6,13 @@ import ReactPannellum, {
 } from "react-pannellum";
 import { useEffect, useRef, useState } from "react";
 // change this to your local version
-import { MazeMap } from "../../../../../mazemap-react";
+import { MazeMap, Marker } from "../../../../../mazemap-react";
 // import { MazeMap } from "@lachlanshoesmith/mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
 import getDistance from "geolib/es/getPreciseDistance";
-
-enum Gamemodes {
-  EXPLORATION = 0,
-  TIMED_5MIN = 1,
-  TIMED_10MIN = 2,
-}
+import { useLocation } from "react-router-dom";
+import { Gamemodes } from "../../types/GameTypes";
 
 enum Roundstate {
   ROUND_STARTED = 0,
@@ -30,10 +26,6 @@ interface Hotspot {
   yaw: number;
   targetPitch: number;
   targetYaw: number;
-}
-
-interface PlayPageProps {
-  Gamemode: Gamemodes;
 }
 
 interface Coordinates {
@@ -56,9 +48,10 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
   }, deps);
 };
 
-function PlayPage(props: PlayPageProps) {
+function PlayPage() {
   const [levelPano, setLevelPano] = useState<string>("");
   const [dataFetched, setDataFetched] = useState(false);
+  const [levelDataFetched, setLevelDataFetched] = useState(false);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
   const [levelId, setLevelId] = useState("");
@@ -68,18 +61,21 @@ function PlayPage(props: PlayPageProps) {
   const [hoverOnMap, setHoverOnMap] = useState(false);
   const [panoramaLoaded, setPanoramaLoaded] = useState(false);
   const [loadCount, setLoadCount] = useState(0);
+  const [showRoundEnd, setShowRoundEnd] = useState(false);
+  const [distanceAway, setDistanceAway] = useState(0);
+  const [levelIds, setLevelIds] = useState([]);
   const [roundstate, setRoundstate] = useState<Roundstate>(
     Roundstate.ROUND_STARTED,
   );
   const [markerCoordinates, setMarkerCoordinates] = useState<Coordinates>({
-    lng: -1,
-    lat: -1,
-    zLevel: -1,
+    lng: 0,
+    lat: 0,
+    zLevel: 0,
   });
   const [locationCoordinates, setLocationCoordinates] = useState<Coordinates>({
-    lng: -1,
-    lat: -1,
-    zLevel: -1,
+    lng: 0,
+    lat: 0,
+    zLevel: 0,
   });
   const [hotpoint, setHotpoint] = useState("");
   const config = {
@@ -102,6 +98,9 @@ function PlayPage(props: PlayPageProps) {
     return minutes * 60 * 1000;
   };
 
+  const { state } = useLocation();
+  const gamemode = state?.gamemode || Gamemodes.EXPLORATION;
+
   const expiryTimestamp = new Date();
   const { seconds, minutes, restart } = useTimer({
     expiryTimestamp,
@@ -110,13 +109,13 @@ function PlayPage(props: PlayPageProps) {
   });
 
   const restartTimer = () => {
-    if (props.Gamemode === Gamemodes.EXPLORATION) return;
+    if (gamemode === Gamemodes.EXPLORATION) return;
 
     const newExpiryTimestamp = new Date(
       Date.now() +
-        (props.Gamemode === Gamemodes.TIMED_5MIN
+        (gamemode === Gamemodes.TIMED_5MIN
           ? minutesToMilliseconds(5)
-          : props.Gamemode === Gamemodes.TIMED_10MIN
+          : gamemode === Gamemodes.TIMED_10MIN
           ? minutesToMilliseconds(10)
           : 0),
     );
@@ -125,10 +124,38 @@ function PlayPage(props: PlayPageProps) {
     restart(newExpiryTimestamp);
   };
 
+  // bug this loads twice
   useEffect(() => {
-    setMaxRounds(8);
-    loadLevel();
-  }, []);
+    const func = async () => {
+      if (levelDataFetched) return; // Check if the effect has already run
+      setMaxRounds(8);
+      await getLevels();
+      setLevelDataFetched(true); // Set a flag once data has been fetched
+    };
+
+    func();
+  }, [levelDataFetched]);
+
+  useEffectAfterMount(() => {
+    if (levelIds.length > 0) {
+      console.log("im being called");
+      loadLevel();
+    }
+  }, [levelIds]);
+
+  const getLevels = async () => {
+    const data = await fetch(`/api/startGame?roundCount=8`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .catch((err) => {
+        console.error("Error fetching level:", err);
+      });
+    setLevelIds(data);
+  };
 
   const formattedSeconds = String(seconds).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(1, "0");
@@ -176,7 +203,7 @@ function PlayPage(props: PlayPageProps) {
   };
 
   const loadLevel = async () => {
-    const data = await fetch("/api/level?levelId=bJZAu949bn3GL4sm54O3", {
+    const data = await fetch(`/api/level?levelId=${levelIds[round]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -187,12 +214,12 @@ function PlayPage(props: PlayPageProps) {
         console.error("Error fetching level:", err);
       });
     setLevelPano(data.photoLink);
+
     setLocationCoordinates({
       lat: data.latitude,
       lng: data.longitude,
       zLevel: data.zPosition,
     });
-
     if ("hotspots" in data) {
       data.hotspots.forEach((hotspot: Hotspot) => {
         addScene(
@@ -215,14 +242,15 @@ function PlayPage(props: PlayPageProps) {
       setHotspotConfigs(hotspotData);
     }
 
-    setLevelId("bJZAu949bn3GL4sm54O3");
-    addScene(
-      "bJZAu949bn3GL4sm54O3",
-      { ...config, imageSource: data.photoLink },
-      () => {},
-    );
+    // i have no idea how this works...
+    // when i set it to levelIds[round - 1]
+    // it removes the hotspots?????
+    // but with this it adds it but its
+    // rng if it takes u to the right spot
+    setLevelId("x");
+    addScene("x", { ...config, imageSource: data.photoLink }, () => {});
     setTimeout(() => {
-      loadScene(`bJZAu949bn3GL4sm54O3`);
+      loadScene(`x`);
     }, 1000);
     setDataFetched(true);
   };
@@ -231,12 +259,11 @@ function PlayPage(props: PlayPageProps) {
     if (round < maxRounds) {
       loadLevel();
       setRoundstate(Roundstate.ROUND_STARTED);
-      calculateScore(markerCoordinates, locationCoordinates);
       setRound(round + 1);
       setMarkerCoordinates({
-        lng: -1,
-        lat: -1,
-        zLevel: -1,
+        lng: 0,
+        lat: 0,
+        zLevel: 0,
       });
     } else {
       // put here what happens after last round
@@ -246,11 +273,11 @@ function PlayPage(props: PlayPageProps) {
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
     const distanceInMetres = getDistance(
-      { latitude: location.lat, longitude: location.lng },
+      { latitude: location.lng, longitude: location.lat },
       { latitude: marker.lat, longitude: marker.lng },
     );
-
-    if (marker.lat === -1) return;
+    console.log(distanceInMetres);
+    if (!marker.lat) return;
 
     const maxScore = 1000;
     let calculatedScore: number =
@@ -289,58 +316,129 @@ function PlayPage(props: PlayPageProps) {
             <div>{score}</div>
           </div>
         </div>
-        <div className={classes.reactPannellumWrapper}>
-          {showTimer && (
-            <div className={classes.timer}>
-              <div>
-                {formattedMinutes}:{formattedSeconds}
-              </div>
-            </div>
-          )}
-          {dataFetched && (
-            <ReactPannellum
-              id="1"
-              sceneId={levelId}
-              style={style}
-              imageSource={levelPano}
-              config={config}
-              onPanoramaLoaded={() => {
-                // this onPanoLoaded gets called twicfe during refresh
-                // causing hotspots to bug out so this ignores the second call.
-                setLoadCount(loadCount + 1);
-                if (loadCount === 1) return;
-                if (roundstate === Roundstate.ROUND_STARTED) {
-                  restartTimer();
-                  setRoundstate(Roundstate.IN_PROGRESS);
-                }
-                hotspotConfigs.forEach((hotspot) => {
-                  addHotSpot(hotspot, levelId);
-                });
-                setPanoramaLoaded(true);
-              }}
+        {showRoundEnd && (
+          <>
+            <MazeMap
+              campuses={111}
+              zoom={16}
+              height={"90%"}
+              width={"100%"}
+              center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
+              {...(markerCoordinates.lat && {
+                line: {
+                  colour: "hsl(52, 100%, 50%)",
+                  coordinates: [
+                    {
+                      lng: locationCoordinates.lat,
+                      lat: locationCoordinates.lng,
+                    },
+                    { lng: markerCoordinates.lng, lat: markerCoordinates.lat },
+                  ],
+                  width: 3,
+                },
+              })}
             />
-          )}
-        </div>
-
-        <div className={classes.canvasWrapper}>
-          {/* <MazeMap
-            campuses={111}
-            zoom={14.5}
-            height={hoverOnMap ? "450px" : "300px"}
-            width={hoverOnMap ? "700px" : "500px"}
-            center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
-            onMapClick={(coords, zLevel) => {
-              setMarkerCoordinates({
-                lng: coords[0],
-                lat: coords[1],
-                zLevel: zLevel,
-              });
-            }}
-          />  */}
-          <button className={classes.guessButton} onClick={guess}>
-            Guess
-          </button>
-        </div>
+            <div className={classes.buttonArea}>
+              <div className={classes.distanceText}>
+                {markerCoordinates.lat ? (
+                  <div> Distance: {distanceAway}m </div>
+                ) : (
+                  <div>lol you didn't place a marker</div>
+                )}
+              </div>
+              <button
+                className={classes.nextButton}
+                onClick={() => {
+                  setShowRoundEnd(false);
+                  guess();
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+        {!showRoundEnd && (
+          <>
+            <div className={classes.reactPannellumWrapper}>
+              {showTimer && (
+                <div className={classes.timer}>
+                  <div>
+                    {formattedMinutes}:{formattedSeconds}
+                  </div>
+                </div>
+              )}
+              {dataFetched && (
+                <ReactPannellum
+                  id="1"
+                  sceneId={levelId}
+                  style={style}
+                  imageSource={levelPano}
+                  config={config}
+                  onPanoramaLoaded={() => {
+                    // this onPanoLoaded gets called twicfe during refresh
+                    // causing hotspots to bug out so this ignores the second call.
+                    setLoadCount(loadCount + 1);
+                    if (loadCount === 1) return;
+                    if (roundstate === Roundstate.ROUND_STARTED) {
+                      restartTimer();
+                      setRoundstate(Roundstate.IN_PROGRESS);
+                    }
+                    hotspotConfigs.forEach((hotspot) => {
+                      addHotSpot(hotspot, levelId);
+                    });
+                    setPanoramaLoaded(true);
+                  }}
+                />
+              )}
+            </div>
+            <div className={classes.canvasWrapper}>
+              {panoramaLoaded && (
+                <MazeMap
+                  campuses={111}
+                  zoom={15}
+                  height={hoverOnMap ? "450px" : "300px"}
+                  width={hoverOnMap ? "700px" : "500px"}
+                  center={{ lng: 151.23140998946815, lat: -33.91702431505671 }}
+                  onMapClick={(coords, zLevel) => {
+                    setMarkerCoordinates({
+                      lng: coords[0],
+                      lat: coords[1],
+                      zLevel: zLevel,
+                    });
+                  }}
+                  marker={{
+                    type: Marker.Marker,
+                    colour: "hsl(300, 1%, 14%)",
+                    innerColour: "hsl(52, 100%, 50%)",
+                    size: 20,
+                  }}
+                />
+              )}
+              <button
+                className={classes.guessButton}
+                onClick={() => {
+                  calculateScore(markerCoordinates, locationCoordinates);
+                  setDistanceAway(
+                    getDistance(
+                      {
+                        latitude: locationCoordinates.lng,
+                        longitude: locationCoordinates.lat,
+                      },
+                      {
+                        latitude: markerCoordinates.lat,
+                        longitude: markerCoordinates.lng,
+                      },
+                    ),
+                  );
+                  setShowRoundEnd(true);
+                }}
+              >
+                Guess
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
