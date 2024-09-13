@@ -236,7 +236,7 @@ app.get(
 );
 
 app.post(
-  "endGame",
+  "/endGame",
   async (
     req: TypedRequest<{ gameMode: Gamemode, levels: Level["id"][], score: number }>,
     res: Response
