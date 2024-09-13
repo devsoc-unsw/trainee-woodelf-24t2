@@ -8,7 +8,7 @@ import PannellumBackground from "./components/PannellumBackground/PannellumBackg
 
 function App() {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // List of routes that do not include the Navbar
   const hideNavbarRoutes = ["/login", "/register"];

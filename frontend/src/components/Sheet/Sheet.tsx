@@ -15,7 +15,9 @@ interface SheetProps {
 
 function Sheet(props: SheetProps) {
   return (
-    <div className={`${props.className}`}>
+    <div className={
+      props.className ? props.className : ''
+    }>
       <div
         className={classNames({
           [classes.containerLogin]: props.login,
