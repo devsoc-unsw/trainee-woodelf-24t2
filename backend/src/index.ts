@@ -6,7 +6,7 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Gamemode, Hotspot } from "./interfaces";
+import { SessionStorage, User, LoginErrors, Level, Gamemode, Game, Hotspot } from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -249,6 +249,35 @@ app.get(
   },
 );
 
+app.post(
+  "/endGame",
+  async (
+    req: TypedRequest<{ gameMode: Gamemode, levels: Level["id"][], score: number }>,
+    res: Response
+  ) => {
+    const { gameMode, levels, score } = req.body;
+
+    const userId = await sessionIdToUserId(req.sessionID);
+
+    if (!userId) {
+      res.status(200).send("Game Ended Successfully (unsaved)");
+      return;
+    }
+
+    const game: Game = {
+      gamemode: gameMode,
+      levels: levels,
+      score: score,
+      userid: userId
+    };
+
+    addDoc(collection(db, "games"), game);
+
+
+    res.status(200).send("Game Ended Successfully");
+  }
+)
+
 app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
   const levelId = req.query.levelId;
   const docRef = doc(db, "levels", levelId);
@@ -325,7 +354,7 @@ app.get(
       }
     });
 
-    const ids = Object.values(highestScores).map((user) => user.id);
+    const ids = Object.values(highestScores).map(user => user.id);
 
     if (ids.length == 0) {
       return res.status(400).send("error");
