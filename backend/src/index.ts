@@ -298,13 +298,15 @@ app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Respo
   res.status(200).json(level);
 });
 
-/* This code was tested by querying 'collection(db, "test_game")' instead of 'games'
-** bcs the game objects in the games collection currently uses username instead of userid
-*/
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
-    const { pagenum, gamemode, increments } = req.query;
+    // const { pagenum, gamemode, increments } = req.query;
+    // ↓ Had to do it this way to bcs apparently there's no "legal" way to parseInt together with deconstructing?
+    const pagenum = parseInt(req.query.pagenum);
+    const gamemode = parseInt(req.query.gamemode);
+    const increments = parseInt(req.query.increments);
+    
     const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [userid: string]: { id: string; score: number } } =
