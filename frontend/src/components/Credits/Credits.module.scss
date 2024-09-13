@@ -38,11 +38,11 @@
 
 .creditstext > li {
   margin-bottom: 10px;
-  color: $primary-yellow;
+  color: white;
 }
 
 .creditstext > li:hover {
-  color: darken($secondary-yellow, 10%)
+  color: darken($secondary-yellow, 10%);
 }
 
 .close {
@@ -56,4 +56,14 @@
   background: transparent;
   top: 15px;
   right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 4px;
+}
+
+.close:hover {
+  background: darken(white, 80%);
 }

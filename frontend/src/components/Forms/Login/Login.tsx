@@ -58,18 +58,19 @@ function LoginPage() {
 
     // formData.username = formData.username.trim();
     try {
-      const resp = await fetch("http://localhost:3000/login", {
+      const resp = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
-      const errorCheck = await resp.json();
 
       if (resp.ok) {
-        navigate("/home", { replace: true });
+        navigate("/home");
       } else {
+        const errorCheck = await resp.json();
         if (errorCheck.usernameNotFound) {
           return setUsernameFound(false);
         } else if (errorCheck.passwordInvalid) {
