@@ -1,17 +1,16 @@
 import classes from "./Summary.module.scss";
 import SummaryRow from "../SummaryRow/SummaryRow";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
 interface SummaryProps {
   totalScore: number;
   personalBest: number;
+  handleClick: React.MouseEventHandler<HTMLButtonElement>
   // timeBonus: number;
   // shirtsAcquried: number;
 }
 
 function Summary(props: SummaryProps) {
-  const navigate = useNavigate();
-
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Summary</h1>
@@ -35,7 +34,7 @@ function Summary(props: SummaryProps) {
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
       </div> */}
       <br/>
-      <button className={classes.button} onClick={() => navigate("/gamemodes")}>Good job!</button>
+      <button className={classes.button} onClick={props.handleClick}>Good job!</button>
     </div>
   );
 }
