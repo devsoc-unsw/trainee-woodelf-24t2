@@ -76,3 +76,34 @@
 .guessButton:active {
   background-color: darken($yellow-button, 10%);
 }
+
+.roundendContainer {
+  display: flex;
+  align-items: flex-end;
+  height: 100vh;
+  width: 100vw;
+  position: relative
+}
+
+.buttonArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: $roundbottomBar;
+  width: 100vw;
+  height: 10vh;
+}
+
+.nextButton {
+  background-color: $yellow-button;
+  border-radius: 3px;
+  font-size: 1.5rem;
+  height: calc(50%);
+  width: 300px;
+}
+
+.distanceText {
+  color: $secondary-yellow;
+  padding-right: 100px;
+}
