@@ -97,7 +97,7 @@ function PlayPage() {
   };
 
   const { state } = useLocation();
-  const gamemode = state.gamemode;
+  const gamemode = state?.gamemode || Gamemodes.EXPLORATION;
 
   const expiryTimestamp = new Date();
   const { seconds, minutes, restart } = useTimer({
