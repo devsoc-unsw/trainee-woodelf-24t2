@@ -95,6 +95,12 @@
   height: 10vh;
 }
 
+.buttonArea > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .nextButton {
   background-color: $yellow-button;
   border-radius: 3px;
@@ -105,7 +111,5 @@
 
 .distanceText {
   font-size: 2rem;
-  position: absolute;
-  left: 10vw;
   color: $secondary-yellow;
 }

@@ -355,6 +355,9 @@ function PlayPage() {
               >
                 Next
               </button>
+              <div>
+
+              </div>
             </div>
           </>
         )}
