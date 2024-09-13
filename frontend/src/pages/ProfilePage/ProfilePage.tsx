@@ -1,58 +1,53 @@
 import BoxOne from "../../components/ProfileBoxes/BoxOne";
-import BoxTwo from "../../components/ProfileBoxes/BoxTwo";
-import BoxThree from "../../components/ProfileBoxes/BoxThree";
+
 import classes from "./ProfilePage.module.scss";
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-
-interface OutletContext {
-  setIsPanoramaLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
+import { useState } from "react";
 
 const ProfilePage = () => {
-    const [username, setUsername] = useState(''); // To store the username
-    const { setIsPanoramaLoaded } = useOutletContext<OutletContext>();
-   
-  useEffect(() => {
-    // Set the loading state when the page is first rendered
-    setIsPanoramaLoaded(false);
+  const [username, setUsername] = useState(""); // To store the username
+  const [highScore, setHighScore] = useState(0);
+  const [cumulativeScore, setCumulativeScore] = useState(0);
+  const [shirts, setShirts] = useState(0);
+  const [dateJoined, setDateJoined] = useState("");
+  const [activeDays, setActiveDays] = useState(0);
 
-    // Simulate loading process (like fetching data or loading resources)
-    const timer = setTimeout(() => {
-      // Once loaded, indicate that panorama is fully loaded
-      setIsPanoramaLoaded(true);
-    }, 3000); // Simulate a 3-second loading
+  async function getData() {
+    let dataPromise = await fetch("/api/user", { method: "GET" });
+    let dataJson = await dataPromise.json();
+    console.log(dataJson);
+    setUsername(dataJson.username);
+    setHighScore(dataJson.highScore);
+    setCumulativeScore(dataJson.cumulativeScore);
+    setShirts(dataJson.shirts);
 
-    return () => clearTimeout(timer); // Clean up on unmount
-  }, [setIsPanoramaLoaded]);
+    const d = new Date(dataJson.dateJoined);
+    const date = d.getDate();
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    setDateJoined(date + "/" + month + "/" + year);
 
+    // active days
+    let date1 = new Date(month + "/" + date + "/" + year);
+    let date2 = new Date();
+    let msDay = 1000 * 3600 * 24; // milliseconds per day
+    let days = Math.round((date2.getTime() - date1.getTime()) / msDay);
+    console.log(days);
+    setActiveDays(days);
+  }
 
-  let dataPromise = fetch('/user', {method: "GET"});
-  dataPromise.then((res) => {
-    return res.json()
-  })
-  .then((jsonData) => {
-    setUsername(jsonData);
-  })
-  .catch((error) => {
-    console.error('Error fetching username:', error);
-    setUsername('Guest');
-  })
-
-
+  getData();
   return (
     <>
-        <p> hello </p>
-      <div className={classes.container}>
-        <div className={classes.userProfile}>
-          {/* <BoxOne username={username} profileIcon="/yellowshirt.svg"></BoxOne> */}
-          <BoxOne username="Chris" profileIcon="/yellowshirt.svg"></BoxOne>
-        </div>
-        <div className={classes.rightColumn}>
-          <BoxTwo></BoxTwo>
-          <BoxThree></BoxThree>
-        </div>
+      <div className={classes.userProfile}>
+        <BoxOne
+          username={username}
+          profileIcon="/yellowshirt.svg"
+          highScore={highScore}
+          cumulativeScore={cumulativeScore}
+          shirts={shirts}
+          dateJoined={dateJoined}
+          activeDays={activeDays}
+        ></BoxOne>
       </div>
     </>
   );

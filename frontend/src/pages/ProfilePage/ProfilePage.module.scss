@@ -1,27 +1,5 @@
-.container {
-    display: flex; 
-    // justify-content: space-between;
-    // align-items: flex-start;
-
-  }
-
-  .userProfile {
-    flex: 1; 
-    margin-left: 16vw;
-    margin-top: 30vh;
-
-  }
-
-  .rightColumn {
-    margin-right: 16vw;
-    margin-top: 30vh;
-  }
-
-  .rightColumn > div {
-    margin-bottom: 4vh; 
-  }
-  
-//   .rightColumn > div:last-child {
-//     margin-bottom: 0; 
-//   }
-  
+.userProfile {
+  margin-top: 20vh;
+  margin-left: 30vw;
+  position: absolute;
+}

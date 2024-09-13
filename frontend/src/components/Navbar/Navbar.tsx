@@ -14,6 +14,7 @@ function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   const toggleCredits = () => {
@@ -28,6 +29,13 @@ function Navbar() {
     setShowDropDown(false);
     navigate(path);
   };
+
+  async function getUsername() {
+    let dataPromise = await fetch("/api/user", {method: "GET"});
+    let dataJson = await dataPromise.json();
+    setUsername(dataJson.username);
+  }
+  getUsername();
 
   return (
     <div>
@@ -68,7 +76,7 @@ function Navbar() {
             className={classes.hideOnMobile}
           >
             <ProfileIcon url="/yellowshirt.svg" />
-            {showProfileDropDown && <ProfileDropdown username="Chris" />}
+            {showProfileDropDown && <ProfileDropdown username={username} />}
           </div>
         </div>
         {showCredits &&
