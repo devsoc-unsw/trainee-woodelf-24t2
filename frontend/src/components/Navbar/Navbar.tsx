@@ -76,9 +76,6 @@ function Navbar() {
           >
             Gamemodes
           </button>
-          <button className={`${classes.hover} ${classes.hideOnMobile}`}>
-            Help
-          </button>
         </div>
 
         <div>
