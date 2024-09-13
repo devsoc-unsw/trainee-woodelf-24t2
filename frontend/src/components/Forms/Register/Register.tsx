@@ -105,7 +105,8 @@ function Register() {
       if (resp.ok) {
         navigate("/login", { replace: true });
       } else {
-        console.log("failure");
+        const errorCheck = await resp.json();
+        if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
       }
     } catch (err) {
       console.log("Error: ", err);

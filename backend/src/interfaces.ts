@@ -69,6 +69,6 @@ declare module "express-session" {
 }
 
 export interface LoginErrors {
-  usernameNotFound: boolean;
-  passwordInvalid: boolean;
+  usernameNotFound?: boolean;
+  passwordInvalid?: boolean;
 }

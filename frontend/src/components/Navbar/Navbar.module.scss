@@ -1,18 +1,18 @@
 @import "../../variables";
 
 .navbar {
-  height: 7vh;
+  height: $navbar-height;
   width: 100vw;
   background-color: $navbar-dark;
   display: flex;
   position: fixed;
   left: 0;
   top: 0;
+  padding: 0 10px;
   z-index: 100;
   align-items: center;
   justify-content: space-between;
   opacity: 80%;
-  padding: 0px 1vw 0px 1vw;
 }
 
 .navbar > div {
@@ -69,4 +69,87 @@
 .hover:hover:after {
   width: 100%;
   left: 0;
+}
+
+.hamburger,
+.sheet {
+  display: none;
+}
+
+@media screen and (max-width: 770px) {
+  .navbar {
+    width: 100vw;
+    padding: 0 10px;
+    background-color: $navbar-dark;
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    opacity: 80%;
+  }
+
+  .hideOnMobile {
+    display: none;
+  }
+
+  .container {
+    position: absolute;
+    width: 100%;
+  }
+
+  .hamburger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .hamburger:active {
+    background-color: darken(white, 90%);
+  }
+
+  .userIcon {
+    padding: 0;
+    margin: 0;
+    height: 25px;
+    width: 32px;
+  }
+
+  @keyframes slide_in {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide_out {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .slide_in {
+    animation: slide_in 0.5s forwards;
+  }
+
+  .slide_out {
+    animation: slide_out 0.5s forwards;
+  }
+
+  .sheet {
+    z-index: 100;
+    display: block;
+  }
+
+  .hover:after {
+    display: none;
+  }
 }
