@@ -306,7 +306,7 @@ app.get(
     const pagenum = parseInt(req.query.pagenum);
     const gamemode = parseInt(req.query.gamemode);
     const increments = parseInt(req.query.increments);
-    
+
     const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
     const highestScores: { [userid: string]: { id: string; score: number } } =
@@ -348,7 +348,7 @@ app.get(
       // if username is undefined, don't add to leaderboard
       let username: string;
       if (!(username = await getUsername(queryScoreSnapshot.docs[i].data().userid))) {
-        continue;
+        return res.status(500).send("invalid userId in game database");
       }
       const dataEntry: ScoreEntry = {
         rank: i + 1,
