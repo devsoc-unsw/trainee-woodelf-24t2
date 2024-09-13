@@ -11,12 +11,8 @@ import { MazeMap, Marker } from "../../../../../mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
 import getDistance from "geolib/es/getPreciseDistance";
-
-enum Gamemodes {
-  EXPLORATION = 0,
-  TIMED_5MIN = 1,
-  TIMED_10MIN = 2,
-}
+import { useLocation } from "react-router-dom";
+import { Gamemodes } from '../../types/GameTypes'
 
 enum Roundstate {
   ROUND_STARTED = 0,
@@ -30,10 +26,6 @@ interface Hotspot {
   yaw: number;
   targetPitch: number;
   targetYaw: number;
-}
-
-interface PlayPageProps {
-  Gamemode: Gamemodes;
 }
 
 interface Coordinates {
@@ -56,7 +48,7 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
   }, deps);
 };
 
-function PlayPage(props: PlayPageProps) {
+function PlayPage() {
   const [levelPano, setLevelPano] = useState<string>("");
   const [dataFetched, setDataFetched] = useState(false);
   const [score, setScore] = useState(0);
@@ -104,6 +96,9 @@ function PlayPage(props: PlayPageProps) {
     return minutes * 60 * 1000;
   };
 
+  const { state } = useLocation();
+  const gamemode = state.gamemode;
+
   const expiryTimestamp = new Date();
   const { seconds, minutes, restart } = useTimer({
     expiryTimestamp,
@@ -112,13 +107,13 @@ function PlayPage(props: PlayPageProps) {
   });
 
   const restartTimer = () => {
-    if (props.Gamemode === Gamemodes.EXPLORATION) return;
+    if (gamemode === Gamemodes.EXPLORATION) return;
 
     const newExpiryTimestamp = new Date(
       Date.now() +
-        (props.Gamemode === Gamemodes.TIMED_5MIN
+        (gamemode === Gamemodes.TIMED_5MIN
           ? minutesToMilliseconds(5)
-          : props.Gamemode === Gamemodes.TIMED_10MIN
+          : gamemode === Gamemodes.TIMED_10MIN
           ? minutesToMilliseconds(10)
           : 0),
     );
