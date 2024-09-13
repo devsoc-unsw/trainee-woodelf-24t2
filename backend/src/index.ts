@@ -345,13 +345,13 @@ app.get(
     for (let i = start; i < end; i++) {
       // if username is undefined, don't add to leaderboard
       let username: string;
-      if (!(username = await getUsername(queryScoreSnapshot.docs[i + start].data().userid))) {
+      if (!(username = await getUsername(queryScoreSnapshot.docs[i].data().userid))) {
         continue;
       }
       const dataEntry: ScoreEntry = {
-        rank: i + start + 1,
+        rank: i + 1,
         username: username,
-        score: queryScoreSnapshot.docs[i + start].data().score,
+        score: queryScoreSnapshot.docs[i].data().score,
       };
       data.push(dataEntry);
     }
