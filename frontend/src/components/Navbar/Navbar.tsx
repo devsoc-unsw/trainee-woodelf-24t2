@@ -3,7 +3,7 @@ import classes from "./Navbar.module.scss";
 import Logo from "../Logo/Logo";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Credits from "../Credits/Credits";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -14,6 +14,7 @@ function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
+  const [username, setUsername] = useState('')
   const navigate = useNavigate();
 
   const toggleCredits = () => {
@@ -28,6 +29,30 @@ function Navbar() {
     setShowDropDown(false);
     navigate(path);
   };
+
+  useEffect(() => {
+    const getUsername = async () => {
+      try {
+        const resp = await fetch("/api/user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (resp.ok) {
+          return resp.json().then((r) => {setUsername(r.username)})
+        } else {
+          console.log(resp);
+        }
+      } catch (e) {
+        console.log("Error: ", e);
+      }
+    }
+    getUsername()
+    .catch(console.error)
+  }, [])
 
   return (
     <div>
@@ -51,9 +76,6 @@ function Navbar() {
           >
             Gamemodes
           </button>
-          <button className={`${classes.hover} ${classes.hideOnMobile}`}>
-            Help
-          </button>
         </div>
 
         <div>
@@ -68,7 +90,7 @@ function Navbar() {
             className={classes.hideOnMobile}
           >
             <ProfileIcon url="/yellowshirt.svg" />
-            {showProfileDropDown && <ProfileDropdown username="Chris" />}
+            {showProfileDropDown && <ProfileDropdown username={username} />}
           </div>
         </div>
         {showCredits &&
