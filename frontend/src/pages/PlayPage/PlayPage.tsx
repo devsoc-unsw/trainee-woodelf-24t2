@@ -12,7 +12,7 @@ import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
 import getDistance from "geolib/es/getPreciseDistance";
 import { useLocation } from "react-router-dom";
-import { Gamemodes } from '../../types/GameTypes'
+import { Gamemodes } from "../../types/GameTypes";
 
 enum Roundstate {
   ROUND_STARTED = 0,
@@ -51,6 +51,7 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
 function PlayPage() {
   const [levelPano, setLevelPano] = useState<string>("");
   const [dataFetched, setDataFetched] = useState(false);
+  const [levelDataFetched, setLevelDataFetched] = useState(false);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
   const [levelId, setLevelId] = useState("");
@@ -62,6 +63,7 @@ function PlayPage() {
   const [loadCount, setLoadCount] = useState(0);
   const [showRoundEnd, setShowRoundEnd] = useState(false);
   const [distanceAway, setDistanceAway] = useState(0);
+  const [levelIds, setLevelIds] = useState([]);
   const [roundstate, setRoundstate] = useState<Roundstate>(
     Roundstate.ROUND_STARTED,
   );
@@ -122,10 +124,38 @@ function PlayPage() {
     restart(newExpiryTimestamp);
   };
 
+  // bug this loads twice
   useEffect(() => {
-    setMaxRounds(8);
-    loadLevel();
-  }, []);
+    const func = async () => {
+      if (levelDataFetched) return; // Check if the effect has already run
+      setMaxRounds(8);
+      await getLevels();
+      setLevelDataFetched(true); // Set a flag once data has been fetched
+    };
+
+    func();
+  }, [levelDataFetched]);
+
+  useEffectAfterMount(() => {
+    if (levelIds.length > 0) {
+      console.log("im being called");
+      loadLevel();
+    }
+  }, [levelIds]);
+
+  const getLevels = async () => {
+    const data = await fetch(`/api/startGame?roundCount=8`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .catch((err) => {
+        console.error("Error fetching level:", err);
+      });
+    setLevelIds(data);
+  };
 
   const formattedSeconds = String(seconds).padStart(2, "0");
   const formattedMinutes = String(minutes).padStart(1, "0");
@@ -173,7 +203,7 @@ function PlayPage() {
   };
 
   const loadLevel = async () => {
-    const data = await fetch("/api/level?levelId=bJZAu949bn3GL4sm54O3", {
+    const data = await fetch(`/api/level?levelId=${levelIds[round]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -212,14 +242,15 @@ function PlayPage() {
       setHotspotConfigs(hotspotData);
     }
 
-    setLevelId("bJZAu949bn3GL4sm54O3");
-    addScene(
-      "bJZAu949bn3GL4sm54O3",
-      { ...config, imageSource: data.photoLink },
-      () => {},
-    );
+    // i have no idea how this works...
+    // when i set it to levelIds[round - 1]
+    // it removes the hotspots?????
+    // but with this it adds it but its
+    // rng if it takes u to the right spot
+    setLevelId("x");
+    addScene("x", { ...config, imageSource: data.photoLink }, () => {});
     setTimeout(() => {
-      loadScene(`bJZAu949bn3GL4sm54O3`);
+      loadScene(`x`);
     }, 1000);
     setDataFetched(true);
   };
@@ -289,7 +320,7 @@ function PlayPage() {
           <>
             <MazeMap
               campuses={111}
-              zoom={14.5}
+              zoom={16}
               height={"90%"}
               width={"100%"}
               center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
@@ -365,10 +396,10 @@ function PlayPage() {
               {panoramaLoaded && (
                 <MazeMap
                   campuses={111}
-                  zoom={14.5}
+                  zoom={15}
                   height={hoverOnMap ? "450px" : "300px"}
                   width={hoverOnMap ? "700px" : "500px"}
-                  center={{ lng: 151.23140898946815, lat: -33.91702431505671 }}
+                  center={{ lng: 151.23140998946815, lat: -33.91702431505671 }}
                   onMapClick={(coords, zLevel) => {
                     setMarkerCoordinates({
                       lng: coords[0],
