@@ -2,6 +2,7 @@ import classes from "./Summary.module.scss";
 import SummaryRow from "../SummaryRow/SummaryRow";
 
 interface SummaryProps {
+  handleClick: React.MouseEventHandler<HTMLButtonElement>;
   correctGuesses: number;
   correctBuilding: number;
   timeBonus: number;
@@ -31,7 +32,7 @@ function Summary(props: SummaryProps) {
       <div className={classes.result}>
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
       </div>
-      <button className={classes.button}>Good job!</button>
+      <button className={classes.button} onClick={props.handleClick}>Good job!</button>
     </div>
   );
 }

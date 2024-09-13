@@ -11,8 +11,11 @@ import { MazeMap, Marker } from "../../../../../mazemap-react";
 import classes from "./PlayPage.module.scss";
 import { useTimer } from "react-timer-hook";
 import getDistance from "geolib/es/getPreciseDistance";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Gamemodes } from "../../types/GameTypes";
+import { createPortal } from "react-dom";
+import Summary from "../../components/Summary/Summary";
+import EndScreenBackdrop from "../../components/EndScreenBackdrop/EndScreenBackdrop";
 
 enum Roundstate {
   ROUND_STARTED = 0,
@@ -49,6 +52,7 @@ const useEffectAfterMount = (fn: () => void, deps: any[] = []) => {
 };
 
 function PlayPage() {
+  const navigate = useNavigate();
   const [levelPano, setLevelPano] = useState<string>("");
   const [dataFetched, setDataFetched] = useState(false);
   const [levelDataFetched, setLevelDataFetched] = useState(false);
@@ -64,6 +68,7 @@ function PlayPage() {
   const [showRoundEnd, setShowRoundEnd] = useState(false);
   const [distanceAway, setDistanceAway] = useState(0);
   const [levelIds, setLevelIds] = useState([]);
+  const [showEndscreen, setShowEndscreen] = useState(false);
   const [roundstate, setRoundstate] = useState<Roundstate>(
     Roundstate.ROUND_STARTED,
   );
@@ -268,6 +273,7 @@ function PlayPage() {
     } else {
       // put here what happens after last round
       console.log("round over");
+      enableEndscreen();
     }
   };
 
@@ -300,6 +306,19 @@ function PlayPage() {
     }
     setScore(score + calculatedScore);
   };
+
+  const enableEndscreen = () => {
+    setShowEndscreen(true);
+    setTimeout(() => {
+      (document.getElementById("overlay-root") as HTMLElement).style.display =
+        showEndscreen ? "none" : "flex";
+    }, 10);
+  };
+
+  const handleEndscreenClick = () => {
+    setShowEndscreen(!showEndscreen);
+    navigate("/gamemodes")
+  }
 
   return (
     <>
@@ -436,6 +455,17 @@ function PlayPage() {
               >
                 Guess
               </button>
+              {showEndscreen &&
+                createPortal(
+                  <EndScreenBackdrop/>,
+                    document.getElementById("overlay-root") as HTMLElement,
+              )}
+              {showEndscreen &&
+                createPortal(
+                  // ↓ Currently hardcoded for testing ↓
+                  <Summary handleClick={handleEndscreenClick} correctGuesses={10} correctBuilding={123} timeBonus={0} shirtsAcquried={0}/>,
+                    document.getElementById("overlay-root") as HTMLElement,
+              )}
             </div>
           </>
         )}

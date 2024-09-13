@@ -79,3 +79,7 @@ button {
   outline: inherit;
   font: inherit;
 }
+
+#overlay-root {
+  z-index: 20;
+}
