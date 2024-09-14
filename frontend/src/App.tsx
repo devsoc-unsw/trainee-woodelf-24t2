@@ -41,7 +41,6 @@ function App() {
         <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded} />
       )}
       {!isPanoramaLoaded && <LoadingScreen />}
-      <br/>
       <Outlet />
     </>
   );
