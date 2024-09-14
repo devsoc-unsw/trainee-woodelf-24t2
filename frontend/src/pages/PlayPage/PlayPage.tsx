@@ -270,7 +270,7 @@ function PlayPage() {
     setDataFetched(true);
   };
 
-  const guess = () => {
+  const guess = async () => {
     if (round < maxRounds) {
       loadLevel();
       setRoundstate(Roundstate.ROUND_STARTED);
@@ -281,6 +281,22 @@ function PlayPage() {
         zLevel: 0,
       });
     } else {
+      const gameData = JSON.stringify({
+        gameMode: gamemode,
+        levels: levelIds,
+        score: score
+      })
+      await fetch(`/api/endGame`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body : gameData
+      })
+        .then((response) => response.json())
+        .catch((err) => {
+          console.error("Error fetching level:", err);
+        });
       enableEndscreen();
     }
   };
@@ -475,7 +491,7 @@ function PlayPage() {
                   // ↓ Currently hardcoded for testing ↓
                   <Summary
                     handleClick={handleEndscreenClick}
-                    correctGuesses={10}
+                    correctGuesses={score}
                     correctBuilding={123}
                     timeBonus={0}
                     shirtsAcquried={0}
