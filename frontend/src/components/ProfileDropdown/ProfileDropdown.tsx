@@ -33,7 +33,7 @@ function ProfileDropdown(props: { username: string }) {
     <div className={classes.dropDownMenu}>
       <h3 className={classes.username}>{props.username}</h3>
 
-      <ProfileDropDownItem text="Profile" handleClick={() => {navigate('/')}}>
+      <ProfileDropDownItem text="Profile" handleClick={() => {navigate('/profile')}}>
       {/* <ProfileDropDownItem href="/profile" text="Profile" handleClick={() => {}}> */}
         <CircleUserRound color="hsl(52, 70%, 50%)" strokeWidth={3} />
       </ProfileDropDownItem>
