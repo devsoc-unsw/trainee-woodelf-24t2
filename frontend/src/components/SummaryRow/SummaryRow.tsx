@@ -1,4 +1,4 @@
-type SummaryType = "guesses" | "time" | "building";
+type SummaryType = "score" | "time" | "personalRecord";
 
 interface SummaryRowProps {
   summaryType: SummaryType;
@@ -6,9 +6,9 @@ interface SummaryRowProps {
 }
 
 const summaries = {
-  guesses: "🎯 Correct guesses",
+  score: "💯 Score",
   time: "⏰ Time bonus",
-  building: "🏫 Correct building",
+  personalRecord: "📜 Personal Best:",
 };
 
 function SummaryRow(props: SummaryRowProps) {

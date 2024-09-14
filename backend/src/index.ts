@@ -410,3 +410,24 @@ app.post("/logout", async (req: Request, res: Response) => {
     return res.status(200).send("Logout Successful!");
   });
 });
+
+// This is here for the summary/endscreen
+app.get("/personalBest", async (req: Request, res: Response) => {
+  const userId = await sessionIdToUserId(req.sessionID);
+  if(!userId) {
+    return res.status(200).json(undefined);
+  }
+  
+  console.log(userId);
+  const userScoreQuery = query(
+    games,
+    where("userid", "==", userId),
+    orderBy("score", "desc"),
+  );
+  console.log(userId);
+  const userScoreData = await getDocs(userScoreQuery);
+  if(userScoreData.empty) {
+    res.status(204)
+  }
+  res.status(200).send(userScoreData.docs[0].data());
+})
