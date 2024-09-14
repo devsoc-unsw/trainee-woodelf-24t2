@@ -134,8 +134,9 @@ function PlayPage() {
     const func = async () => {
       if (levelDataFetched) return; // Check if the effect has already run
       setMaxRounds(8);
+      console.log("this is also being called");
       await getLevels();
-      setLevelDataFetched(true); // Set a flag once data has been fetched
+      setLevelDataFetched(true); // Set a flag once data has been fetcheds
     };
 
     func();
@@ -208,7 +209,7 @@ function PlayPage() {
   };
 
   const loadLevel = async () => {
-    const data = await fetch(`/api/level?levelId=${levelIds[round]}`, {
+    const data = await fetch(`/api/level?levelId=${levelIds[round - 1]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -225,7 +226,7 @@ function PlayPage() {
       lng: data.longitude,
       zLevel: data.zPosition,
     });
-    console.log(locationCoordinates);
+
     if ("hotspots" in data) {
       data.hotspots.forEach((hotspot: Hotspot) => {
         addScene(
@@ -249,19 +250,23 @@ function PlayPage() {
     }
 
     // i have no idea how this works...
-    // when i set it to levelIds[round - 1]
-    // it removes the hotspots?????/
-    // but with this it adds it but its
+    // when i set it to levelIds[round - 1]lll
+    // it removes the hotspots?????/ll
+    // but with this it adds it but itsl
     // rng if it takes u to the right spot
-    setLevelId("xddddd");
-    addScene(
-      "xddddd",
-      { ...config, imageSource: data.photoLink },
-      () => {},
-    );
-    setTimeout(() => {
-      loadScene("xddddd");
-    }, 1000);
+    if (!dataFetched) {
+      setLevelId("xddddd");
+      addScene("xddddd", { ...config, imageSource: data.photoLink }, () => {});
+      setTimeout(() => {
+        loadScene("xddddd");
+      }, 1000);
+    } else {
+      setLevelId(levelIds[round - 1]);
+      addScene(levelIds[round  - 1], { ...config, imageSource: data.photoLink }, () => {});
+      setTimeout(() => {
+        loadScene(levelIds[round - 1]);
+      }, 1000);
+    }
     setDataFetched(true);
   };
 
