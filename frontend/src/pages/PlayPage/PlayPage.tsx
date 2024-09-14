@@ -67,7 +67,7 @@ function PlayPage() {
   const [loadCount, setLoadCount] = useState(0);
   const [showRoundEnd, setShowRoundEnd] = useState(false);
   const [distanceAway, setDistanceAway] = useState(0);
-  const [levelIds, setLevelIds] = useState([]);
+  const [levelIds, setLevelIds] = useState<string[]>([]);
   const [showEndscreen, setShowEndscreen] = useState(false);
   const [roundstate, setRoundstate] = useState<Roundstate>(
     Roundstate.ROUND_STARTED,
@@ -225,6 +225,7 @@ function PlayPage() {
       lng: data.longitude,
       zLevel: data.zPosition,
     });
+    console.log(locationCoordinates);
     if ("hotspots" in data) {
       data.hotspots.forEach((hotspot: Hotspot) => {
         addScene(
@@ -249,13 +250,17 @@ function PlayPage() {
 
     // i have no idea how this works...
     // when i set it to levelIds[round - 1]
-    // it removes the hotspots?????
+    // it removes the hotspots?????/
     // but with this it adds it but its
     // rng if it takes u to the right spot
-    setLevelId("x");
-    addScene("x", { ...config, imageSource: data.photoLink }, () => {});
+    setLevelId("xddddd");
+    addScene(
+      "xddddd",
+      { ...config, imageSource: data.photoLink },
+      () => {},
+    );
     setTimeout(() => {
-      loadScene(`x`);
+      loadScene("xddddd");
     }, 1000);
     setDataFetched(true);
   };
@@ -271,25 +276,23 @@ function PlayPage() {
         zLevel: 0,
       });
     } else {
-      // put here what happens after last round
-      console.log("round over");
       enableEndscreen();
     }
   };
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
     const distanceInMetres = getDistance(
-      { latitude: location.lng, longitude: location.lat },
+      { latitude: location.lat, longitude: location.lng },
       { latitude: marker.lat, longitude: marker.lng },
     );
-    console.log(distanceInMetres);
+
     if (!marker.lat) return;
 
     const maxScore = 1000;
     let calculatedScore: number =
-      maxScore * (Math.E ^ (-(Math.log(1000) / 90) * distanceInMetres));
-    console.log(distanceInMetres);
-
+      distanceInMetres >= 800
+        ? 0
+        : Math.round(0.0015625 * (distanceInMetres - 800) ** 2);
     if (marker.zLevel != undefined && location.zLevel != undefined) {
       const levelDifference: number = Math.abs(marker.zLevel - location.zLevel);
       if (levelDifference < 1) {
@@ -304,6 +307,7 @@ function PlayPage() {
         calculatedScore = calculatedScore * 1.2;
       }
     }
+
     setScore(score + calculatedScore);
   };
 
@@ -317,8 +321,8 @@ function PlayPage() {
 
   const handleEndscreenClick = () => {
     setShowEndscreen(!showEndscreen);
-    navigate("/gamemodes")
-  }
+    navigate("/gamemodes");
+  };
 
   return (
     <>
@@ -374,9 +378,7 @@ function PlayPage() {
               >
                 Next
               </button>
-              <div>
-
-              </div>
+              <div></div>
             </div>
           </>
         )}
@@ -460,15 +462,21 @@ function PlayPage() {
               </button>
               {showEndscreen &&
                 createPortal(
-                  <EndScreenBackdrop/>,
-                    document.getElementById("overlay-root") as HTMLElement,
-              )}
+                  <EndScreenBackdrop />,
+                  document.getElementById("overlay-root") as HTMLElement,
+                )}
               {showEndscreen &&
                 createPortal(
                   // ↓ Currently hardcoded for testing ↓
-                  <Summary handleClick={handleEndscreenClick} correctGuesses={10} correctBuilding={123} timeBonus={0} shirtsAcquried={0}/>,
-                    document.getElementById("overlay-root") as HTMLElement,
-              )}
+                  <Summary
+                    handleClick={handleEndscreenClick}
+                    correctGuesses={10}
+                    correctBuilding={123}
+                    timeBonus={0}
+                    shirtsAcquried={0}
+                  />,
+                  document.getElementById("overlay-root") as HTMLElement,
+                )}
             </div>
           </>
         )}
