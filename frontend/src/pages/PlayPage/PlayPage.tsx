@@ -306,6 +306,7 @@ function PlayPage() {
       { latitude: location.lat, longitude: location.lng },
       { latitude: marker.lat, longitude: marker.lng },
     );
+    console.log()
 
     if (!marker.lat) return;
 
@@ -373,8 +374,8 @@ function PlayPage() {
                   colour: "hsl(52, 100%, 50%)",
                   coordinates: [
                     {
-                      lng: locationCoordinates.lat,
-                      lat: locationCoordinates.lng,
+                      lng: locationCoordinates.lng,
+                      lat: locationCoordinates.lat,
                     },
                     { lng: markerCoordinates.lng, lat: markerCoordinates.lat },
                   ],
@@ -467,8 +468,8 @@ function PlayPage() {
                   setDistanceAway(
                     getDistance(
                       {
-                        latitude: locationCoordinates.lng,
-                        longitude: locationCoordinates.lat,
+                        latitude: locationCoordinates.lat,
+                        longitude: locationCoordinates.lng,
                       },
                       {
                         latitude: markerCoordinates.lat,
