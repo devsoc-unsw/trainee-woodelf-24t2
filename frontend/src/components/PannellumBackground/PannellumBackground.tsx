@@ -35,7 +35,7 @@ function PannellumBackground({
         id="1"
         sceneId="firstScene"
         style={style}
-        imageSource={"testimage.png"}
+        imageSource={"https://firebasestorage.googleapis.com/v0/b/yellowshirt-24t2-training.appspot.com/o/levels%2Funsw%2FIMG_20240803_125023_00_031.jpg?alt=media"}
         config={config}
         onPanoramaLoaded={() => {
           // there is a delay between when the 'panorama loaded' event occurs
