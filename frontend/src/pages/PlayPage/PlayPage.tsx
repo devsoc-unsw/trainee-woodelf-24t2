@@ -104,7 +104,7 @@ function PlayPage() {
   };
 
   const { state } = useLocation();
-  const gamemode = state?.gamemode || Gamemodes.EXPLORATION;
+  const gamemode = state?.gamemode;
 
   const expiryTimestamp = new Date();
   const { seconds, minutes, restart } = useTimer({
@@ -114,13 +114,13 @@ function PlayPage() {
   });
 
   const restartTimer = () => {
-    if (gamemode === Gamemodes.EXPLORATION) return;
+    if (gamemode === "exploration") return;
 
     const newExpiryTimestamp = new Date(
       Date.now() +
         (gamemode === Gamemodes.TIMED_5MIN
           ? minutesToMilliseconds(5)
-          : gamemode === Gamemodes.TIMED_10MIN
+          : gamemode === "timed"
           ? minutesToMilliseconds(10)
           : 0),
     );
