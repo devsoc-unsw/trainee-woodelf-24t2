@@ -5,6 +5,7 @@ import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useEffect, useState } from "react";
 import Credits from "../Credits/Credits";
+import Help from "../Help/Help"
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
@@ -12,16 +13,27 @@ import classNames from "classnames";
 
 function Navbar() {
   const [showCredits, setShowCredits] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
   const [username, setUsername] = useState('')
   const navigate = useNavigate();
 
   const toggleCredits = () => {
+    setShowHelp(false);
     setShowCredits((prev) => !prev);
     setTimeout(() => {
       (document.getElementById("overlay-root") as HTMLElement).style.display =
         showCredits ? "none" : "flex";
+    }, 10);
+  };
+
+  const toggleHelp = () => {
+    setShowCredits(false);
+    setShowHelp((prev) => !prev);
+    setTimeout(() => {
+      (document.getElementById("overlay-root") as HTMLElement).style.display =
+        showHelp ? "none" : "flex";
     }, 10);
   };
 
@@ -76,6 +88,12 @@ function Navbar() {
           >
             Gamemodes
           </button>
+          <button
+            className={`${classes.hover} ${classes.hideOnMobile}`}
+            onClick={toggleHelp}
+          >
+            Help
+          </button>
         </div>
 
         <div>
@@ -96,6 +114,11 @@ function Navbar() {
         {showCredits &&
           createPortal(
             <Credits onClick={toggleCredits} />,
+            document.getElementById("overlay-root") as HTMLElement,
+          )}
+        {showHelp &&
+          createPortal(
+            <Help onClick={toggleHelp} />,
             document.getElementById("overlay-root") as HTMLElement,
           )}
         <button

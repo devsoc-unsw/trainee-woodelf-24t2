@@ -9,6 +9,7 @@ interface SheetProps {
   gamemode?: boolean;
   leaderboard?: boolean;
   credits?: boolean;
+  help?: boolean;
   dropdownNavbar?: boolean;
   className?: string;
 }
@@ -23,6 +24,7 @@ function Sheet(props: SheetProps) {
           [classes.containerLeaderboard]: props.leaderboard,
           [classes.containerCredits]: props.credits,
           [classes.containerDropdownNavbar]: props.dropdownNavbar,
+          [classes.containerHelp]: props.help,
         })}
       >
         <div
@@ -32,6 +34,7 @@ function Sheet(props: SheetProps) {
             [classes.sheetLeaderboard]: props.leaderboard,
             [classes.sheetCredits]: props.credits,
             [classes.sheetDropdownNavbar]: props.dropdownNavbar,
+            [classes.sheetHelp]: props.help,
           })}
         >
           {props.hasCloseButton && (
