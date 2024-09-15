@@ -110,7 +110,7 @@ function PlayPage() {
   const { seconds, minutes, restart } = useTimer({
     expiryTimestamp,
     autoStart: false,
-    onExpire: () => console.warn("GAME OVER!!!"),
+    onExpire: () => guess(),
   });
 
   const restartTimer = () => {
@@ -492,7 +492,7 @@ function PlayPage() {
                 )}
               {showEndscreen &&
                 createPortal(
-                  // ↓ Currently hardcoded for testing ↓
+                  // ↓ Currently hardcoded for testing ↓.
                   <Summary
                     handleClick={handleEndscreenClick}
                     correctGuesses={8}
