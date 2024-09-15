@@ -68,7 +68,7 @@ function LoginPage() {
       });
 
       if (resp.ok) {
-        navigate("/home");
+        navigate("/gamemodes");
       } else {
         const errorCheck = await resp.json();
         if (errorCheck.usernameNotFound) {
