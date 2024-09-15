@@ -1,46 +1,97 @@
-@import '../../variables';
-
+@import "../../variables";
 .BoxOne {
-    background-color: #222222;
-    width: 35vw;
-    height: 60vh;
+    background-color: #1e1e1e;
+    width: 40vw;
+    height: 70vh;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .profileIcon {
+    width: 13em;
+    height: 13em;
+    background-color: #f1d440;
+    border-radius: 50%;
+    border: 3px solid white;
+    display: block;
+    margin: 10px auto;
+  }
+
+  .usernameText {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 0.5em;
+  }
+
+  .dateJoinedContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+  }
+
+  .dateJoined {
+    color: #7e7e7e;
+    margin-left: 10px;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 2svh;
+  }
+
+  .highScoreContainer,
+  .cumulativeScoreContainer,
+  .shirtsContainer,
+  .activeDaysContainer {
+    display: flex;
+    align-items: center;
+    background-color: #444444;
+    padding: 15px;
+    border-radius: 5px;
+    width: 45%;
+  }
+
+  .iconCircle {
+    background-color: #b8e30c;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+    flex-shrink: 0;
+  }
 
-.BoxTwo {
-    background-color: #222222;
-    width: 35vw;
-    height: 30.5vh;
-    padding: 20px;
-    border-radius: 10px;
+  .highScoreRightColumn,
+  .cumulativeScoreRightColumn,
+  .shirtsRightColumn,
+  .activeDaysRightColumn {
+    margin-left: 20px;
+  }
+
+  .highScore,
+  .cumulativeScore,
+  .shirts,
+  .activeDays {
+    color: #e0e0e0;
+    font-size: 1.2em;
+  }
+
+  .highScoreContainer p,
+  .cumulativeScoreContainer p,
+  .shirtsContainer p,
+  .activeDaysContainer p {
+    margin: 0;
+  }
+
+  .bodyText {
     color: white;
-    width: 30vw;
+  }
 
-}
-
-.BoxThree {
-    background-color: #222222;
-    padding: 20px;
-    border-radius: 10px;
-    color: white;
-    width: 30vw;
-    height: 25.5vh;
-}
-
-.profileIcon {
-    width: 250px;
-    height: 250px;
-    background-color: #f1d440;
-    border-radius: 50%;
-    position: absolute;
-    top: 175px;
-    border: 2px solid white;
-
-}
-
-.usernameText {
-    color: white;
-}

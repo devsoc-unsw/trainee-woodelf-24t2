@@ -25,6 +25,13 @@
   color: $secondary-yellow;
 }
 
+.containerHelp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $secondary-yellow;
+}
+
 .containerDropdownNavbar {
   position: fixed;
   display: flex;
@@ -86,6 +93,16 @@
   background-color: $dark;
   opacity: 95%;
   text-align: center;
+}
+
+.sheetHelp {
+  position: relative;
+  padding: 10px 30px;
+  width: 500px;
+  height: 600px;
+  border-radius: 8px;
+  background-color: $dark;
+  opacity: 95%;
 }
 
 .sheetGamemode {
