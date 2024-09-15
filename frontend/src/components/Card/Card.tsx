@@ -6,11 +6,15 @@ interface CardProps {
   cardTitleText: string;
   cardBodyText: string;
   img: string;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
 function Card(props: CardProps) {
   return (
-    <div className={classes.card}>
+    <div
+      className={classes.card}
+      onClick={props.onClick}
+    >
       <img src={props.img} className={classes.cardImage} />
       <div className={classes.cardTextBox}>
         <h1
