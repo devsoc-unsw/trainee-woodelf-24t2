@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage.tsx';
 import GamemodesPage from './pages/GamemodesPage/GamemodesPage.tsx';
 import construction from "/under_construction.jpg"
+import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 
 import {
   createBrowserRouter,
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
       {
         path: '/play',
         // hard coded rn to 10 min gamemode
-        element: <PlayPage Gamemode={2}/>,
+        element: <PlayPage/>,
       },
       {
         path: '/register',
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         path: '/leaderboard',
         element: <LeaderboardPage/>,
       },
+      {
+        path: '/profile',
+        element: <ProfilePage/>
+      }
     ],
   },
 ]);
