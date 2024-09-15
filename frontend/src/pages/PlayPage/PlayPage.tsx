@@ -133,7 +133,7 @@ function PlayPage() {
   useEffect(() => {
     const func = async () => {
       if (levelDataFetched) return; // Check if the effect has already run
-      setMaxRounds(8);
+      setMaxRounds(4);
       console.log("this is also being called");
       await getLevels();
       setLevelDataFetched(true); // Set a flag once data has been fetchedss
@@ -167,9 +167,7 @@ function PlayPage() {
   const formattedMinutes = String(minutes).padStart(1, "0");
 
   useEffectAfterMount(() => {
-    setTimeout(() => {
-      loadHotspots();
-    }, 1000);
+    loadHotspots();
   }, [hotpoint]);
 
   const loadHotspots = async () => {
@@ -259,18 +257,21 @@ function PlayPage() {
     if (!dataFetched) {
       setLevelId("xddddd");
       addScene("xddddd", { ...config, imageSource: data.photoLink }, () => {});
-      loadScene("xddddd");
+      setTimeout(() => {
+        loadScene("xddddd");
+      }, 1000);
     } else {
-      setLevelId(levelIds[round]);
+      setLevelId(levelIds[round - 1]);
       addScene(
-        levelIds[round],
+        levelIds[round - 1],
         { ...config, imageSource: data.photoLink },
         () => {},
       );
       setTimeout(() => {
-        loadScene(levelIds[round]);
+        loadScene(levelIds[round - 1]);
       }, 1000);
     }
+    setDataFetched(true);
     setDataFetched(true);
   };
 
@@ -306,18 +307,10 @@ function PlayPage() {
   };
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
-    console.log('location', location);
-    console.log('marker', marker);
-    console.log("lat", location.lat);
-    console.log("lng", location.lng);
-    console.log("lat", marker.lat);
-    console.log("lng", marker.lng);
-
     const distanceInMetres = getDistance(
       { latitude: location.lat, longitude: location.lng },
       { latitude: marker.lat, longitude: marker.lng },
     );
-    console.log()
 
     if (!marker.lat) return;
     let calculatedScore: number =
