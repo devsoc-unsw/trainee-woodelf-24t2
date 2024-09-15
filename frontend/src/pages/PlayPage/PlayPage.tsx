@@ -129,14 +129,14 @@ function PlayPage() {
     restart(newExpiryTimestamp);
   };
 
-  // bug this loads twice
+  // bug this loads twice..
   useEffect(() => {
     const func = async () => {
       if (levelDataFetched) return; // Check if the effect has already run
       setMaxRounds(8);
       console.log("this is also being called");
       await getLevels();
-      setLevelDataFetched(true); // Set a flag once data has been fetcheds
+      setLevelDataFetched(true); // Set a flag once data has been fetchedss
     };
 
     func();
@@ -167,7 +167,9 @@ function PlayPage() {
   const formattedMinutes = String(minutes).padStart(1, "0");
 
   useEffectAfterMount(() => {
-    loadHotspots();
+    setTimeout(() => {
+      loadHotspots();
+    }, 1000);
   }, [hotpoint]);
 
   const loadHotspots = async () => {
@@ -222,9 +224,9 @@ function PlayPage() {
     setLevelPano(data.photoLink);
 
     setLocationCoordinates({
-      lat: data.latitude,
-      lng: data.longitude,
-      zLevel: data.zPosition,
+      lat: parseFloat(data.latitude),
+      lng: parseFloat(data.longitude),
+      zLevel: parseFloat(data.zPosition),
     });
 
     if ("hotspots" in data) {
@@ -250,21 +252,23 @@ function PlayPage() {
     }
 
     // i have no idea how this works...
-    // when i set it to levelIds[round - 1]lll
+    // when i set it to levelIds[round - 1]lllll
     // it removes the hotspots?????/ll
     // but with this it adds it but itsl
     // rng if it takes u to the right spot
     if (!dataFetched) {
       setLevelId("xddddd");
       addScene("xddddd", { ...config, imageSource: data.photoLink }, () => {});
-      setTimeout(() => {
-        loadScene("xddddd");
-      }, 1000);
+      loadScene("xddddd");
     } else {
-      setLevelId(levelIds[round - 1]);
-      addScene(levelIds[round  - 1], { ...config, imageSource: data.photoLink }, () => {});
+      setLevelId(levelIds[round]);
+      addScene(
+        levelIds[round],
+        { ...config, imageSource: data.photoLink },
+        () => {},
+      );
       setTimeout(() => {
-        loadScene(levelIds[round - 1]);
+        loadScene(levelIds[round]);
       }, 1000);
     }
     setDataFetched(true);
@@ -284,14 +288,14 @@ function PlayPage() {
       const gameData = JSON.stringify({
         gameMode: gamemode,
         levels: levelIds,
-        score: score
-      })
+        score: score,
+      });
       await fetch(`/api/endGame`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body : gameData
+        body: gameData,
       })
         .then((response) => response.json())
         .catch((err) => {
@@ -302,6 +306,13 @@ function PlayPage() {
   };
 
   const calculateScore = (marker: Coordinates, location: Coordinates) => {
+    console.log('location', location);
+    console.log('marker', marker);
+    console.log("lat", location.lat);
+    console.log("lng", location.lng);
+    console.log("lat", marker.lat);
+    console.log("lng", marker.lng);
+
     const distanceInMetres = getDistance(
       { latitude: location.lat, longitude: location.lng },
       { latitude: marker.lat, longitude: marker.lng },
@@ -309,8 +320,6 @@ function PlayPage() {
     console.log()
 
     if (!marker.lat) return;
-
-    const maxScore = 1000;
     let calculatedScore: number =
       distanceInMetres >= 800
         ? 0
@@ -421,6 +430,7 @@ function PlayPage() {
                   style={style}
                   imageSource={levelPano}
                   config={config}
+                  hideIcons
                   onPanoramaLoaded={() => {
                     // this onPanoLoaded gets called twicfe during refresh
                     // causing hotspots to bug out so this ignores the second call.
@@ -492,10 +502,10 @@ function PlayPage() {
                   // ↓ Currently hardcoded for testing ↓
                   <Summary
                     handleClick={handleEndscreenClick}
-                    correctGuesses={score}
+                    correctGuesses={8}
                     correctBuilding={123}
-                    timeBonus={0}
-                    shirtsAcquried={0}
+                    timeBonus={120}
+                    shirtsAcquried={score}
                   />,
                   document.getElementById("overlay-root") as HTMLElement,
                 )}
