@@ -27,7 +27,7 @@ importers:
         specifier: ^0.435.0
         version: 0.435.0(react@18.3.1)
       prop-types:
-        specifier: ^15.5.4
+        specifier: ^15.8.1
         version: 15.8.1
       react:
         specifier: ^18.3.1
