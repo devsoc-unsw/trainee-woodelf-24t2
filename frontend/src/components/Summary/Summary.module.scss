@@ -39,6 +39,8 @@ table {
 
 .button {
   align-self: center;
+  margin-top: auto;
+  margin-bottom: 40px;
   width: 15vw;
   height: 5vh;
   border-radius: 10px;
@@ -51,7 +53,7 @@ table {
   transition: background-color 0.5s ease;
 }
 
-button:hover {
+.button:hover {
   cursor: pointer;
   background-color: lighten($yellow-button, 30%);
 }

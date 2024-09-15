@@ -278,7 +278,7 @@ app.post(
   }
 )
 
-app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
+app.get("/level", async (req: TypedRequestQuery<{  levelId: string  }>, res: Response) => {
   const levelId = req.query.levelId;
   const docRef = doc(db, "levels", levelId);
   const docSnap = await getDoc(docRef);
@@ -411,3 +411,23 @@ app.post("/logout", async (req: Request, res: Response) => {
     return res.status(200).send("Logout Successful!");
   });
 });
+
+// This is here for the summary/endscreen
+// Returns a user's best score or undefined if guest player.
+app.get("/personalBest", async (req: Request, res: Response) => {
+  const userId = await sessionIdToUserId(req.sessionID);
+  if (!userId) {
+    return res.status(200).json(undefined);
+  }
+
+  const userScoreQuery = query(
+    games,
+    where("userid", "==", userId),
+    orderBy("score", "desc"),
+  );
+  const userScoreData = await getDocs(userScoreQuery);
+  if (userScoreData.empty) {
+    return res.status(204).send("No data!");
+  }
+  res.status(200).json(userScoreData.docs[0].data().score);
+})
