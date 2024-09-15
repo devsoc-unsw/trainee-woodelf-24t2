@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+
 import classes from "./ProfileBoxes.module.scss";
-import { Timestamp } from "firebase/firestore";
 import { FaFire } from "react-icons/fa6";
-import { IoTimeSharp } from "react-icons/io5";
 import { FaCrown } from "react-icons/fa";
 import { FaTshirt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
