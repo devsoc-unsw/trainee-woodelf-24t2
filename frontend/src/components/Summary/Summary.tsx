@@ -1,12 +1,13 @@
 import classes from "./Summary.module.scss";
 import SummaryRow from "../SummaryRow/SummaryRow";
+import React from "react";
 
 interface SummaryProps {
-  handleClick: React.MouseEventHandler<HTMLButtonElement>;
-  correctGuesses: number;
-  correctBuilding: number;
-  timeBonus: number;
-  shirtsAcquried: number;
+  totalScore: number;
+  personalBest: number;
+  handleClick: React.MouseEventHandler<HTMLButtonElement>
+  // timeBonus: number;
+  // shirtsAcquried: number;
 }
 
 function Summary(props: SummaryProps) {
@@ -18,20 +19,21 @@ function Summary(props: SummaryProps) {
         <table className={classes.fields}>
           <tbody>
             <SummaryRow
-              summaryType="guesses"
-              summaryAttribute={props.correctGuesses}
+              summaryType="score"
+              summaryAttribute={props.totalScore}
             />
             <SummaryRow
-              summaryType="building"
-              summaryAttribute={props.correctBuilding}
+              summaryType="personalRecord"
+              summaryAttribute={props.personalBest}
             />
-            <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} />
+            {/* <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} /> */}
           </tbody>
         </table>
       </div>
-      <div className={classes.result}>
+      {/* <div className={classes.result}>
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
-      </div>
+      </div> */}
+      <br/>
       <button className={classes.button} onClick={props.handleClick}>Good job!</button>
     </div>
   );
