@@ -114,13 +114,13 @@ function PlayPage() {
   });
 
   const restartTimer = () => {
-    if (gamemode === "exploration") return;
+    if (gamemode === Gamemodes.EXPLORATION) return;
 
     const newExpiryTimestamp = new Date(
       Date.now() +
         (gamemode === Gamemodes.TIMED_5MIN
           ? minutesToMilliseconds(5)
-          : gamemode === "timed"
+          : gamemode === Gamemodes.TIMED_10MIN
           ? minutesToMilliseconds(10)
           : 0),
     );

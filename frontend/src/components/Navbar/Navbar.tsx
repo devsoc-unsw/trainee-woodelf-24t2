@@ -19,6 +19,12 @@ function Navbar() {
   const [username, setUsername] = useState('')
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setTimeout(() => {
+      (document.getElementById("overlay-root") as HTMLElement).style.display = "none";
+    }, 10);
+  }, [])
+
   const toggleCredits = () => {
     setShowHelp(false);
     setShowCredits((prev) => !prev);
