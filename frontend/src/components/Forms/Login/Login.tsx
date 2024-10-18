@@ -66,6 +66,8 @@ function LoginPage() {
       credentials: "include",
     });
 
+    setIsProcessing(false);
+
     if (resp.ok) {
       navigate("/gamemodes");
     } else {
@@ -76,7 +78,6 @@ function LoginPage() {
         return setPasswordMatch(false);
       }
     }
-    setIsProcessing(false);
   };
 
   return (
