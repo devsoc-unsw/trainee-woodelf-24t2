@@ -10,7 +10,14 @@ FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 ENV NODE_ENV=production
-ENV ALLOWED_ORIGINS=/yellowshirt\.xyz$/,/trainee-woodelf-24t2\.pages\.dev$/
+
+# envs to set for runtime
+# if using fly, env vars can be specified in fly.toml
+
+#ENV ALLOWED_ORIGINS=/yellowshirt\.xyz$/,/trainee-woodelf-24t2\.pages\.dev$/,/yellowshirt-backend\.fly\.dev$/
+
+# ⚠️ SESSION_SECRET should be, well, a secret!
+# if using fly, use fly secrets
 #ENV SESSION_SECRET=...
 
 FROM base AS build

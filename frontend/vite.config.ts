@@ -7,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://yellowshirt-backend.fly.dev",
+        target: "https://yellowshirt-backend.fly.dev/api",
         changeOrigin: true,
-	secure: false,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },

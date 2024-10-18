@@ -1,4 +1,4 @@
-import express, { Response, Request } from "express";
+import express, { Response, Request, Router } from "express";
 import session from "express-session";
 import {
   TypedRequest,
@@ -37,6 +37,7 @@ const EXPRESS_PORT = 3000;
 const games = collection(db, "games");
 const sessions = collection(db, "sessions");
 const users = collection(db, "users");
+const router = express.Router();
 
 const session_auth = async (sessionId: string) => {
   const sessionData = query(sessions, where("sessionId", "==", sessionId));
@@ -128,8 +129,9 @@ app.use(
     resave: false,
   }),
 );
+app.use("/api", router);
 
-app.get("/user", async (req: Request, res: Response) => {
+router.get("/user", async (req: Request, res: Response) => {
   // if sessionId is in the DB and not expired --> session is a user.
   // if not --> session is a guest.
   const sessionId = req.sessionID;
@@ -161,41 +163,47 @@ app.listen(EXPRESS_PORT, () => {
   );
 });
 
-app.post("/register", async (req: TypedRequest<LoginBody>, res: Response) => {
-  const { username, password } = req.body;
-  const querySnapshot = await getDocs(users);
+router.post(
+  "/register",
+  async (req: TypedRequest<LoginBody>, res: Response) => {
+    const { username, password } = req.body;
+    const querySnapshot = await getDocs(users);
 
-  const errorCheck: LoginErrors = {
-    usernameNotFound: true,
-  };
+    const errorCheck: LoginErrors = {
+      usernameNotFound: true,
+    };
 
-  if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
-    errorCheck.usernameNotFound = false;
-    return res.status(400).json(errorCheck);
-  }
+    if (querySnapshot.docs.some((doc) => doc.data().username === username)) {
+      errorCheck.usernameNotFound = false;
+      return res.status(400).json(errorCheck);
+    }
 
-  const salt: string = crypto.randomBytes(128).toString("base64");
-  const saltedPassword: string = password.concat(salt);
+    const salt: string = crypto.randomBytes(128).toString("base64");
+    const saltedPassword: string = password.concat(salt);
 
-  const saltRounds: number = 10;
-  const hashedPassword: string = await bcrypt.hash(saltedPassword, saltRounds);
+    const saltRounds: number = 10;
+    const hashedPassword: string = await bcrypt.hash(
+      saltedPassword,
+      saltRounds,
+    );
 
-  const newUser: User = {
-    username,
-    password: hashedPassword,
-    salt: salt,
-    dateJoined: new Date(),
-    highScore: 0,
-    cumulativeScore: 0,
-    shirts: 0,
-  };
+    const newUser: User = {
+      username,
+      password: hashedPassword,
+      salt: salt,
+      dateJoined: new Date(),
+      highScore: 0,
+      cumulativeScore: 0,
+      shirts: 0,
+    };
 
-  await addDoc(users, newUser);
+    await addDoc(users, newUser);
 
-  return res.status(201).send("User Successfully Registered");
-});
+    return res.status(201).send("User Successfully Registered");
+  },
+);
 
-app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
+router.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   const { username, password } = req.body;
   const loginDetails = query(users, where("username", "==", username));
   const details = await getDocs(loginDetails);
@@ -247,7 +255,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
 });
 // curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
 
-app.get(
+router.get(
   "/startGame",
   async (
     req: TypedRequestQuery<{ roundCount: number; gameMode: Gamemode }>,
@@ -270,7 +278,7 @@ app.get(
   },
 );
 
-app.post(
+router.post(
   "/endGame",
   async (
     req: TypedRequest<{
@@ -302,11 +310,11 @@ app.post(
   },
 );
 
-app.get("/ping", (req: Request, res: Response) => {
+router.get("/ping", (req: Request, res: Response) => {
   res.status(200).send("pong");
 });
 
-app.get(
+router.get(
   "/level",
   async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
     const levelId = req.query.levelId;
@@ -362,7 +370,7 @@ app.get(
   },
 );
 
-app.get(
+router.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
     // const { pagenum, gamemode, increments } = req.query;
@@ -433,7 +441,7 @@ app.get(
   },
 );
 
-app.post("/logout", async (req: Request, res: Response) => {
+router.post("/logout", async (req: Request, res: Response) => {
   const sessionId = req.sessionID;
   if (!(await session_remove(sessionId))) {
     console.log("Not logged in");

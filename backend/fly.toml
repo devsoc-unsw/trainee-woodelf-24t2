@@ -20,3 +20,6 @@ primary_region = 'syd'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[env]
+  ALLOWED_ORIGINS = 'yellowshirt\.xyz$,trainee-woodelf-24t2\.pages\.dev$,yellowshirt-backend\.fly\.dev$'
