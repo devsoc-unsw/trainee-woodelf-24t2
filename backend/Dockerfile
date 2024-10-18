@@ -3,11 +3,14 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+# install dependencies for compiling bcrypt
+RUN apk --no-cache add --virtual builds-deps build-base python3
+
 COPY . /yellowshirt-backend
 WORKDIR /yellowshirt-backend
 
 FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod 
 
 ENV NODE_ENV=production
 
@@ -21,10 +24,7 @@ ENV NODE_ENV=production
 #ENV SESSION_SECRET=...
 
 FROM base AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-
-RUN ls -l
-
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install && pnpm rebuild bcrypt
 RUN pnpm run build
 
 FROM base

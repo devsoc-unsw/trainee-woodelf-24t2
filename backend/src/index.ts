@@ -100,6 +100,7 @@ if (process.env.ALLOWED_ORIGINS) {
 } else {
   allowedOrigins = [];
 }
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -217,13 +218,16 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
     details.docs[0].data().password,
     async (err: Error | undefined, result: boolean) => {
       if (err) {
-        return res.status(500).send("Error processing password");
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
       }
 
       if (result) {
         req.session.regenerate(async (err: Error | null) => {
           if (err) {
-            return res.status(500).send("Error regenerating session.");
+            return res.status(500).json({
+              error: "Error regenerating session",
+            });
           }
           const expiryTime: Date = new Date();
           expiryTime.setDate(expiryTime.getDate() + 7);
