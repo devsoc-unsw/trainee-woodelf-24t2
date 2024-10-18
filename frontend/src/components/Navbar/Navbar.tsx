@@ -5,7 +5,7 @@ import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useEffect, useState } from "react";
 import Credits from "../Credits/Credits";
-import Help from "../Help/Help"
+import Help from "../Help/Help";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Sheet from "../Sheet/Sheet";
@@ -16,7 +16,7 @@ function Navbar() {
   const [showHelp, setShowHelp] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   const toggleCredits = () => {
@@ -54,17 +54,18 @@ function Navbar() {
         });
 
         if (resp.ok) {
-          return resp.json().then((r) => {setUsername(r.username)})
+          return resp.json().then((r) => {
+            setUsername(r.username);
+          });
         } else {
-          console.log(resp);
+          console.error(resp);
         }
       } catch (e) {
-        console.log("Error: ", e);
+        console.error(e);
       }
-    }
-    getUsername()
-    .catch(console.error)
-  }, [])
+    };
+    getUsername().catch(console.error);
+  }, []);
 
   return (
     <div>
@@ -129,9 +130,7 @@ function Navbar() {
           [classes.slide_out]: !showDropDown,
         })}
       >
-        <button onClick={() => handleNavigation("/profile")}>
-          Profile
-        </button>
+        <button onClick={() => handleNavigation("/profile")}>Profile</button>
         <button onClick={() => handleNavigation("/gamemodes")}>
           Gamemodes
         </button>

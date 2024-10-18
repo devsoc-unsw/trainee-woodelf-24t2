@@ -60,10 +60,10 @@ function Leaderboard() {
         setLeaderboardPage(1);
         setPageCount(1);
       } else {
-        console.error("Error: ", resp.status);
+        console.error(resp.status);
       }
-    } catch (err) {
-      console.log("error ", err);
+    } catch (e) {
+      console.error(e);
     }
   };
 

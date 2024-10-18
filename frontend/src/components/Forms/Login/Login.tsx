@@ -77,8 +77,8 @@ function LoginPage() {
           return setPasswordMatch(false);
         }
       }
-    } catch (err) {
-      console.log("Error: ", err);
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsProcessing(false);
     }

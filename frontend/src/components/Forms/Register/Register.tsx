@@ -108,8 +108,8 @@ function Register() {
         const errorCheck = await resp.json();
         if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
       }
-    } catch (err) {
-      console.log("Error: ", err);
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsProcessing(false);
     }
