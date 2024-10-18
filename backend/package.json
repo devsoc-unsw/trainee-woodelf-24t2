@@ -28,8 +28,8 @@
     "dev_env": "tsx watch --env-file=.env ./src/index.ts",
     "dev": "tsx watch ./src/index.ts",
     "build": "tsc --build",
-    "start_env": "node --env-file=.env dist/src/index.js",
-    "start": "node dist/src/index.js"
+    "start_env": "node --env-file=.env dist/index.js",
+    "start": "node dist/index.js"
   },
   "prettier": {
     "singleQuote": false,
