@@ -44,27 +44,21 @@ function Navbar() {
 
   useEffect(() => {
     const getUsername = async () => {
-      try {
-        const resp = await fetch("/api/user", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+      const resp = await fetch("/api/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-        if (resp.ok) {
-          return resp.json().then((r) => {
-            setUsername(r.username);
-          });
-        } else {
-          console.error(resp);
-        }
-      } catch (e) {
-        console.error(e);
+      if (resp.ok) {
+        return resp.json().then((r) => {
+          setUsername(r.username);
+        });
       }
     };
-    getUsername().catch(console.error);
+    getUsername();
   }, []);
 
   return (

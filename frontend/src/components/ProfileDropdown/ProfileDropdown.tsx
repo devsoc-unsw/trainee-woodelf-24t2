@@ -7,22 +7,16 @@ function ProfileDropdown(props: { username: string }) {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    try {
-      const resp = await fetch("/api/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+    const resp = await fetch("/api/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-      if (resp.ok) {
-        navigate("/login", { replace: true });
-      } else {
-        console.error(resp);
-      }
-    } catch (e) {
-      console.error(e);
+    if (resp.ok) {
+      navigate("/login", { replace: true });
     }
   };
 
