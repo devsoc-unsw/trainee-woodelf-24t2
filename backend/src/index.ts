@@ -92,11 +92,24 @@ const sessionIdToUserId = async (
 };
 
 const app = express();
+let allowedOrigins: RegExp[];
+if (process.env.ALLOWED_ORIGINS) {
+  allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map(
+    (origin) => new RegExp(origin),
+  );
+} else {
+  allowedOrigins = [];
+}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_LOCAL as string,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      allowedOrigins.some((r) => r.test(origin as string))
+        ? callback(null, true)
+        : callback(new Error(`Origin ${origin} not in ALLOWED_ORIGINS`));
+    },
     credentials: true,
     optionsSuccessStatus: 200,
   }),

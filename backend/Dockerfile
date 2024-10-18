@@ -10,7 +10,7 @@ FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 ENV NODE_ENV=production
-ENV FRONTEND_LOCAL=https://yellowshirt.xyz
+ENV ALLOWED_ORIGINS=/yellowshirt\.xyz$/,/trainee-woodelf-24t2\.pages\.dev$/
 #ENV SESSION_SECRET=...
 
 FROM base AS build
