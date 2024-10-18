@@ -15,6 +15,9 @@ ENV FRONTEND_LOCAL=https://yellowshirt.xyz
 
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+RUN ls -l
+
 RUN pnpm run build
 
 FROM base
