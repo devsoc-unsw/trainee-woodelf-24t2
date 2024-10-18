@@ -27,8 +27,7 @@
     "dev": "tsx watch ./src/index.ts",
     "build": "tsc --build",
     "start_env": "node --env-file=.env dist/src/index.js",
-    "start": "node dist/src/index.js",
-    "production": "node dist/src/index.js"
+    "start": "node dist/src/index.js"
   },
   "prettier": {
     "singleQuote": false,
