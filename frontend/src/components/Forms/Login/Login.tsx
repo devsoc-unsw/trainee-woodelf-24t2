@@ -57,30 +57,26 @@ function LoginPage() {
     setIsProcessing(true);
 
     // formData.username = formData.username.trim();
-    try {
-      const resp = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+    const resp = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+      credentials: "include",
+    });
 
-      if (resp.ok) {
-        navigate("/gamemodes");
-      } else {
-        const errorCheck = await resp.json();
-        if (errorCheck.usernameNotFound) {
-          return setUsernameFound(false);
-        } else if (errorCheck.passwordInvalid) {
-          return setPasswordMatch(false);
-        }
+    setIsProcessing(false);
+
+    if (resp.ok) {
+      navigate("/gamemodes");
+    } else {
+      const errorCheck = await resp.json();
+      if (errorCheck.usernameNotFound) {
+        return setUsernameFound(false);
+      } else if (errorCheck.passwordInvalid) {
+        return setPasswordMatch(false);
       }
-    } catch (err) {
-      console.log("Error: ", err);
-    } finally {
-      setIsProcessing(false);
     }
   };
 

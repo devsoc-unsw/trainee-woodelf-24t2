@@ -6,7 +6,15 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Gamemode, Game, Hotspot } from "./interfaces";
+import {
+  SessionStorage,
+  User,
+  LoginErrors,
+  Level,
+  Gamemode,
+  Game,
+  Hotspot,
+} from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -84,11 +92,25 @@ const sessionIdToUserId = async (
 };
 
 const app = express();
+let allowedOrigins: RegExp[];
+if (process.env.ALLOWED_ORIGINS) {
+  allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map(
+    (origin) => new RegExp(origin),
+  );
+} else {
+  allowedOrigins = [];
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_LOCAL as string,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      allowedOrigins.some((r) => r.test(origin as string))
+        ? callback(null, true)
+        : callback(new Error(`Origin ${origin} not in ALLOWED_ORIGINS`));
+    },
     credentials: true,
     optionsSuccessStatus: 200,
   }),
@@ -194,15 +216,18 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    async (err: Error | null, result: boolean) => {
+    async (err: Error | undefined, result: boolean) => {
       if (err) {
-        return res.status(500).send("Error processing password");
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
       }
 
       if (result) {
         req.session.regenerate(async (err: Error | null) => {
           if (err) {
-            return res.status(500).send("Error regenerating session.");
+            return res.status(500).json({
+              error: "Error regenerating session",
+            });
           }
           const expiryTime: Date = new Date();
           expiryTime.setDate(expiryTime.getDate() + 7);
@@ -234,7 +259,7 @@ app.get(
   ) => {
     const getDoc = await getDocs(collection(db, "levels"));
 
-    const { roundCount, gameMode } = req.query;
+    const { roundCount } = req.query;
 
     // array of level IDs
     const docIds = getDoc.docs.map((doc) => doc.id);
@@ -252,8 +277,12 @@ app.get(
 app.post(
   "/endGame",
   async (
-    req: TypedRequest<{ gameMode: Gamemode, levels: Level["id"][], score: number }>,
-    res: Response
+    req: TypedRequest<{
+      gameMode: Gamemode;
+      levels: Level["id"][];
+      score: number;
+    }>,
+    res: Response,
   ) => {
     const { gameMode, levels, score } = req.body;
 
@@ -268,64 +297,74 @@ app.post(
       gamemode: gameMode,
       levels: levels,
       score: score,
-      userid: userId
+      userid: userId,
     };
 
     addDoc(collection(db, "games"), game);
 
-
     res.status(200).send("Game Ended Successfully");
-  }
-)
+  },
+);
 
-app.get("/level", async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
-  const levelId = req.query.levelId;
-  const docRef = doc(db, "levels", levelId);
-  const docSnap = await getDoc(docRef);
+app.get("/ping", (req: Request, res: Response) => {
+  res.status(200).send("pong");
+});
 
-  if (!docSnap.exists()) {
-    res.status(404).json({ error: "Level not found" });
-    return;
-  }
+app.get(
+  "/level",
+  async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
+    const levelId = req.query.levelId;
+    const docRef = doc(db, "levels", levelId);
+    const docSnap = await getDoc(docRef);
 
-  const levelData = docSnap.data();
+    if (!docSnap.exists()) {
+      res.status(404).json({ error: "Level not found" });
+      return;
+    }
 
-  const floorMap = {
-    LG: 0,
-    G: 1,
-    L1: 2,
-    L2: 3,
-    L3: 4,
-    L4: 5,
-    L5: 6,
-    L6: 7,
-  };
+    const levelData = docSnap.data();
 
-  const hotspots: Hotspot[] = []
-  levelData.hotspots.forEach((h) => {
-    hotspots.push(
-      {
+    const floorMap = {
+      LG: 0,
+      G: 1,
+      L1: 2,
+      L2: 3,
+      L3: 4,
+      L4: 5,
+      L5: 6,
+      L6: 7,
+    };
+
+    const hotspots: Hotspot[] = [];
+    levelData.hotspots.forEach((h: Hotspot) => {
+      hotspots.push({
         levelId: h.levelId,
         pitch: h.pitch,
         yaw: h.yaw,
         targetPitch: h.targetPitch,
         targetYaw: h.targetYaw,
-      }
-    )
-  })
+      });
+    });
 
+    const level: Level = {
+      photoLink: levelData.panorama,
+      locationName: levelData.title,
+      latitude: levelData.latitude,
+      longitude: levelData.longitude,
+      zPosition: undefined,
+      hotspots: hotspots,
+    };
 
-  const level: Level = {
-    photoLink: levelData.panorama,
-    locationName: levelData.title,
-    latitude: levelData.latitude,
-    longitude: levelData.longitude,
-    zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
-    hotspots: hotspots,
-  }
+    // if floor is undefined, then location must be G (eg. a lawn)
+    if (levelData.floor in floorMap) {
+      level.zPosition = levelData.floor;
+    } else {
+      level.zPosition = 1;
+    }
 
-  res.status(200).json(level);
-});
+    res.status(200).json(level);
+  },
+);
 
 app.get(
   "/leaderboard/data",
@@ -354,7 +393,7 @@ app.get(
       }
     });
 
-    const ids = Object.values(highestScores).map(user => user.id);
+    const ids = Object.values(highestScores).map((user) => user.id);
 
     if (ids.length == 0) {
       return res.status(400).send("error");
@@ -376,7 +415,11 @@ app.get(
     for (let i = start; i < end; i++) {
       // if username is undefined, don't add to leaderboard
       let username: string;
-      if (!(username = await getUsername(queryScoreSnapshot.docs[i].data().userid))) {
+      if (
+        !(username = await getUsername(
+          queryScoreSnapshot.docs[i].data().userid,
+        ))
+      ) {
         return res.status(500).send("invalid userId in game database");
       }
       const dataEntry: ScoreEntry = {

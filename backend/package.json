@@ -14,6 +14,8 @@
     "fs": "^0.0.1-security"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.18.0",
     "@types/node": "^20.14.9",
@@ -26,9 +28,8 @@
     "dev_env": "tsx watch --env-file=.env ./src/index.ts",
     "dev": "tsx watch ./src/index.ts",
     "build": "tsc --build",
-    "start_env": "node --env-file=.env dist/src/index.js",
-    "start": "node dist/src/index.js",
-    "production": "node dist/src/index.js"
+    "start_env": "node --env-file=.env dist/index.js",
+    "start": "node dist/index.js"
   },
   "prettier": {
     "singleQuote": false,

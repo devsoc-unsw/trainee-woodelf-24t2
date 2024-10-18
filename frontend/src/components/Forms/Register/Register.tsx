@@ -93,26 +93,21 @@ function Register() {
 
     if (isProcessing) return;
     setIsProcessing(true);
-    try {
-      const resp = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    const resp = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
-      if (resp.ok) {
-        navigate("/login", { replace: true });
-      } else {
-        const errorCheck = await resp.json();
-        if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
-      }
-    } catch (err) {
-      console.log("Error: ", err);
-    } finally {
-      setIsProcessing(false);
+    if (resp.ok) {
+      navigate("/login", { replace: true });
+    } else {
+      const errorCheck = await resp.json();
+      if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
     }
+    setIsProcessing(false);
   };
 
   return (

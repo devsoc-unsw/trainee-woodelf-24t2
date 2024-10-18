@@ -6,26 +6,17 @@ import { useNavigate } from "react-router-dom";
 function ProfileDropdown(props: { username: string }) {
   const navigate = useNavigate();
 
-  
   const handleClick = async () => {
-    try {
-      const resp = await fetch("/api/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+    const resp = await fetch("/api/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-      if (resp.ok) {
-        // here for testing change later
-        console.log("Log out success");
-        navigate("/login", { replace: true });
-      } else {
-        console.log(resp);
-      }
-    } catch (e) {
-      console.log("Error: ", e);
+    if (resp.ok) {
+      navigate("/login", { replace: true });
     }
   };
 
@@ -33,8 +24,13 @@ function ProfileDropdown(props: { username: string }) {
     <div className={classes.dropDownMenu}>
       <h3 className={classes.username}>{props.username}</h3>
 
-      <ProfileDropDownItem text="Profile" handleClick={() => {navigate('/profile')}}>
-      {/* <ProfileDropDownItem href="/profile" text="Profile" handleClick={() => {}}> */}
+      <ProfileDropDownItem
+        text="Profile"
+        handleClick={() => {
+          navigate("/profile");
+        }}
+      >
+        {/* <ProfileDropDownItem href="/profile" text="Profile" handleClick={() => {}}> */}
         <CircleUserRound color="hsl(52, 70%, 50%)" strokeWidth={3} />
       </ProfileDropDownItem>
       <ProfileDropDownItem text="Logout" handleClick={handleClick}>

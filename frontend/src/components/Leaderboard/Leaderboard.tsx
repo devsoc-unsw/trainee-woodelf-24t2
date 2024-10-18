@@ -37,33 +37,27 @@ function Leaderboard() {
     if (leaderboardPage != 0 && (pageNum <= 0 || pageNum > pageCount)) {
       return;
     }
-    try {
-      const resp = await fetch(
-        `/api/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+    const resp = await fetch(
+      `/api/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      },
+    );
 
-      if (resp.status === 200) {
-        const data = (await resp.json()) as fetchedData;
-        setUsers(data.leaderboardData);
-        if (data.pageCount != pageCount) {
-          setPageCount(data.pageCount);
-        }
-        setLeaderboardPage(pageNum);
-      } else if (resp.status === 204) {
-        setUsers([]);
-        setLeaderboardPage(1);
-        setPageCount(1);
-      } else {
-        console.error("Error: ", resp.status);
+    if (resp.status === 200) {
+      const data = (await resp.json()) as fetchedData;
+      setUsers(data.leaderboardData);
+      if (data.pageCount != pageCount) {
+        setPageCount(data.pageCount);
       }
-    } catch (err) {
-      console.log("error ", err);
+      setLeaderboardPage(pageNum);
+    } else if (resp.status === 204) {
+      setUsers([]);
+      setLeaderboardPage(1);
+      setPageCount(1);
     }
   };
 
