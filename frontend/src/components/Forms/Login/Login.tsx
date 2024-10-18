@@ -57,7 +57,7 @@ function LoginPage() {
     setIsProcessing(true);
 
     // formData.username = formData.username.trim();
-    const resp = await fetch("/api/login", {
+    const resp = await fetch("https://yellowshirt-backend.fly.dev/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

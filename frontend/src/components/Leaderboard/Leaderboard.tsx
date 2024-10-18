@@ -38,7 +38,7 @@ function Leaderboard() {
       return;
     }
     const resp = await fetch(
-      `/api/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
+      `https://yellowshirt-backend.fly.dev/leaderboard/data?pagenum=${pageNum}&gamemode=${leaderboardType}&increments=6`,
       {
         method: "GET",
         headers: {
