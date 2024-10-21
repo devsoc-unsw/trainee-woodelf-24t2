@@ -26,7 +26,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 ```
 
-5. _optionally_, create a .env file at the root of the repository which contains a cloudflare deploy book endpoint.
+5. _optionally_, create a .env file at the root of the repository which contains a cloudflare deploy hook endpoint.
 
 ```
 echo "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/ENDPOINT_GOES_HERE" > .env
