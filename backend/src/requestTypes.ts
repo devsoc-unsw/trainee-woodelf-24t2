@@ -1,5 +1,3 @@
-import { Gamemode } from "./interfaces";
-
 export interface TypedRequest<T> extends Express.Request {
   body: T;
 }
@@ -18,7 +16,7 @@ export interface LoginBody {
 }
 
 export interface LeaderboardQuery {
-  pagenum: number;
-  gamemode: number;
-  increments: number;
+  pagenum: string;
+  gamemode: string;
+  increments: string;
 }

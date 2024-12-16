@@ -6,7 +6,15 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Gamemode, Hotspot } from "./interfaces";
+import {
+  SessionStorage,
+  User,
+  LoginErrors,
+  Level,
+  Gamemode,
+  Game,
+  Hotspot,
+} from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -61,6 +69,15 @@ const session_remove = async (sessionId: string) => {
   return true;
 };
 
+const getUsername = async (userId: string) => {
+  const userData = query(users, where("__name__", "==", userId));
+  const user = await getDocs(userData);
+
+  if (user.empty) return undefined;
+
+  return user.docs[0].data().username;
+};
+
 const sessionIdToUserId = async (
   sessionId: string,
 ): Promise<string | undefined> => {
@@ -75,11 +92,25 @@ const sessionIdToUserId = async (
 };
 
 const app = express();
+let allowedOrigins: RegExp[];
+if (process.env.ALLOWED_ORIGINS) {
+  allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map(
+    (origin) => new RegExp(origin),
+  );
+} else {
+  allowedOrigins = [];
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_LOCAL as string,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      allowedOrigins.some((r) => r.test(origin as string))
+        ? callback(null, true)
+        : callback(new Error(`Origin ${origin} not in ALLOWED_ORIGINS`));
+    },
     credentials: true,
     optionsSuccessStatus: 200,
   }),
@@ -185,15 +216,18 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    async (err: Error | null, result: boolean) => {
+    async (err: Error | undefined, result: boolean) => {
       if (err) {
-        return res.status(500).send("Error processing password");
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
       }
 
       if (result) {
         req.session.regenerate(async (err: Error | null) => {
           if (err) {
-            return res.status(500).send("Error regenerating session.");
+            return res.status(500).json({
+              error: "Error regenerating session",
+            });
           }
           const expiryTime: Date = new Date();
           expiryTime.setDate(expiryTime.getDate() + 7);
@@ -225,7 +259,7 @@ app.get(
   ) => {
     const getDoc = await getDocs(collection(db, "levels"));
 
-    const { roundCount, gameMode } = req.query;
+    const { roundCount } = req.query;
 
     // array of level IDs
     const docIds = getDoc.docs.map((doc) => doc.id);
@@ -240,74 +274,122 @@ app.get(
   },
 );
 
-app.get("/level", async (req: TypedRequestQuery<{levelId: string}>, res: Response) => {
-  const levelId = req.query.levelId;
-  const docRef =  doc(db, "levels", levelId);
-  const docSnap = await getDoc(docRef);
+app.post(
+  "/endGame",
+  async (
+    req: TypedRequest<{
+      gameMode: Gamemode;
+      levels: Level["id"][];
+      score: number;
+    }>,
+    res: Response,
+  ) => {
+    const { gameMode, levels, score } = req.body;
 
-  if (!docSnap.exists()) {
-    res.status(404).json({ error: "Level not found" });
-    return;
-  }
+    const userId = await sessionIdToUserId(req.sessionID);
 
-  const levelData = docSnap.data();
+    if (!userId) {
+      res.status(200).send("Game Ended Successfully (unsaved)");
+      return;
+    }
 
-  const floorMap = {
-    LG: 0,
-    G: 1,
-    L1: 2,
-    L2: 3,
-    L3: 4,
-    L4: 5,
-    L5: 6,
-    L6: 7,
-  };
+    const game: Game = {
+      gamemode: gameMode,
+      levels: levels,
+      score: score,
+      userid: userId,
+    };
 
-  const hotspots: Hotspot[] = []
-  levelData.hotspots.forEach((h) => {
-    hotspots.push(
-      {
+    addDoc(collection(db, "games"), game);
+
+    res.status(200).send("Game Ended Successfully");
+  },
+);
+
+app.get("/ping", (req: Request, res: Response) => {
+  res.status(200).send("pong");
+});
+
+app.get(
+  "/level",
+  async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
+    const levelId = req.query.levelId;
+    const docRef = doc(db, "levels", levelId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      res.status(404).json({ error: "Level not found" });
+      return;
+    }
+
+    const levelData = docSnap.data();
+
+    const floorMap = {
+      LG: 0,
+      G: 1,
+      L1: 2,
+      L2: 3,
+      L3: 4,
+      L4: 5,
+      L5: 6,
+      L6: 7,
+    };
+
+    const hotspots: Hotspot[] = [];
+    levelData.hotspots.forEach((h: Hotspot) => {
+      hotspots.push({
         levelId: h.levelId,
         pitch: h.pitch,
         yaw: h.yaw,
         targetPitch: h.targetPitch,
         targetYaw: h.targetYaw,
-      }
-    )
-  })
+      });
+    });
 
+    const level: Level = {
+      photoLink: levelData.panorama,
+      locationName: levelData.title,
+      latitude: levelData.latitude,
+      longitude: levelData.longitude,
+      zPosition: undefined,
+      hotspots: hotspots,
+    };
 
-  const level: Level = {
-    photoLink: levelData.panorama,
-    locationName: levelData.title,
-    latitude: levelData.latitude,
-    longitude: levelData.longitude,
-    zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
-    hotspots: hotspots,
-  }
+    // if floor is undefined, then location must be G (eg. a lawn)
+    if (levelData.floor in floorMap) {
+      level.zPosition = levelData.floor;
+    } else {
+      level.zPosition = 1;
+    }
 
-  res.status(200).json(level);
-});
+    res.status(200).json(level);
+  },
+);
 
 app.get(
   "/leaderboard/data",
   async (req: TypedRequestQuery<LeaderboardQuery>, res: Response) => {
-    const { pagenum, gamemode, increments } = req.query;
+    // const { pagenum, gamemode, increments } = req.query;
+    // ↓ Had to do it this way to bcs apparently there's no "legal" way to parseInt together with deconstructing?
+    const pagenum = parseInt(req.query.pagenum);
+    const gamemode = parseInt(req.query.gamemode);
+    const increments = parseInt(req.query.increments);
+
     const queryGames = query(games, where("gamemode", "==", Number(gamemode)));
     const querySnapshot = await getDocs(queryGames);
-    const highestScores: { [username: string]: { id: string; score: number } } =
+    const highestScores: { [userid: string]: { id: string; score: number } } =
       {};
     if (querySnapshot.empty) {
       return res.status(204).send("No data!");
     }
-    querySnapshot.forEach((docSnapshot) => {
+    querySnapshot.forEach(async (docSnapshot) => {
       const data = docSnapshot.data();
-      const username = data.username;
+      const userid = data.userid;
       const score = data.score;
       const id = docSnapshot.id;
 
-      if (!highestScores[username] || score > highestScores[username].score) {
-        highestScores[username] = { id, score };
+      if (!highestScores[userid] || score > highestScores[userid].score) {
+        highestScores[userid] = { id, score };
       }
     });
 
@@ -329,12 +411,21 @@ app.get(
     const pageCount = Math.ceil(size / increments);
 
     const data: ScoreEntry[] = [];
-
-    for (let i = 0; i < increments && i + start < size; i++) {
+    const end = Math.min(start + increments, size);
+    for (let i = start; i < end; i++) {
+      // if username is undefined, don't add to leaderboard
+      let username: string;
+      if (
+        !(username = await getUsername(
+          queryScoreSnapshot.docs[i].data().userid,
+        ))
+      ) {
+        return res.status(500).send("invalid userId in game database");
+      }
       const dataEntry: ScoreEntry = {
-        rank: i + start + 1,
-        username: queryScoreSnapshot.docs[i + start].data().username,
-        score: queryScoreSnapshot.docs[i + start].data().score,
+        rank: i + 1,
+        username: username,
+        score: queryScoreSnapshot.docs[i].data().score,
       };
       data.push(dataEntry);
     }

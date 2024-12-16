@@ -8,6 +8,7 @@ import PlayPage from './pages/PlayPage/PlayPage.tsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage.tsx';
 import GamemodesPage from './pages/GamemodesPage/GamemodesPage.tsx';
+import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 
 import {
   createBrowserRouter,
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
         path: '/leaderboard',
         element: <LeaderboardPage/>,
       },
+      {
+        path: '/profile',
+        element: <ProfilePage/>
+      }
     ],
   },
 ]);

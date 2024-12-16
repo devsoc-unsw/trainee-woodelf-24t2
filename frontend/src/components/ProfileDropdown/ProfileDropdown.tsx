@@ -1,5 +1,5 @@
 import classes from "./ProfileDropdown.module.scss";
-import { Award, CircleUserRound, LogOut } from "lucide-react";
+import { CircleUserRound, LogOut } from "lucide-react";
 import ProfileDropDownItem from "../ProfileDropdownItem/ProfileDropdownItem";
 import { useNavigate } from "react-router-dom";
 
@@ -7,24 +7,16 @@ function ProfileDropdown(props: { username: string }) {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    try {
-      const resp = await fetch("/api/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+    const resp = await fetch("https://yellowshirt-backend.fly.dev/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-      if (resp.ok) {
-        // here for testing change later
-        console.log("Log out success");
-        navigate("/login", { replace: true });
-      } else {
-        console.log(resp);
-      }
-    } catch (e) {
-      console.log("Error: ", e);
+    if (resp.ok) {
+      navigate("/login", { replace: true });
     }
   };
 
@@ -32,13 +24,16 @@ function ProfileDropdown(props: { username: string }) {
     <div className={classes.dropDownMenu}>
       <h3 className={classes.username}>{props.username}</h3>
 
-      <ProfileDropDownItem href="/" text="Profile" handleClick={() => {}}>
+      <ProfileDropDownItem
+        text="Profile"
+        handleClick={() => {
+          navigate("/profile");
+        }}
+      >
+        {/* <ProfileDropDownItem href="/profile" text="Profile" handleClick={() => {}}> */}
         <CircleUserRound color="hsl(52, 70%, 50%)" strokeWidth={3} />
       </ProfileDropDownItem>
-      <ProfileDropDownItem href="/" text="Achievements" handleClick={() => {}}>
-        <Award color="hsl(52, 70%, 50%)" strokeWidth={3} />
-      </ProfileDropDownItem>
-      <ProfileDropDownItem href="/" text="Logout" handleClick={handleClick}>
+      <ProfileDropDownItem text="Logout" handleClick={handleClick}>
         <LogOut color="hsl(52, 70%, 50%)" strokeWidth={3} />
       </ProfileDropDownItem>
     </div>
