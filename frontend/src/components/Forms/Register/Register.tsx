@@ -93,7 +93,7 @@ function Register() {
 
     if (isProcessing) return;
     setIsProcessing(true);
-    const resp = await fetch("/api/register", {
+    const resp = await fetch("https://yellowshirt-backend.fly.dev/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

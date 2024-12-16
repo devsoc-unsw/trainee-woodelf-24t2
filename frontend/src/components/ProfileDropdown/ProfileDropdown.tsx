@@ -7,7 +7,7 @@ function ProfileDropdown(props: { username: string }) {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    const resp = await fetch("/api/logout", {
+    const resp = await fetch("https://yellowshirt-backend.fly.dev/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
