@@ -28,10 +28,9 @@ function App() {
   const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(!hasBackground);
 
   useEffect(() => {
-    if (location.pathname == "/")
-      navigate('/login')
-      // should be updated when user endpoint works...
-  }, [location.pathname])
+    if (location.pathname == "/") navigate("/login");
+    // should be updated when user endpoint works...
+  }, [location.pathname]);
 
   return (
     <>
@@ -41,7 +40,9 @@ function App() {
         <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded} />
       )}
       {!isPanoramaLoaded && <LoadingScreen />}
-      <Outlet />
+      <div style={{ position: "absolute", zIndex: 5 }}>
+        <Outlet />
+      </div>
     </>
   );
 }
