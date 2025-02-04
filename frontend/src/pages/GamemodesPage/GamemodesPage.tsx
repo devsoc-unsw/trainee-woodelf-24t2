@@ -4,7 +4,7 @@ import Card from "../../components/Card/Card";
 import poggers from "/poggers.png";
 import hacker from "/hackermans.gif";
 import { useNavigate } from "react-router-dom";
-import { Gamemodes } from "../../types/GameTypes";
+import { Gamemodes } from "../../enums";
 
 function GamemodesPage() {
   const navigate = useNavigate();
@@ -18,7 +18,9 @@ function GamemodesPage() {
           cardTitleText="Exploration"
           cardBodyText="Explore UNSW’s lush campus at your own pace!"
           img={poggers}
-          onClick={() => { navigate('/play', { state: { gamemode: Gamemodes.EXPLORATION } }) }}
+          onClick={() => {
+            navigate("/play", { state: { gamemode: Gamemodes.EXPLORATION } });
+          }}
         />
         <Card
           titleColor="#f17e7e"
@@ -26,7 +28,9 @@ function GamemodesPage() {
           cardTitleText="Timed"
           cardBodyText="Race the clock at UNSW! Find your way or get lost like a first-year during O-Week!"
           img={hacker}
-          onClick={() => { navigate('/play', { state: { gamemode: Gamemodes.TIMED_5MIN } }) }}
+          onClick={() => {
+            navigate("/play", { state: { gamemode: Gamemodes.TIMED_5MIN } });
+          }}
         />
       </div>
     </Sheet>

@@ -160,7 +160,7 @@ function LoginPage() {
             Register
           </a>
           <br /> or play as a{" "}
-          <a className={classes.link} onClick={() => navigate("/home")}>
+          <a className={classes.link} onClick={() => navigate("/gamemodes")}>
             guest
           </a>
         </div>

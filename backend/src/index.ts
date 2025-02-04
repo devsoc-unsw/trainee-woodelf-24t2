@@ -6,7 +6,15 @@ import {
   LoginBody,
   LeaderboardQuery,
 } from "./requestTypes";
-import { SessionStorage, User, LoginErrors, Level, Gamemode, Game, Hotspot } from "./interfaces";
+import {
+  SessionStorage,
+  User,
+  LoginErrors,
+  Level,
+  Gamemode,
+  Game,
+  Hotspot,
+} from "./interfaces";
 import bcrypt from "bcrypt";
 import {
   collection,
@@ -19,6 +27,7 @@ import {
   orderBy,
   Timestamp,
   getDoc,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { ScoreEntry } from "./interfaces";
 import { db } from "./firebase";
@@ -226,6 +235,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
 });
 // curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
 
+// get locations spread apart from each other
 app.get(
   "/startGame",
   async (
@@ -236,15 +246,21 @@ app.get(
 
     const { roundCount, gameMode } = req.query;
 
-    // array of level IDs
-    const docIds = getDoc.docs.map((doc) => doc.id);
+    // array of levels
+    const docIds = getDoc.docs;
     const shuffled = docIds.sort(() => 0.5 - Math.random());
 
     // Get sub-array of first n elements after shuffled
-    let selected = shuffled.slice(0, roundCount);
-    const levels: Level["id"][] = [];
-    selected.forEach((location) => levels.push(location));
-
+    let selected = shuffled.slice(
+      0,
+      roundCount,
+    ) as QueryDocumentSnapshot<Level>[];
+    const levels = selected.map((levelData) => ({
+      photoLink: levelData.data().panorama,
+      locationName: levelData.data().title,
+      latitude: levelData.data().latitude,
+      longitude: levelData.data().longitude,
+    }));
     res.status(200).json(levels);
   },
 );
@@ -252,10 +268,13 @@ app.get(
 app.post(
   "/endGame",
   async (
-    req: TypedRequest<{ gameMode: Gamemode, levels: Level["id"][], score: number }>,
-    res: Response
+    req: TypedRequest<{
+      gameMode: Gamemode;
+      score: number;
+    }>,
+    res: Response,
   ) => {
-    const { gameMode, levels, score } = req.body;
+    const { gameMode, score } = req.body;
 
     const userId = await sessionIdToUserId(req.sessionID);
 
@@ -266,67 +285,15 @@ app.post(
 
     const game: Game = {
       gamemode: gameMode,
-      levels: levels,
       score: score,
-      userid: userId
+      userid: userId,
     };
 
     addDoc(collection(db, "games"), game);
 
-
     res.status(200).send("Game Ended Successfully");
-  }
-)
-
-app.get("/level", async (req: TypedRequestQuery<{  levelId: string  }>, res: Response) => {
-  const levelId = req.query.levelId;
-  const docRef = doc(db, "levels", levelId);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) {
-    res.status(404).json({ error: "Level not found" });
-    return;
-  }
-
-  const levelData = docSnap.data();
-
-  const floorMap = {
-    LG: 0,
-    G: 1,
-    L1: 2,
-    L2: 3,
-    L3: 4,
-    L4: 5,
-    L5: 6,
-    L6: 7,
-  };
-
-  const hotspots: Hotspot[] = []
-  levelData.hotspots.forEach((h) => {
-    hotspots.push(
-      {
-        levelId: h.levelId,
-        panorama: h.panorama,
-        pitch: h.pitch,
-        yaw: h.yaw,
-        targetPitch: h.targetPitch,
-        targetYaw: h.targetYaw,
-      }
-    )
-  })
-
-
-  const level: Level = {
-    photoLink: levelData.panorama,
-    locationName: levelData.title,
-    latitude: levelData.latitude,
-    longitude: levelData.longitude,
-    zPosition: floorMap[levelData.floor] ?? 1, // if floor is undefined, then location must be G (eg. a lawn)
-    hotspots: hotspots,
-  }
-
-  res.status(200).json(level);
-});
+  },
+);
 
 app.get(
   "/leaderboard/data",
@@ -355,7 +322,7 @@ app.get(
       }
     });
 
-    const ids = Object.values(highestScores).map(user => user.id);
+    const ids = Object.values(highestScores).map((user) => user.id);
 
     if (ids.length == 0) {
       return res.status(400).send("error");
@@ -377,7 +344,11 @@ app.get(
     for (let i = start; i < end; i++) {
       // if username is undefined, don't add to leaderboard
       let username: string;
-      if (!(username = await getUsername(queryScoreSnapshot.docs[i].data().userid))) {
+      if (
+        !(username = await getUsername(
+          queryScoreSnapshot.docs[i].data().userid,
+        ))
+      ) {
         return res.status(500).send("invalid userId in game database");
       }
       const dataEntry: ScoreEntry = {
@@ -430,4 +401,4 @@ app.get("/personalBest", async (req: Request, res: Response) => {
     return res.status(204).send("No data!");
   }
   res.status(200).json(userScoreData.docs[0].data().score);
-})
+});
