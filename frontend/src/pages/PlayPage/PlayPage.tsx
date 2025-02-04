@@ -85,7 +85,6 @@ function PlayPage() {
 
   function nextLevel() {
     if (roundState === RoundState.ROUND_STARTED) {
-      if (markerPosition === null) return;
       setRoundState(RoundState.IN_PROGRESS);
       pause();
       calculateScore();
