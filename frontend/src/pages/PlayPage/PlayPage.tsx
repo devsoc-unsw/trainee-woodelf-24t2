@@ -41,7 +41,7 @@ function PlayPage() {
     return minutes * 60 * 1000;
   };
 
-  const { seconds, minutes, restart } = useTimer({
+  const { seconds, minutes, restart, pause } = useTimer({
     expiryTimestamp,
     autoStart: false,
     onExpire: () => nextLevel(),
@@ -67,7 +67,9 @@ function PlayPage() {
 
   useEffect(() => {
     const fetchLevels = async () => {
-      await fetch(`${import.meta.env.VITE_BACKEND_LOCAL}/startGame?roundCount=8`)
+      await fetch(
+        `${import.meta.env.VITE_BACKEND_LOCAL}/startGame?roundCount=8`,
+      )
         .then((resp) => resp.json())
         .then((resp) => {
           setLevelData(resp);
@@ -85,6 +87,7 @@ function PlayPage() {
     if (roundState === RoundState.ROUND_STARTED) {
       if (markerPosition === null) return;
       setRoundState(RoundState.IN_PROGRESS);
+      pause();
       calculateScore();
     } else if (roundState === RoundState.IN_PROGRESS) {
       if (round === maxRounds) return endGame();
@@ -93,7 +96,6 @@ function PlayPage() {
       resetRound();
     }
   }
-
 
   const endGame = () => {
     setRoundState(RoundState.END_SCREEN);
@@ -138,6 +140,7 @@ function PlayPage() {
     setScoreGained(calculatedScore);
     setScore(score + calculatedScore);
   };
+
   if (loading) return <LoadingScreen />;
   if (roundState === RoundState.END_SCREEN)
     return (
