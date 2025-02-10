@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.scss";
 import "@fontsource/hammersmith-one";
@@ -10,14 +10,6 @@ function App() {
 
   // List of routes that do not include the Navbar
   const hideNavbarRoutes = ["/login", "/register", "/play"];
-  const panoBackgroundRoutes = [
-    "/login",
-    "/register",
-    "/profile",
-    "/home",
-    "/gamemodes",
-    "/leaderboard",
-  ];
 
   // Determine if the Navbar should be hidden
   const hasNavbar = !hideNavbarRoutes.includes(location.pathname);

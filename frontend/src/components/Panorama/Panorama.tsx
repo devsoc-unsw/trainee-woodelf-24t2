@@ -1,5 +1,5 @@
 // import "@photo-sphere-viewer/core/index.css";
-import { createRef, useContext, useEffect, useRef } from "react";
+import { useContext } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { GameContextTypes } from "../../interfaces";
 import { GameContext } from "../../pages/PlayPage/PlayPage";

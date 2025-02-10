@@ -203,13 +203,13 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    async (err: Error | null, result: boolean) => {
+    async (err: Error | undefined, result: boolean) => {
       if (err) {
         return res.status(500).send("Error processing password");
       }
 
       if (result) {
-        req.session.regenerate(async (err: Error | null) => {
+        req.session.regenerate(async (err: Error | undefined) => {
           if (err) {
             return res.status(500).send("Error regenerating session.");
           }
