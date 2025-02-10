@@ -11,9 +11,10 @@ const ProfilePage = () => {
   const [activeDays, setActiveDays] = useState(0);
 
   async function getData() {
-    let dataPromise = await fetch("/api/user", { method: "GET" });
+    let dataPromise = await fetch("https://yellowshirt-backend.fly.dev/user", {
+      method: "GET",
+    });
     let dataJson = await dataPromise.json();
-    console.log(dataJson);
     setUsername(dataJson.username);
     setHighScore(dataJson.highScore);
     setCumulativeScore(dataJson.cumulativeScore);
@@ -30,7 +31,6 @@ const ProfilePage = () => {
     let date2 = new Date();
     let msDay = 1000 * 3600 * 24; // milliseconds per day
     let days = Math.round((date2.getTime() - date1.getTime()) / msDay);
-    console.log(days);
     setActiveDays(days);
   }
 
