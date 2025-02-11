@@ -11,6 +11,7 @@ import Map from "../../components/Map/Map";
 import { RoundState } from "../../enums";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 import Panorama from "../../components/Panorama/Panorama";
+import toast from "react-hot-toast";
 
 export const GameContext = createContext<GameContextTypes>(
   {} as GameContextTypes,
@@ -52,11 +53,7 @@ function PlayPage() {
 
     const newExpiryTimestamp = new Date(
       Date.now() +
-        (gamemode === Gamemodes.TIMED_5MIN
-          ? minutesToMilliseconds(5)
-          : gamemode === Gamemodes.TIMED_10MIN
-          ? minutesToMilliseconds(10)
-          : 0),
+        (gamemode === Gamemodes.TIMED_5MIN ? minutesToMilliseconds(5) : 0),
     );
 
     restart(newExpiryTimestamp);
@@ -67,9 +64,7 @@ function PlayPage() {
 
   useEffect(() => {
     const fetchLevels = async () => {
-      await fetch(
-        `${import.meta.env.VITE_BACKEND_LOCAL}/startGame?roundCount=8`,
-      )
+      await fetch("/api/startGame?roundCount=8")
         .then((resp) => resp.json())
         .then((resp) => {
           setLevelData(resp);
@@ -85,6 +80,14 @@ function PlayPage() {
 
   function nextLevel() {
     if (roundState === RoundState.ROUND_STARTED) {
+      if (markerPosition === null)
+        return toast.error("Marker not placed", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
       setRoundState(RoundState.IN_PROGRESS);
       pause();
       calculateScore();
@@ -102,7 +105,7 @@ function PlayPage() {
       gameMode: gamemode,
       score: score,
     });
-    fetch(`${import.meta.env.VITE_BACKEND_LOCAL}/endGame`, {
+    fetch(`/api/endGame`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,12 +146,7 @@ function PlayPage() {
   if (loading) return <LoadingScreen />;
   if (roundState === RoundState.END_SCREEN)
     return (
-      <div className={classes.endScreenContainer}>
-        <Summary
-          totalScore={score}
-          handleClick={() => navigate("/gamemodes")}
-        />
-      </div>
+      <Summary totalScore={score} handleClick={() => navigate("/gamemodes")} />
     );
   return (
     <>

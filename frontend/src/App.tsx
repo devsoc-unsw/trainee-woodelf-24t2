@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.scss";
 import "@fontsource/hammersmith-one";
 import Navbar from "./components/Navbar/Navbar";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <div id="overlay-root"></div>
       {hasNavbar && <Navbar />}
       <Outlet />

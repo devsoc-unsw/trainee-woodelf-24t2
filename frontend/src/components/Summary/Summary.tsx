@@ -16,32 +16,34 @@ function Summary(props: SummaryProps) {
 
   return (
     <>
-      <Confetti className={classes.confetti} width={width} height={height} />
+      <Confetti width={width} height={height} />
       <div className={classes.container}>
-        <h1 className={classes.title}>Summary</h1>
-        <hr></hr>
-        <div>
-          <table className={classes.fields}>
-            <tbody>
-              <SummaryRow
-                summaryType="score"
-                summaryAttribute={props.totalScore}
-              />
-              {/* <SummaryRow
+        <div className={classes.summaryBox}>
+          <h1 className={classes.title}>Summary</h1>
+          <hr></hr>
+          <div>
+            <table className={classes.fields}>
+              <tbody>
+                <SummaryRow
+                  summaryType="score"
+                  summaryAttribute={props.totalScore}
+                />
+                {/* <SummaryRow
               summaryType="personalRecord"
               summaryAttribute={props.personalBest}
             /> */}
-              {/* <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} /> */}
-            </tbody>
-          </table>
-        </div>
-        {/* <div className={classes.result}>
+                {/* <SummaryRow summaryType="time" summaryAttribute={props.timeBonus} /> */}
+              </tbody>
+            </table>
+          </div>
+          {/* <div className={classes.result}>
         💃🥳 {props.shirtsAcquried} Shirts acquired 💃🥳
       </div> */}
-        <br />
-        <button className={classes.button} onClick={props.handleClick}>
-          Good job!
-        </button>
+          <br />
+          <button className={classes.button} onClick={props.handleClick}>
+            Good job!
+          </button>
+        </div>
       </div>
     </>
   );

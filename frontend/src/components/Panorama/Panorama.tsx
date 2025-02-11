@@ -10,7 +10,12 @@ export default function Panorama() {
 
   return (
     <>
-      <div className={classes.panoContainer}>
+      <div
+        className={classes.panoContainer}
+        onMouseDown={(e) => {
+          e.preventDefault();
+        }}
+      >
         <ReactPhotoSphereViewer
           containerClass="panoContainer"
           navbar={false}
