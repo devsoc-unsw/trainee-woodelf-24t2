@@ -2,6 +2,12 @@
 
 .container {
   display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.summaryBox {
+  display: flex;
   flex-direction: column;
   height: 500px;
   width: 450px;
@@ -53,7 +59,7 @@ table {
 
 .button:hover {
   cursor: pointer;
-  background-color: lighten($yellow-button, 30%);
+  background-color: darken($yellow-button, 5%);
 }
 
 hr {
@@ -71,5 +77,6 @@ hr {
 }
 
 .confetti {
+  position: absolute;
   z-index: 10;
 }
