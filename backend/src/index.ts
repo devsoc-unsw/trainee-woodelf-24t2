@@ -93,11 +93,25 @@ const sessionIdToUserId = async (
 };
 
 const app = express();
+let allowedOrigins: RegExp[];
+if (process.env.ALLOWED_ORIGINS) {
+  allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map(
+    (origin) => new RegExp(origin),
+  );
+} else {
+  allowedOrigins = [];
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_LOCAL as string,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      allowedOrigins.some((r) => r.test(origin as string))
+        ? callback(null, true)
+        : callback(new Error(`Origin ${origin} not in ALLOWED_ORIGINS`));
+    },
     credentials: true,
     optionsSuccessStatus: 200,
   }),
@@ -203,15 +217,18 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
   bcrypt.compare(
     saltedPassword,
     details.docs[0].data().password,
-    async (err: Error | null, result: boolean) => {
+    async (err: Error | undefined, result: boolean) => {
       if (err) {
-        return res.status(500).send("Error processing password");
+        errorCheck.passwordInvalid = true;
+        return res.status(401).json(errorCheck);
       }
 
       if (result) {
-        req.session.regenerate(async (err: Error | null) => {
+        req.session.regenerate(async (err: Error | undefined) => {
           if (err) {
-            return res.status(500).send("Error regenerating session.");
+            return res.status(500).json({
+              error: "Error regenerating session",
+            });
           }
           const expiryTime: Date = new Date();
           expiryTime.setDate(expiryTime.getDate() + 7);
@@ -244,7 +261,7 @@ app.get(
   ) => {
     const getDoc = await getDocs(collection(db, "levels"));
 
-    const { roundCount, gameMode } = req.query;
+    const { roundCount } = req.query;
 
     // array of levels
     const docIds = getDoc.docs;
@@ -270,6 +287,7 @@ app.post(
   async (
     req: TypedRequest<{
       gameMode: Gamemode;
+      levels: Level["id"][];
       score: number;
     }>,
     res: Response,
