@@ -17,13 +17,15 @@ function Navbar() {
   const [showDropDown, setShowDropDown] = useState(false);
   const [showProfileDropDown, setShowProfileDropDown] = useState(false);
   const [username, setUsername] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
-      (document.getElementById("overlay-root") as HTMLElement).style.display = "none";
+      (document.getElementById("overlay-root") as HTMLElement).style.display =
+        "none";
     }, 10);
-  }, [])
+  }, []);
 
   const toggleCredits = () => {
     setShowHelp(false);
@@ -61,6 +63,7 @@ function Navbar() {
       if (resp.ok) {
         return resp.json().then((r) => {
           setUsername(r.username);
+          setLoggedIn(true);
         });
       }
     };
@@ -98,13 +101,17 @@ function Navbar() {
           >
             Credits
           </button>
-          <div
-            onClick={() => setShowProfileDropDown(!showProfileDropDown)}
-            className={classes.hideOnMobile}
-          >
-            <ProfileIcon url="/yellowshirt.svg" />
-            {showProfileDropDown && <ProfileDropdown username={username} />}
-          </div>
+          {loggedIn ? (
+            <div
+              onClick={() => setShowProfileDropDown(!showProfileDropDown)}
+              className={classes.hideOnMobile}
+            >
+              <ProfileIcon url="/yellowshirt.svg" />
+              {showProfileDropDown && <ProfileDropdown username={username} />}
+            </div>
+          ) : (
+            <button onClick={() => navigate("/login")}>Login</button>
+          )}
         </div>
         {showCredits &&
           createPortal(

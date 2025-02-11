@@ -16,7 +16,7 @@ function ProfileDropdown(props: { username: string }) {
     });
 
     if (resp.ok) {
-      navigate("/login", { replace: true });
+      navigate(0);
     }
   };
 
