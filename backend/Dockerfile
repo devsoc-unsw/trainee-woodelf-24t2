@@ -1,10 +1,12 @@
-FROM node:22.10.0-alpine AS base
+FROM node:22.10.0-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+RUN npm i -g corepack@latest
 RUN corepack enable
 
 # install dependencies for compiling bcrypt
-RUN apk --no-cache add --virtual builds-deps build-base python3
+RUN apt-get update
+RUN apt-get install -y build-essential python3
 
 COPY . /yellowshirt-backend
 WORKDIR /yellowshirt-backend
@@ -24,7 +26,11 @@ ENV NODE_ENV=production
 #ENV SESSION_SECRET=...
 
 FROM base AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install && pnpm rebuild bcrypt
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install node-gyp -g
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+#WORKDIR /yellowshirt-backend/node-modules
+#RUN node-pre-gyp install --fallback-to-build
+WORKDIR /yellowshirt-backend
 RUN pnpm run build
 
 FROM base
