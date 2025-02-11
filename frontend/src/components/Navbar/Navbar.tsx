@@ -50,7 +50,7 @@ function Navbar() {
 
   useEffect(() => {
     const getUsername = async () => {
-      const resp = await fetch("https://yellowshirt-backend.fly.dev/user", {
+      const resp = await fetch("/api/user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
