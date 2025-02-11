@@ -7,5 +7,4 @@ export enum RoundState {
 export enum Gamemodes {
   EXPLORATION,
   TIMED_5MIN,
-  TIMED_10MIN,
 }

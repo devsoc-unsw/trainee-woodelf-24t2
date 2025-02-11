@@ -53,11 +53,7 @@ function PlayPage() {
 
     const newExpiryTimestamp = new Date(
       Date.now() +
-        (gamemode === Gamemodes.TIMED_5MIN
-          ? minutesToMilliseconds(5)
-          : gamemode === Gamemodes.TIMED_10MIN
-          ? minutesToMilliseconds(10)
-          : 0),
+        (gamemode === Gamemodes.TIMED_5MIN ? minutesToMilliseconds(5) : 0),
     );
 
     restart(newExpiryTimestamp);
