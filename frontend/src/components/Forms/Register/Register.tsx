@@ -12,11 +12,15 @@ function Register() {
   const passwordPattern =
     /^(?!.*\s)(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
   const usernamePattern = /^[A-Za-z0-9]{3,16}$/;
+  const emailPattern =
+    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
   const [formData, setFormData] = useState({
+    email: "",
     username: "",
     password: "",
     confirmPassword: "",
   });
+  const [emailEmpty, setEmailEmpty] = useState(true);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [usernameAvailable, setUsernameAvailable] = useState(true);
   const [usernameEmpty, setUsernameEmpty] = useState(false);
@@ -30,6 +34,7 @@ function Register() {
   const navigate = useNavigate();
 
   const resetState = () => {
+    if (!emailEmpty) setEmailEmpty(true);
     if (!passwordMatch) setPasswordMatch(true);
     if (!usernameAvailable) setUsernameAvailable(true);
     if (usernameEmpty) setUsernameEmpty(false);
@@ -57,6 +62,11 @@ function Register() {
 
   const validateLoginAttempt = (): boolean => {
     // Checks the fields are empty
+    if (isFieldEmpty(formData.email, true)) {
+      setEmailEmpty(true);
+      return false;
+    }
+
     if (isFieldEmpty(formData.username, true)) {
       setUsernameEmpty(true);
       return false;
@@ -118,6 +128,25 @@ function Register() {
     <Sheet login>
       <h1 className="title">Register!</h1>
       <form className={classes.form} onSubmit={handleSubmit}>
+        <label htmlFor="email" className={classes.label}>
+          Email
+        </label>
+        <input
+          id="email"
+          className={classNames(classes.input, {
+            [classes.inputError]: emailEmpty,
+          })}
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        {/* {!emailValid && (
+          <WarningText
+            text="Email format provided is invalid."
+            paddingBottom={10}
+          />
+        )} */}
         <label htmlFor="username" className={classes.label}>
           Username
         </label>
