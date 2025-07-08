@@ -5,6 +5,8 @@ import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 import { EyeOff, Eye } from "lucide-react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 function Register() {
   const passwordPattern =
@@ -93,19 +95,21 @@ function Register() {
 
     if (isProcessing) return;
     setIsProcessing(true);
-    const resp = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (resp.ok) {
-      navigate("/login", { replace: true });
-    } else {
-      const errorCheck = await resp.json();
-      if (!errorCheck.usernameNotFound) setUsernameAvailable(false);
+    // to replace
+    const auth = getAuth();
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        formData.username,
+        formData.password,
+      );
+      const user = userCredentials.user;
+      // TODO: process through screens
+      console.log(user);
+    } catch (err: any) {
+      const errorCheck = err.message;
+      console.error(errorCheck);
+      // TODO: interact with error-related state
     }
     setIsProcessing(false);
   };

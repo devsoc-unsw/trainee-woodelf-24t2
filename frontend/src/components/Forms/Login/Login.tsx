@@ -5,9 +5,11 @@ import classNames from "classnames";
 import WarningText from "../WarningText/WarningText";
 import { useNavigate } from "react-router-dom";
 import { EyeOff, Eye } from "lucide-react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 function LoginPage() {
   const [formData, setFormData] = useState({
+    email: "", // TODO: add email to frontend
     username: "",
     password: "",
   });
@@ -56,27 +58,20 @@ function LoginPage() {
     if (isProcessing) return;
     setIsProcessing(true);
 
-    // formData.username = formData.username.trim();
-    const resp = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-      credentials: "include",
-    });
-
-    setIsProcessing(false);
-
-    if (resp.ok) {
+    const auth = getAuth();
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password,
+      );
+      const user = userCredentials.user;
+      console.log(user);
       navigate("/gamemodes");
-    } else {
-      const errorCheck = await resp.json();
-      if (errorCheck.usernameNotFound) {
-        return setUsernameFound(false);
-      } else if (errorCheck.passwordInvalid) {
-        return setPasswordMatch(false);
-      }
+    } catch (err: any) {
+      const errorCheck = err.message;
+      console.error(errorCheck);
+      // TODO: interact with error-related state
     }
   };
 
