@@ -45,7 +45,7 @@ function PlayPage() {
   const { seconds, minutes, restart, pause } = useTimer({
     expiryTimestamp,
     autoStart: false,
-    onExpire: () => nextLevel(),
+    onExpire: () => nextLevel(true),
   });
 
   const restartTimer = () => {
@@ -78,9 +78,9 @@ function PlayPage() {
     fetchLevels();
   }, []);
 
-  function nextLevel() {
+  function nextLevel(forceNext: Boolean = true) {
     if (roundState === RoundState.ROUND_STARTED) {
-      if (markerPosition === null)
+      if (markerPosition === null && !forceNext)
         return toast.error("Marker not placed", {
           style: {
             borderRadius: "10px",
