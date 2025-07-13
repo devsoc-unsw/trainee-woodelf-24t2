@@ -28,6 +28,7 @@ import {
   Timestamp,
   getDoc,
   QueryDocumentSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { ScoreEntry } from "./interfaces";
 import { db } from "./firebase";
@@ -420,3 +421,57 @@ app.get("/personalBest", async (req: Request, res: Response) => {
   }
   res.status(200).json(userScoreData.docs[0].data().score);
 });
+
+app.post(
+  "/updateUser",
+  async (req: TypedRequest<{ score: number }>, res: Response) => {
+    const { score } = req.body;
+    const userId = await sessionIdToUserId(req.sessionID);
+
+    if (!userId) {
+      return res.status(401).send("user not authenticated");
+    }
+
+    try {
+      const userRef = doc(db, "users", userId);
+      const user = await getDoc(userRef);
+
+      if (!user.exists()) {
+        return res.status(404).send("user not found");
+      }
+
+      const userData = user.data() as User;
+      const currentHighScore = userData.highScore || 0;
+      const currentCumulativeScore = userData.cumulativeScore || 0;
+
+      const newHighScore = Math.max(currentHighScore, score);
+      const newCumulativeScore = currentCumulativeScore + score;
+
+      // Calculate level based on cumulative score milestones (every 1000 points = 1 level)
+      const currentLevel = userData.shirts || 0;
+      const newLevel = Math.floor(newCumulativeScore / 1000);
+      const levelsEarned = newLevel - currentLevel;
+
+      await updateDoc(userRef, {
+        highScore: newHighScore,
+        cumulativeScore: newCumulativeScore,
+        shirts: newLevel,
+      });
+
+      res.status(200).json({
+        message: "updated user",
+        newHighScore,
+        newCumulativeScore,
+        previousHighScore: currentHighScore,
+        previousCumulativeScore: currentCumulativeScore,
+        scoreAdded: score,
+        newLevel,
+        previousLevel: currentLevel,
+        levelsEarned
+      });
+    } catch (error) {
+      console.error("error updating stats: ", error)
+      res.status(500).send("cannot update stats")
+    }
+  },
+);

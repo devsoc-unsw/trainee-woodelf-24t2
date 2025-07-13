@@ -9,6 +9,11 @@ interface SummaryProps {
   handleClick: () => void;
   // timeBonus: number;
   // shirtsAcquried: number;
+  newHighScore?: number;
+  newCumulativeScore?: number;
+  newLevel?: number;
+  previousLevel?: number;
+  levelsEarned?: number;
 }
 
 function Summary(props: SummaryProps) {
@@ -28,6 +33,30 @@ function Summary(props: SummaryProps) {
                   summaryType="score"
                   summaryAttribute={props.totalScore}
                 />
+                {props.newHighScore !== undefined && (
+                  <SummaryRow
+                    summaryType="newHighScore"
+                    summaryAttribute={props.newHighScore}
+                  />
+                )}
+                {props.newCumulativeScore !== undefined && (
+                  <SummaryRow
+                    summaryType="newCumulativeScore"
+                    summaryAttribute={props.newCumulativeScore}
+                  />
+                )}
+                {props.newLevel !== undefined && (
+                  <tr>
+                    <td className="light-text">⭐ Level</td>
+                    <td>{props.newLevel}</td>
+                  </tr>
+                )}
+                {props.levelsEarned !== undefined && props.levelsEarned > 0 && (
+                  <tr>
+                    <td className="light-text">🎉 New Levels Earned!</td>
+                    <td>+{props.levelsEarned}</td>
+                  </tr>
+                )}
                 {/* <SummaryRow
               summaryType="personalRecord"
               summaryAttribute={props.personalBest}

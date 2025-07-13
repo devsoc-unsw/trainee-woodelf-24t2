@@ -6,17 +6,19 @@ const ProfilePage = () => {
   const [username, setUsername] = useState(""); // To store the username
   const [highScore, setHighScore] = useState(0);
   const [cumulativeScore, setCumulativeScore] = useState(0);
-  const [shirts, setShirts] = useState(0);
+  const [level, setLevel] = useState(0);
   const [dateJoined, setDateJoined] = useState("");
   const [activeDays, setActiveDays] = useState(0);
 
   async function getData() {
     let dataPromise = await fetch("/api/user");
     let dataJson = await dataPromise.json();
+    console.log(dataJson)
+    console.log(dataPromise);
     setUsername(dataJson.username);
     setHighScore(dataJson.highScore);
     setCumulativeScore(dataJson.cumulativeScore);
-    setShirts(dataJson.shirts);
+    setLevel(dataJson.shirts); // shirts field in DB now represents Level
 
     const d = new Date(dataJson.dateJoined);
     const date = d.getDate();
@@ -41,7 +43,7 @@ const ProfilePage = () => {
           profileIcon="/yellowshirt.svg"
           highScore={highScore}
           cumulativeScore={cumulativeScore}
-          shirts={shirts}
+          level={level}
           dateJoined={dateJoined}
           activeDays={activeDays}
         ></BoxOne>

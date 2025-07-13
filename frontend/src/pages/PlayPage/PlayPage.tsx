@@ -116,6 +116,39 @@ function PlayPage() {
       .catch((err) => {
         console.error("Error fetching level:", err);
       });
+
+    fetch(`/api/updateUser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ score: score }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`HTTP ${response.status}: ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("=== USER STATS UPDATED ===");
+        console.log("Score from this game:", data.scoreAdded);
+        console.log("Previous High Score:", data.previousHighScore);
+        console.log("New High Score:", data.newHighScore);
+        console.log("Previous Cumulative Score:", data.previousCumulativeScore);
+        console.log("New Cumulative Score:", data.newCumulativeScore);
+        console.log("Previous Level:", data.previousLevel);
+        console.log("New Level:", data.newLevel);
+        console.log("Levels Earned:", data.levelsEarned);
+        console.log("High Score Improved:", data.newHighScore > data.previousHighScore ? "YES! 🎉" : "No");
+        console.log("==========================");
+      })
+      .catch((err) => {
+        console.error("Error updating user stats:", err.message);
+        console.log("guest logged in");
+      });
   };
 
   const resetRound = () => {
