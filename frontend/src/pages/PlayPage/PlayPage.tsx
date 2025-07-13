@@ -184,6 +184,11 @@ function PlayPage() {
               </div>
             </div>
           )}
+          <div className={classes.exitContainer}>
+              <button className={classes.exit} onClick={() => endGame()}>
+                Exit
+              </button>
+            </div>
           <Map />
           <Panorama />
         </div>
