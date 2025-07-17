@@ -9,7 +9,7 @@
     align-items: center;
     padding: 20px;
   }
-  
+
   .profileIcon {
     width: 13em;
     height: 13em;
@@ -19,25 +19,25 @@
     display: block;
     margin: 10px auto;
   }
-  
+
   .usernameText {
     color: #ffffff;
     text-align: center;
     margin-top: 0.5em;
   }
-  
+
   .dateJoinedContainer {
     display: flex;
     align-items: center;
     margin-top: 1vh;
     margin-bottom: 2vh;
   }
-  
+
   .dateJoined {
     color: #7e7e7e;
     margin-left: 10px;
   }
-  
+
   .leftColumn,
   .rightColumn {
     display: flex;
@@ -45,7 +45,7 @@
     width: 100%;
     margin-top: 2svh;
   }
-  
+
   .highScoreContainer,
   .cumulativeScoreContainer,
   .shirtsContainer,
@@ -57,7 +57,7 @@
     border-radius: 5px;
     width: 45%;
   }
-  
+
   .iconCircle {
     background-color: #b8e30c;
     border-radius: 50%;
@@ -68,14 +68,14 @@
     align-items: center;
     flex-shrink: 0;
   }
-  
+
   .highScoreRightColumn,
   .cumulativeScoreRightColumn,
   .shirtsRightColumn,
   .activeDaysRightColumn {
     margin-left: 20px;
   }
-  
+
   .highScore,
   .cumulativeScore,
   .shirts,
@@ -83,7 +83,7 @@
     color: #e0e0e0;
     font-size: 1.2em;
   }
-  
+
   .highScoreContainer p,
   .cumulativeScoreContainer p,
   .shirtsContainer p,
@@ -94,4 +94,4 @@
   .bodyText {
     color: white;
   }
-  
+

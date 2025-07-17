@@ -1,5 +1,4 @@
 import BoxOne from "../../components/ProfileBoxes/BoxOne";
-
 import classes from "./ProfilePage.module.scss";
 import { useState } from "react";
 
@@ -12,9 +11,7 @@ const ProfilePage = () => {
   const [activeDays, setActiveDays] = useState(0);
 
   async function getData() {
-    let dataPromise = await fetch("https://yellowshirt-backend.fly.dev/user", {
-      method: "GET",
-    });
+    let dataPromise = await fetch("/api/user");
     let dataJson = await dataPromise.json();
     setUsername(dataJson.username);
     setHighScore(dataJson.highScore);

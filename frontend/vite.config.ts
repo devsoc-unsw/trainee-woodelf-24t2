@@ -7,10 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://yellowshirt-backend.fly.dev",
-        // target: "http://localhost:3000",
+        // change here from prod server to localhost server
+        // target: "https://yellowshirt-backend.fly.dev",
+        target: "http://localhost:3000",
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

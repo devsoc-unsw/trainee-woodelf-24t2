@@ -13,17 +13,16 @@ export enum Gamemode {
 
 export interface Level {
   id?: string;
-  photoLink: string;
-  locationName: string | undefined;
+  panorama: string;
+  title: string | undefined;
   latitude: number;
   longitude: number;
-  zPosition: number | undefined;
-  hotspots: Hotspot[];
 }
 
 export interface Hotspot {
   levelId: string;
   pitch: number;
+  panorama: string;
   yaw: number;
   targetPitch: number;
   targetYaw: number;
@@ -32,7 +31,6 @@ export interface Hotspot {
 export interface Game {
   id?: string;
   gamemode: Gamemode;
-  levels: Level["id"][];
   score: number;
   userid: string;
 }

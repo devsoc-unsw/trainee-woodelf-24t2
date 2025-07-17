@@ -2,20 +2,26 @@
 
 .container {
   display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.summaryBox {
+  display: flex;
   flex-direction: column;
-  width: 35vw;
-  height: 55vh;
+  height: 500px;
+  width: 450px;
   border-radius: 10px;
   background-color: $dark;
   padding: 30px;
   color: white;
   margin: auto;
+  z-index: 0;
 }
 
 table {
   border-spacing: 15px 5px;
   margin-left: 0;
-  width: 30vw;
 }
 
 .title {
@@ -37,8 +43,10 @@ table {
 
 .button {
   align-self: center;
-  width: 15vw;
-  height: 5vh;
+  margin-top: auto;
+  margin-bottom: 10px;
+  width: 200px;
+  height: 50px;
   border-radius: 10px;
   background-color: $yellow-button;
   border: none;
@@ -49,13 +57,13 @@ table {
   transition: background-color 0.5s ease;
 }
 
-button:hover {
+.button:hover {
   cursor: pointer;
-  background-color: lighten($yellow-button, 30%);
+  background-color: darken($yellow-button, 5%);
 }
 
 hr {
-  width: 30vw;
+  width: 100%;
   margin-left: 0;
 }
 
@@ -66,4 +74,9 @@ hr {
   .result {
     font-size: 1.6rem;
   }
+}
+
+.confetti {
+  position: absolute;
+  z-index: 10;
 }

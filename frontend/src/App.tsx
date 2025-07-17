@@ -1,31 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.scss";
 import "@fontsource/hammersmith-one";
 import Navbar from "./components/Navbar/Navbar";
-import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
-import PannellumBackground from "./components/PannellumBackground/PannellumBackground";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
   // List of routes that do not include the Navbar
-  const hideNavbarRoutes = ["/login", "/register"];
-  const panoBackgroundRoutes = [
-    "/login",
-    "/register",
-    "/profile",
-    "/home",
-    "/gamemodes",
-    "/leaderboard",
-  ];
+  const hideNavbarRoutes = ["/login", "/register", "/play"];
 
   // Determine if the Navbar should be hidden
   const hasNavbar = !hideNavbarRoutes.includes(location.pathname);
-  const hasBackground = panoBackgroundRoutes.includes(location.pathname);
-
-  const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(!hasBackground);
 
   useEffect(() => {
     if (location.pathname == "/") navigate("/login");
@@ -34,15 +22,10 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <div id="overlay-root"></div>
       {hasNavbar && <Navbar />}
-      {hasBackground && (
-        <PannellumBackground setIsPanoramaLoaded={setIsPanoramaLoaded} />
-      )}
-      {!isPanoramaLoaded && <LoadingScreen />}
-      <div style={{ position: "absolute", zIndex: 5 }}>
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }

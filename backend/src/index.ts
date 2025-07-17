@@ -27,6 +27,7 @@ import {
   orderBy,
   Timestamp,
   getDoc,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { ScoreEntry } from "./interfaces";
 import { db } from "./firebase";
@@ -223,7 +224,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
       }
 
       if (result) {
-        req.session.regenerate(async (err: Error | null) => {
+        req.session.regenerate(async (err: Error | undefined) => {
           if (err) {
             return res.status(500).json({
               error: "Error regenerating session",
@@ -251,6 +252,7 @@ app.post("/login", async (req: TypedRequest<LoginBody>, res: Response) => {
 });
 // curl -H 'Content-Type: application/json' -d '{ "email": "ben", "color": "pink"}' -X POST http://localhost:3000/subscribe
 
+// get locations spread apart from each other
 app.get(
   "/startGame",
   async (
@@ -261,15 +263,21 @@ app.get(
 
     const { roundCount } = req.query;
 
-    // array of level IDs
-    const docIds = getDoc.docs.map((doc) => doc.id);
+    // array of levels
+    const docIds = getDoc.docs;
     const shuffled = docIds.sort(() => 0.5 - Math.random());
 
     // Get sub-array of first n elements after shuffled
-    let selected = shuffled.slice(0, roundCount);
-    const levels: Level["id"][] = [];
-    selected.forEach((location) => levels.push(location));
-
+    let selected = shuffled.slice(
+      0,
+      roundCount,
+    ) as QueryDocumentSnapshot<Level>[];
+    const levels = selected.map((levelData) => ({
+      photoLink: levelData.data().panorama,
+      locationName: levelData.data().title,
+      latitude: levelData.data().latitude,
+      longitude: levelData.data().longitude,
+    }));
     res.status(200).json(levels);
   },
 );
@@ -284,7 +292,7 @@ app.post(
     }>,
     res: Response,
   ) => {
-    const { gameMode, levels, score } = req.body;
+    const { gameMode, score } = req.body;
 
     const userId = await sessionIdToUserId(req.sessionID);
 
@@ -295,7 +303,6 @@ app.post(
 
     const game: Game = {
       gamemode: gameMode,
-      levels: levels,
       score: score,
       userid: userId,
     };
@@ -303,66 +310,6 @@ app.post(
     addDoc(collection(db, "games"), game);
 
     res.status(200).send("Game Ended Successfully");
-  },
-);
-
-app.get("/ping", (req: Request, res: Response) => {
-  res.status(200).send("pong");
-});
-
-app.get(
-  "/level",
-  async (req: TypedRequestQuery<{ levelId: string }>, res: Response) => {
-    const levelId = req.query.levelId;
-    const docRef = doc(db, "levels", levelId);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      res.status(404).json({ error: "Level not found" });
-      return;
-    }
-
-    const levelData = docSnap.data();
-
-    const floorMap = {
-      LG: 0,
-      G: 1,
-      L1: 2,
-      L2: 3,
-      L3: 4,
-      L4: 5,
-      L5: 6,
-      L6: 7,
-    };
-
-    const hotspots: Hotspot[] = [];
-    levelData.hotspots.forEach((h: Hotspot) => {
-      hotspots.push({
-        levelId: h.levelId,
-        pitch: h.pitch,
-        yaw: h.yaw,
-        targetPitch: h.targetPitch,
-        targetYaw: h.targetYaw,
-      });
-    });
-
-    const level: Level = {
-      photoLink: levelData.panorama,
-      locationName: levelData.title,
-      latitude: levelData.latitude,
-      longitude: levelData.longitude,
-      zPosition: undefined,
-      hotspots: hotspots,
-    };
-
-    // if floor is undefined, then location must be G (eg. a lawn)
-    if (levelData.floor in floorMap) {
-      level.zPosition = levelData.floor;
-    } else {
-      level.zPosition = 1;
-    }
-
-    res.status(200).json(level);
   },
 );
 
@@ -382,7 +329,8 @@ app.get(
     if (querySnapshot.empty) {
       return res.status(204).send("No data!");
     }
-    querySnapshot.forEach(async (docSnapshot) => {
+    
+    for (const docSnapshot of querySnapshot.docs) {
       const data = docSnapshot.data();
       const userid = data.userid;
       const score = data.score;
@@ -391,7 +339,7 @@ app.get(
       if (!highestScores[userid] || score > highestScores[userid].score) {
         highestScores[userid] = { id, score };
       }
-    });
+    };
 
     const ids = Object.values(highestScores).map((user) => user.id);
 
@@ -429,7 +377,6 @@ app.get(
       };
       data.push(dataEntry);
     }
-
     return res.status(200).json({
       leaderboardData: data,
       pageCount: pageCount,
@@ -452,4 +399,24 @@ app.post("/logout", async (req: Request, res: Response) => {
     console.log("Successfully logged out");
     return res.status(200).send("Logout Successful!");
   });
+});
+
+// This is here for the summary/endscreen
+// Returns a user's best score or undefined if guest player.
+app.get("/personalBest", async (req: Request, res: Response) => {
+  const userId = await sessionIdToUserId(req.sessionID);
+  if (!userId) {
+    return res.status(200).json(undefined);
+  }
+
+  const userScoreQuery = query(
+    games,
+    where("userid", "==", userId),
+    orderBy("score", "desc"),
+  );
+  const userScoreData = await getDocs(userScoreQuery);
+  if (userScoreData.empty) {
+    return res.status(204).send("No data!");
+  }
+  res.status(200).json(userScoreData.docs[0].data().score);
 });

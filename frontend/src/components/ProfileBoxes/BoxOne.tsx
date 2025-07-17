@@ -23,7 +23,7 @@ const BoxOne = (props: {
           alt={`${props.username}'s profile picture`}
         />
         <h1 className={classes.usernameText}>{props.username}</h1>
-  
+
         <div className={classes.dateJoinedContainer}>
           {/* <div className={classes.iconCircle}>
             <IconContext.Provider value={{ color: "#ffffff" }}>
@@ -32,7 +32,7 @@ const BoxOne = (props: {
           </div> */}
           <p className={classes.dateJoined}>yellowshirt user since   {props.dateJoined}</p>
         </div>
-  
+
         <div className={classes.leftColumn}>
           <div className={classes.highScoreContainer}>
             <div className={classes.iconCircle}>
@@ -45,7 +45,7 @@ const BoxOne = (props: {
               <p className={classes.highScore}>{props.highScore}</p>
             </div>
           </div>
-  
+
           <div className={classes.cumulativeScoreContainer}>
             <div className={classes.iconCircle}>
               <IconContext.Provider value={{ color: "#ffffff" }}>
@@ -58,7 +58,7 @@ const BoxOne = (props: {
             </div>
           </div>
         </div>
-  
+
         <div className={classes.rightColumn}>
           <div className={classes.shirtsContainer}>
             <div className={classes.iconCircle}>
@@ -71,7 +71,7 @@ const BoxOne = (props: {
               <p className={classes.shirts}>{props.shirts}</p>
             </div>
           </div>
-  
+
           <div className={classes.activeDaysContainer}>
             <div className={classes.iconCircle}>
               <IconContext.Provider value={{ color: "#ffffff" }}>
@@ -87,6 +87,6 @@ const BoxOne = (props: {
       </div>
     );
   };
-  
+
   export default BoxOne;
-  
+
