@@ -329,7 +329,8 @@ app.get(
     if (querySnapshot.empty) {
       return res.status(204).send("No data!");
     }
-    querySnapshot.forEach(async (docSnapshot) => {
+    
+    for (const docSnapshot of querySnapshot.docs) {
       const data = docSnapshot.data();
       const userid = data.userid;
       const score = data.score;
@@ -338,7 +339,7 @@ app.get(
       if (!highestScores[userid] || score > highestScores[userid].score) {
         highestScores[userid] = { id, score };
       }
-    });
+    };
 
     const ids = Object.values(highestScores).map((user) => user.id);
 
@@ -376,7 +377,6 @@ app.get(
       };
       data.push(dataEntry);
     }
-
     return res.status(200).json({
       leaderboardData: data,
       pageCount: pageCount,
