@@ -1,4 +1,4 @@
-type SummaryType = "score" | "time" | "personalRecord";
+type SummaryType = "score" | "time" | "personalRecord" | "newHighScore" | "newCumulativeScore";
 
 interface SummaryRowProps {
   summaryType: SummaryType;
@@ -9,6 +9,8 @@ const summaries = {
   score: "💯 Score",
   time: "⏰ Time bonus",
   personalRecord: "📜 Personal Best:",
+  newHighScore: "🏆 New High Score!",
+  newCumulativeScore: "⭐ Total Score",
 };
 
 function SummaryRow(props: SummaryRowProps) {

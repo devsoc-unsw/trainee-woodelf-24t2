@@ -11,7 +11,7 @@ const BoxOne = (props: {
     profileIcon: string;
     highScore: number;
     cumulativeScore: number;
-    shirts: number;
+    level: number;
     dateJoined: string;
     activeDays: number;
   }) => {
@@ -67,8 +67,8 @@ const BoxOne = (props: {
               </IconContext.Provider>
             </div>
             <div className={classes.shirtsRightColumn}>
-              <p className={classes.bodyText}>Shirts</p>
-              <p className={classes.shirts}>{props.shirts}</p>
+              <p className={classes.bodyText}>Level</p>
+              <p className={classes.shirts}>{props.level}</p>
             </div>
           </div>
 
